@@ -15,7 +15,7 @@ stages:
 phpcs:
   stage: CodingStandards
   script:
-      - cd ApiLibrary && phpcs -v --standard=PSR1 --ignore=./src/Kernel.php ./src
+      - phpcs -v --standard=PSR1 --ignore=./src/Kernel.php ./ApiLibrary/src
   allow_failure: false
 
 phpunit:

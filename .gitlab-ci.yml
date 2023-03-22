@@ -2,8 +2,6 @@ image: jakzal/phpqa:php8.1
 
 before_script:
   - composer install
-  - composer global require friendsofphp/php-cs-fixer
-  - php ApiLibrary/php-cs-fixer.phar fix ./
 
 cache:
   paths: 

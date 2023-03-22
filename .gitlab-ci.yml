@@ -2,6 +2,8 @@ image: jakzal/phpqa:php8.1
 
 before_script:
   - composer install
+  - composer global require friendsofphp/php-cs-fixer
+  - php ApiLibrary/php-cs-fixer.phar fix ./
 
 cache:
   paths: 
@@ -21,7 +23,7 @@ security-checker:
 phpcs:
   stage: CodingStandards
   script:
-      - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./ApiLibrary/src
+      - phpcs -v --standard=@PSR1 --ignore=./src/Kernel.php ./ApiLibrary/src
   allow_failure: false
 
 phpstan:

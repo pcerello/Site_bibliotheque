@@ -1,7 +1,7 @@
 image: jakzal/phpqa:php8.1
 
 before_script:
-  - composer install
+  - cd ApiLibrary && composer install
 
 cache:
   paths: 

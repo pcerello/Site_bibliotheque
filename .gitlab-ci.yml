@@ -15,19 +15,19 @@ stages:
 security-checker:
   stage: SecurityChecker
   script:
-      - local-php-security-checker  --path=./ApiLibrary/composer.lock
+      - local-php-security-checker  --path=./composer.lock
   allow_failure: false
 
 phpcs:
   stage: CodingStandards
   script:
-      - phpcs -v --standard=@PSR1 --ignore=./src/Kernel.php ./ApiLibrary/src
+      - phpcs -v --standard=@PSR1 --ignore=./src/Kernel.php ./src
   allow_failure: false
 
 phpstan:
   stage: CodingStandards
   script:
-      - phpstan analyse ./ApiLibrary/src
+      - phpstan analyse ./src
   allow_failure: false
 
 phpunit:

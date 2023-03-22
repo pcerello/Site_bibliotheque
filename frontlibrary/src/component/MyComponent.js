@@ -1,31 +1,31 @@
-import axios from 'axios';
-import React from 'react';
+import axios from "axios";
+import React from "react";
 
 class MyComponent extends React.Component {
   state = {
-    data: []
-  }
+    data: [],
+  };
 
   componentDidMount() {
-    axios.get('http://localhost:8000','cors')
-      .then(response => {      
+    axios
+      .get("http://localhost:8000", "cors")
+      .then((response) => {
         const jsonString = JSON.stringify(response.data);
         this.setState({ data: jsonString });
-        
+
         console.log(jsonString);
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
 
   render() {
     return (
-      <div >
+      <div>
         <h1>MyComponent</h1>
         <p>{this.state.data}</p>
-
       </div>
     );
   }

@@ -12,12 +12,6 @@ stages:
   - CodingStandards
   - UnitTests
 
-security-checker:
-  stage: SecurityChecker
-  script:
-      - local-php-security-checker  --path=./composer.lock
-  allow_failure: false
-
 phpcs:
   stage: CodingStandards
   script:

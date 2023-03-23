@@ -11,6 +11,7 @@ stages:
   - SecurityChecker
   - CodingStandards
   - UnitTests
+  - LintReact
 
 security-checker:
   stage: SecurityChecker
@@ -28,4 +29,14 @@ phpunit:
   stage: UnitTests
   script:
       - php bin/phpunit
+  allow_failure: false
+
+eslint:
+  image: node:16
+  stage: LintReact
+  script:
+      - cd ../frontlibrary
+      - nmp install
+      - npm install eslint
+      - npx eslint src/*.js --max-warnings=0
   allow_failure: false

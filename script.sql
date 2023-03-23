@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 172.16.1.2
--- Généré le : jeu. 23 mars 2023 à 11:16
+-- Généré le : jeu. 23 mars 2023 à 12:09
 -- Version du serveur :  10.3.29-MariaDB-0+deb10u1
 -- Version de PHP : 7.4.33
 
@@ -109,6 +109,7 @@ CREATE TABLE `Reader` (
 --
 
 CREATE TABLE `Write_` (
+  `id` int(11) NOT NULL,
   `id_author` int(11) NOT NULL,
   `id_book` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -166,6 +167,7 @@ ALTER TABLE `Reader`
 -- Index pour la table `Write_`
 --
 ALTER TABLE `Write_`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `id_book` (`id_book`),
   ADD KEY `id_author` (`id_author`);
 

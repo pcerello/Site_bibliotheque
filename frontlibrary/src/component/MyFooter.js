@@ -23,7 +23,7 @@ class MyFooter extends React.Component {
         </div>
         <div>
           <p>Copyright 2020 IUT - Bibliothèque. Tous droits réservés.</p>
-          <p>Réalisé par Nous</p>
+          <p>Réalisé par GVECEMML</p>
         </div>
       </footer>
     );

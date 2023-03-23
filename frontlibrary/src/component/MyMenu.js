@@ -6,10 +6,18 @@ class MyMenu extends React.Component {
       <header>
         <div>
           <h1>IUT - Bibliothèque</h1>
-          <p>Accueil</p>
-          <p>Amis</p>
-          <p>Connexion</p>
-          <p>Déconnexion</p>
+          <button>
+            <p>Accueil</p>
+          </button>
+          <button>
+            <p>Amis</p>
+          </button>
+          <button>
+            <p>Connexion</p>
+          </button>
+          <button>
+            <p>Déconnexion</p>
+          </button>
         </div>
       </header>
     );

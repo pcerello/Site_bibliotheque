@@ -1,4 +1,5 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class SearchEngine extends React.Component {
   /*constructor(props) {
@@ -16,7 +17,7 @@ class SearchEngine extends React.Component {
       <form>
         <input type="text" placeholder="Rechercher un auteur" />
         <button type="submit" onClick={this.handleSubmit}>
-          Rechercher
+        <i class="fa-solid fa-magnifying-glass"></i> Rechercher
         </button>
       </form>
     );

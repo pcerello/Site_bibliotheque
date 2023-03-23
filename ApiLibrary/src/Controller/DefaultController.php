@@ -11,18 +11,6 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'app_default')]
     public function index(): Response
     {
-        /*return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
-        ]);*/
-
-        $data = [
-            'controller_name' => 'DefaultController',
-        ];
-
-        $response = new Response(json_encode($data), 200, [
-            'Content-Type' => 'application/json'
-        ]);
-
-        return $response;
+        return $this->redirectToRoute('app.swagger_ui');
     }
 }

@@ -3,7 +3,7 @@ import React from "react";
 class MyFooter extends React.Component {
   render() {
     return (
-      <footer>
+      <footer className="bg-sky-500">
         <div>
           <div>
             <h1>IUT - Bibliothèque</h1>

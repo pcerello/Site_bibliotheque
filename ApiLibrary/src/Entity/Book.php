@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Attributes as OA;
 
 /**
  * Book
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="Book", uniqueConstraints={@ORM\UniqueConstraint(name="UQ_maTable_titlepictureyear", columns={"title", "picture", "year"})}, indexes={@ORM\Index(name="category", columns={"category"}), @ORM\Index(name="editor", columns={"editor"})})
  * @ORM\Entity
  */
+#[ORM\Entity(repositoryClass: BookRepository::class)]
 class Book
 {
     /**
@@ -19,6 +22,9 @@ class Book
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column]
+    #[Groups("book_infos")]
+    #[OA\Property(example: 1, description: "Id of the book")]
     private $id;
 
     /**
@@ -26,6 +32,9 @@ class Book
      *
      * @ORM\Column(name="title", type="string", length=100, nullable=false)
      */
+    #[ORM\Column]
+    #[Groups("book_infos")]
+    #[OA\Property(example: "Harry Potter", description: "Title of the book")]
     private $title;
 
     /**

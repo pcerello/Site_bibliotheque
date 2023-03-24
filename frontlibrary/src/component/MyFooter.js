@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class MyFooter extends React.Component {
   render() {
     return (
-      <footer className="bg-gray-200 flex flex-col">
+      <footer className="bg-gray-200 flex flex-col space-y-4">
         <div className="flex flex-row justify-between grey">
           <div>
             <h1>IUT - Bibliothèque</h1>

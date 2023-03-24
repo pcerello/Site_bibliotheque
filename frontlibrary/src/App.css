@@ -17,6 +17,10 @@
   }
 }
 
+html,body,#root,.App{
+  height: 100%;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -35,11 +39,13 @@
 .bg-blue{
   background-color: #009de0;
   color: white;
+  @apply py-2 px-3;
 }
 
 .bg-brown{
   background-color: #443A31;
   color: white;
+  @apply py-2 px-3;
 }
 
 .text-color{

@@ -34,8 +34,10 @@ class BookApiController extends AbstractController
     public function listBook(Request $request, EntityManagerInterface $entityManager)
     {
         $query = $entityManager->createQueryBuilder()
-        ->select('b.id, b.title')
-        ->from('\App\Entity\Book', 'b');
+        ->select('b.id, b.title, b.picture, b.language, b.nbrPages, b.resume, b.year, c.name, e.name')
+        ->from('\App\Entity\Book', 'b')
+        ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
+        ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id');
 
         /* Gestion des paramètres de la query string de la requête */
         $author_name = $request->get('author');
@@ -57,6 +59,7 @@ class BookApiController extends AbstractController
                 $query->setMaxResults($max);
             }
         }
+        
         $query = $query->getQuery();
         $books = $query->getResult();
 

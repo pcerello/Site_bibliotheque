@@ -4,16 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class MyFooter extends React.Component {
   render() {
     return (
-      <footer className="bg-gray-200 flex flex-col space-y-4">
-        <div className="flex flex-row justify-between grey">
+      <footer className="bg-gray-200 flex flex-col space-y-16 px-16 pt-8 pb-4 text-left">
+        <div className="flex flex-row justify-between grey flex-wrap">
           <div>
-            <h1>IUT - Bibliothèque</h1>
+            <h1 className="text-color pb-4">IUT - Bibliothèque</h1>
             <p>15 rue de Naudet - CS 10207</p>
             <p>33 175 Gradignan Cedex</p>
             <p>Tél. +33 (0)5 56 84 57 57</p>
           </div>
-          <div>
-            <h1>Liens</h1>
+          <div >
+            <h1 className="text-color pb-4">Liens</h1>
             <p>IUT de Bordeaux</p>
             <p>Bibliothèque de l'université de Bordeaux</p>
             <p>Nous contacter</p>

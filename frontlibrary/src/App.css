@@ -77,6 +77,10 @@ html,body,#root,.App{
   background-color: #086969;
 }
 
+input::placeholder{
+  @apply text-color;
+}
+
 .App-link {
   color: #61dafb;
 }

@@ -32,8 +32,12 @@ class BookApiController extends AbstractController
      */
     public function listBook(EntityManagerInterface $entityManager)
     {
-        $query = $entityManager
-            ->createQuery("SELECT b.id, b.title FROM \App\Entity\Book b");
+        $query = $entityManager->createQueryBuilder()
+        ->select('b.id, b.title, b.picture, b.language, b.nbrPages, b.resume, b.year, c.name, e.name')
+        ->from('\App\Entity\Book', 'b')
+        ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
+        ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id')
+        ->getQuery();
 
         $books = $query->getResult();
 
@@ -72,7 +76,7 @@ class BookApiController extends AbstractController
         $reader = $query->getOneOrNullResult();
 
         if (!$reader) {
-            return $this->json(["message" => "Reader not found"], 404);
+            return $this->json(["message" => "Book not found"], 404);
         }
 
         return $this->json($reader, 200);

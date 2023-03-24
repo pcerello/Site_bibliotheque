@@ -18,8 +18,7 @@ function App() {
       <MyMenu />
       <SearchEngine />
       {/*<MyConnection />*/}
-      <MyHomePage type="read" />
-      <MyHomePage type="new" />
+      <MyHomePage readerId={1} />
       {/*<MyComponent />*/}
       <MyFooter />
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 
 class MyHomePage extends React.Component {
   render() {
@@ -56,7 +56,7 @@ class MyHomePage extends React.Component {
   }
 }
 
-export default MyHomePage;
+export default MyHomePage;*/
 
 /*
 import React from "react";
@@ -124,3 +124,34 @@ class MyHomePage extends React.Component {
 
 export default MyHomePage;
 */
+
+import React, { useEffect, useState } from "react";
+
+function MyHomePage({ readerId }) {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/readers/${readerId}/books`, { mode: "cors" })
+      .then((response) => response.json())
+      .then((data) => setBooks(data.slice(-4).reverse()));
+  }, [readerId]);
+
+  return (
+    <div>
+      <h2>4 derniers livres lus par le lecteur</h2>
+      <ul>
+        {books.map((book) => (
+          <li key={book.id}>
+            {book.picture && ( // Si book.picture existe
+                <img src={`http://localhost:8000/images/${book.picture}`} alt={book.title} />
+            )}
+            {book.title} - {book.author} - {book.year}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default MyHomePage;
+

@@ -1,4 +1,5 @@
 import React from "react";
+/*import { Link } from "react-router-dom";*/
 
 class MyMenu extends React.Component {
   render() {
@@ -13,7 +14,7 @@ class MyMenu extends React.Component {
             <p>Amis</p>
           </button>
           <button>
-            <p>Connexion</p>
+            {/*<Link to="/C">Connexion</Link>*/}
           </button>
           <button>
             <p>Déconnexion</p>

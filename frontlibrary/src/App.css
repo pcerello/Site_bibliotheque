@@ -4,6 +4,7 @@
 
 .App {
   text-align: center;
+  @apply text-color;
 }
 
 .App-logo {
@@ -17,6 +18,10 @@
   }
 }
 
+html,body,#root,.App{
+  height: 100%;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -26,6 +31,54 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.grey{
+  color: #989ca3;
+}
+
+.bg-blue{
+  background-color: #009de0;
+  color: white;
+  @apply py-2 px-3;
+}
+
+.bg-brown{
+  background-color: #443A31;
+  color: white;
+  @apply py-2 px-3;
+}
+
+.bar-button>button{
+  color: gray;
+}
+
+.bar-button>button:hover{
+  @apply text-color-hover;
+}
+
+.text-color{
+  color: #009999;
+}
+
+.text-blue{
+  color: #009de0;
+}
+
+.text-color-hover{
+  color: #086969;
+}
+
+.bg-color{
+  background-color: #009999;
+}
+
+.bg-color:hover{
+  background-color: #086969;
+}
+
+input::placeholder{
+  @apply text-color;
 }
 
 .App-link {

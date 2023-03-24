@@ -14,9 +14,9 @@ class SearchEngine extends React.Component {
 
   render() {
     return (
-      <form>
-        <input type="text" placeholder="Rechercher un auteur" />
-        <button type="submit" onClick={this.handleSubmit}>
+      <form className="bg-sky-800 pt-16 pb-16">
+        <input type="text" className="p-1 text-color-hover" placeholder="Rechercher un auteur" />
+        <button type="submit" onClick={this.handleSubmit} className="p-1 px-6 bg-color hover:bg-color-hover text-white">
           <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
         </button>
       </form>

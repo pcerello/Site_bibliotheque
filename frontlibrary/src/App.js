@@ -7,6 +7,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
+import MyConnection from "./component/MyConnection";
+import MyHomePage from "./component/MyHomePage";
 
 library.add(fas, far, fab);
 
@@ -15,6 +17,9 @@ function App() {
     <div className="App">
       <MyMenu />
       <SearchEngine />
+      {/*<MyConnection />*/}
+      <MyHomePage type="read" />
+      <MyHomePage type="new" />
       {/*<MyComponent />*/}
       <MyFooter />
     </div>

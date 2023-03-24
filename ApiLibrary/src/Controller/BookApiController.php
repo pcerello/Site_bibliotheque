@@ -34,7 +34,7 @@ class BookApiController extends AbstractController
     public function listBook(Request $request, EntityManagerInterface $entityManager)
     {
         $query = $entityManager->createQueryBuilder()
-        ->select('b.id, b.title, b.picture, b.language, b.nbrPages, b.resume, b.year, c.name, e.name')
+        ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
         ->from('\App\Entity\Book', 'b')
         ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
         ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id');
@@ -87,7 +87,7 @@ class BookApiController extends AbstractController
     public function bookShow(EntityManagerInterface $entityManager, int $id)
     {
         $query = $entityManager->createQueryBuilder()
-        ->select('b.id, b.title, b.picture, b.language, b.nbrPages, b.resume, b.year, c.name, e.name')
+        ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
         ->from('\App\Entity\Book', 'b')
         ->where('b.id = :id')
         ->setParameter('id', $id)

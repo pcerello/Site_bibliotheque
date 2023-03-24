@@ -42,6 +42,9 @@ class Book
      *
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
+    #[ORM\Column]
+    #[Groups("book_infos")]
+    #[OA\Property(example: "https://www.google.com/picture", description: "Picture of the book")]
     private $picture;
 
     /**
@@ -49,6 +52,9 @@ class Book
      *
      * @ORM\Column(name="language", type="string", length=255, nullable=false)
      */
+    #[ORM\Column]
+    #[Groups("book_infos")]
+    #[OA\Property(example: "fr", description: "Language of the book")]
     private $language;
 
     /**
@@ -56,13 +62,19 @@ class Book
      *
      * @ORM\Column(name="nbr_pages", type="integer", nullable=false)
      */
-    private $nbrPages;
+    #[ORM\Column]
+    #[Groups("book_infos")]
+    #[OA\Property(example: 100, description: "Number of pages of the book")]
+     private $nbrPages;
 
     /**
      * @var string
      *
      * @ORM\Column(name="resume", type="text", length=65535, nullable=false)
      */
+    #[ORM\Column]
+    #[Groups("book_infos")]
+    #[OA\Property(example: "Harry Potter is a series of fantasy novels written by British author J. K. Rowling.", description: "Resume of the book")]
     private $resume;
 
     /**
@@ -70,6 +82,9 @@ class Book
      *
      * @ORM\Column(name="year", type="integer", nullable=false)
      */
+    #[ORM\Column]
+    #[Groups("book_infos")]
+    #[OA\Property(example: 2000, description: "Year of the book")]
     private $year;
 
     /**
@@ -80,6 +95,10 @@ class Book
      *   @ORM\JoinColumn(name="editor", referencedColumnName="id")
      * })
      */
+    #[ORM\ManyToOne(targetEntity: Editor::class)]
+    #[ORM\JoinColumn(name: "editor", referencedColumnName: "id")]
+    #[Groups("book_infos")]
+    #[OA\Property(example: 1, description: "Id of the editor")]
     private $editor;
 
     /**
@@ -90,5 +109,9 @@ class Book
      *   @ORM\JoinColumn(name="category", referencedColumnName="id")
      * })
      */
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(name: "category", referencedColumnName: "id")]
+    #[Groups("book_infos")]
+    #[OA\Property(example: 1, description: "Id of the category")]
     private $category;
 }

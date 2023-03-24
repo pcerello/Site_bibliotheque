@@ -28,6 +28,32 @@
   color: white;
 }
 
+.grey{
+  color: #989ca3;
+}
+
+.bg-blue{
+  background-color: #009de0;
+  color: white;
+}
+
+.bg-brown{
+  background-color: #443A31;
+  color: white;
+}
+
+.text-color{
+  color: #009999;
+}
+
+.bg-color{
+  background-color: #009999;
+}
+
+.bg-color:hover{
+  background-color: #086969;
+}
+
 .App-link {
   color: #61dafb;
 }

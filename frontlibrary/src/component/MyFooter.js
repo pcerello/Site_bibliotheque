@@ -20,19 +20,19 @@ class MyFooter extends React.Component {
           </div>
           <div>
             <div className="flex space-x-4">
-              <a className="bg-blue" href="https://www.facebook.com/iutdebordeaux">
+              <a className="bg-blue" href="https://www.facebook.com/iutdebordeaux" target="_blank">
                 <FontAwesomeIcon icon="fa-brands fa-facebook" />
               </a>
-              <a className="bg-brown" href="https://www.instagram.com/iutdebordeaux/">
+              <a className="bg-brown" href="https://www.instagram.com/iutdebordeaux/" target="_blank">
                 <FontAwesomeIcon icon="fa-brands fa-instagram" />
               </a>
-              <a className="bg-blue" href="https://twitter.com/IUT_de_Bordeaux">
+              <a className="bg-blue" href="https://twitter.com/IUT_de_Bordeaux" target="_blank">
                 <FontAwesomeIcon icon="fa-brands fa-twitter" />
               </a>
-              <a className="bg-brown" href="https://www.linkedin.com/school/iut-de-bordeaux">
+              <a className="bg-brown" href="https://www.linkedin.com/school/iut-de-bordeaux" target="_blank">
                 <FontAwesomeIcon icon="fa-brands fa-linkedin-in" />
               </a>
-              <a className="bg-blue" href="https://www.youtube.com/channel/UCaWP9UzIsK3H9NKx9AruRdA">
+              <a className="bg-blue" href="https://www.youtube.com/channel/UCaWP9UzIsK3H9NKx9AruRdA" target="_blank">
                 <FontAwesomeIcon icon="fa-brands fa-youtube" />
               </a>
             </div>

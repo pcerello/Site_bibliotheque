@@ -3,21 +3,23 @@ import React from "react";
 class MyMenu extends React.Component {
   render() {
     return (
-      <header>
-        <div>
-          <h1>IUT - Bibliothèque</h1>
-          <button>
-            <p>Accueil</p>
-          </button>
-          <button>
-            <p>Amis</p>
-          </button>
-          <button>
-            <p>Connexion</p>
-          </button>
-          <button>
-            <p>Déconnexion</p>
-          </button>
+      <header className="flex w-full justify-center pt-4 pb-4">
+        <div className="flex flex-row justify-between w-5/6 content-center">
+          <a href="/" className="text-blue" >IUT - Bibliothèque</a>
+          <div className="flex space-x-4 bar-button">
+            <button type="button">
+              <p>Accueil</p>
+            </button>
+            <button type="button"> 
+              <p>Amis</p>
+            </button>
+            <button type="button">
+              <p>Connexion</p>
+            </button>
+            <button type="button">
+              <p>Déconnexion</p>
+            </button>
+          </div>
         </div>
       </header>
     );

@@ -4,6 +4,7 @@
 
 .App {
   text-align: center;
+  @apply text-color;
 }
 
 .App-logo {
@@ -48,8 +49,24 @@ html,body,#root,.App{
   @apply py-2 px-3;
 }
 
+.bar-button>button{
+  color: gray;
+}
+
+.bar-button>button:hover{
+  @apply text-color-hover;
+}
+
 .text-color{
   color: #009999;
+}
+
+.text-blue{
+  color: #009de0;
+}
+
+.text-color-hover{
+  color: #086969;
 }
 
 .bg-color{

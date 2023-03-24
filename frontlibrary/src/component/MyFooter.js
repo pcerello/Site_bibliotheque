@@ -1,4 +1,5 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class MyFooter extends React.Component {
   render() {
@@ -18,6 +19,11 @@ class MyFooter extends React.Component {
             <p>Nous contacter</p>
           </div>
           <div>
+            <FontAwesomeIcon icon="fa-brands fa-facebook" />
+            <FontAwesomeIcon icon="fa-brands fa-instagram" />
+            <FontAwesomeIcon icon="fa-brands fa-twitter" />
+            <FontAwesomeIcon icon="fa-brands fa-linkedin" />
+            <FontAwesomeIcon icon="fa-brands fa-youtube" />
             <p>Conditions générales d'utilisation</p>
           </div>
         </div>

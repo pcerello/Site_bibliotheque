@@ -17,7 +17,7 @@ class SearchEngine extends React.Component {
       <form>
         <input type="text" placeholder="Rechercher un auteur" />
         <button type="submit" onClick={this.handleSubmit}>
-        <i class="fa-solid fa-magnifying-glass"></i> Rechercher
+          <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
         </button>
       </form>
     );

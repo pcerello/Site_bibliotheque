@@ -18,6 +18,27 @@ use Doctrine\ORM\Query\Expr;
 class BookApiController extends AbstractController
 {
     #[OA\Get(summary: "List of books")]
+    #[OA\Parameter(
+        name: "author",
+        in: "query",
+        description: "Author name",
+        required: false,
+        example: "J.K. Rowling"
+    )]
+    #[OA\Parameter(
+        name: "max",
+        in: "query",
+        description: "Maximum number of books",
+        required: false,
+        example: 10
+    )]
+    #[OA\Parameter(
+        name: "title",
+        in: "query",
+        description: "Book title",
+        required: false,
+        example: "Harry Potter"
+    )]
     #[OA\Response(
         response: 200,
         description: "List of books",
@@ -43,6 +64,8 @@ class BookApiController extends AbstractController
         $author_name = $request->get('author');
         // Nombre maximum de livres
         $max = $request->get('max');
+        // Titre du livre
+        $title = $request->get('title');
         // Vérification des valeurs des paramètres
         if ($author_name) {
             $query
@@ -50,6 +73,11 @@ class BookApiController extends AbstractController
             ->innerJoin('\App\Entity\Author', 'a', Expr\Join::WITH, 'w.idAuthor = a.id')
             ->where("a.name LIKE :author_name")
             ->setParameter('author_name', "%$author_name%");
+        }
+        if ($title) {
+            $query
+            ->where("b.title LIKE :title")
+            ->setParameter('title', "%$title%");
         }
         if ($max && is_numeric($max)) {
             // Si la valeur est négative
@@ -59,7 +87,7 @@ class BookApiController extends AbstractController
                 $query->setMaxResults($max);
             }
         }
-        
+
         $query = $query->getQuery();
         $books = $query->getResult();
 

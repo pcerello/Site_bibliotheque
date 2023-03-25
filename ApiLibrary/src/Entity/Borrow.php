@@ -7,8 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Borrow
  *
- * @ORM\Table(name="Borrow", indexes={@ORM\Index(name="id_book", columns={"id_book"}),
- * @ORM\Index(name="id_reader", columns={"id_reader"})})
+ * @ORM\Table(name="Borrow", indexes={@ORM\Index(name="id_book", columns={"id_book"}), @ORM\Index(name="id_reader", columns={"id_reader"})})
  * @ORM\Entity
  */
 class Borrow
@@ -37,16 +36,6 @@ class Borrow
     private $dateReturn;
 
     /**
-     * @var \Book
-     *
-     * @ORM\ManyToOne(targetEntity="Book")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_book", referencedColumnName="id")
-     * })
-     */
-    private $idBook;
-
-    /**
      * @var \Reader
      *
      * @ORM\ManyToOne(targetEntity="Reader")
@@ -55,4 +44,14 @@ class Borrow
      * })
      */
     private $idReader;
+
+    /**
+     * @var \Book
+     *
+     * @ORM\ManyToOne(targetEntity="Book")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_book", referencedColumnName="id")
+     * })
+     */
+    private $idBook;
 }

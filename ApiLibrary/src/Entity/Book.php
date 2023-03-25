@@ -65,7 +65,7 @@ class Book
     #[ORM\Column]
     #[Groups("book_infos")]
     #[OA\Property(example: 100, description: "Number of pages of the book")]
-     private $nbrPages;
+    private $nbrPages;
 
     /**
      * @var string

@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use ContainerURNMEDA\getSluggerService;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\View;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr;
 
 #[Route("/api")]
 #[OA\Tag("Readers")]
@@ -31,8 +33,10 @@ class ReaderApiController extends AbstractController
      */
     public function listReader(EntityManagerInterface $entityManager)
     {
-        $query = $entityManager
-            ->createQuery("SELECT r.id, r.firstName, r.lastName, r.email FROM \App\Entity\Reader r");
+        $query = $entityManager->createQueryBuilder()
+            ->select('r.id, r.firstName, r.lastName, r.email, r.picture')
+            ->from('\App\Entity\Reader', 'r')
+            ->getQuery();
 
         $readers = $query->getResult();
 
@@ -59,9 +63,12 @@ class ReaderApiController extends AbstractController
      */
     public function readerShow(EntityManagerInterface $entityManager, int $id)
     {
-        $query = $entityManager
-            ->createQuery("SELECT r.id, r.firstName, r.lastName, r.email FROM \App\Entity\Reader r WHERE r.id = :id")
-            ->setParameter("id", $id);
+        $query = $entityManager->createQueryBuilder()
+            ->select('r.id, r.firstName, r.lastName, r.email, r.picture')
+            ->from('\App\Entity\Reader', 'r')
+            ->where('r.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
 
         $reader = $query->getOneOrNullResult();
 
@@ -92,10 +99,16 @@ class ReaderApiController extends AbstractController
      */
     public function booksReadByReader(EntityManagerInterface $entityManager, int $id)
     {
-        $query = $entityManager
-            ->createQuery("SELECT b.id, b.title FROM \App\Entity\Borrow bo 
-                JOIN bo.idBook b JOIN bo.idReader r WHERE r.id = :id")
-            ->setParameter("id", $id);
+        $query = $entityManager->createQueryBuilder()
+            ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
+            ->from('\App\Entity\Book', 'b')
+            ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
+            ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id')
+            ->innerJoin('\App\Entity\Borrow', 'bo', Expr\Join::WITH, 'b.id = bo.idBook')
+            ->innerJoin('\App\Entity\Reader', 'r', Expr\Join::WITH, 'bo.idReader = r.id')
+            ->where('r.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
 
         $books = $query->getResult();
 
@@ -126,36 +139,30 @@ class ReaderApiController extends AbstractController
      */
     public function booksRecommendationForReader(EntityManagerInterface $entityManager, int $id)
     {
-        $query = $entityManager
-            ->createQuery("SELECT b.id, b.title FROM \App\Entity\Borrow bo 
-                JOIN bo.idBook b JOIN bo.idReader r WHERE r.id = :id")
-            ->setParameter("id", $id);
+        // recuperer les id de mes followers
+        $query = $entityManager->createQueryBuilder()
+            ->select('r.id')
+            ->from('\App\Entity\Reader', 'r')
+            ->innerJoin('\App\Entity\Follow', 'f', Expr\Join::WITH, 'r.id = f.idIsFollowed')
+            ->where('f.idFollow = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        $friends = $query->getResult();
+
+        // recuperer les id des livres que mes followers ont lu
+        $query = $entityManager->createQueryBuilder()
+            ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
+            ->from('\App\Entity\Book', 'b')
+            ->innerJoin('\App\Entity\Borrow', 'bo', Expr\Join::WITH, 'b.id = bo.idBook')
+            ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
+            ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id')
+            ->where('bo.idReader IN (:friends)')
+            ->setParameter('friends', $friends)
+            ->getQuery();
 
         $books = $query->getResult();
 
-        if (!$books) {
-            return $this->json(["message" => "Reader not found"], 404);
-        }
-
-        // Get the list of books read by the reader
-        $booksRead = [];
-        foreach ($books as $book) {
-            $booksRead[] = $book["id"];
-        }
-        //Pour l'instant on a 1 ami donc la vie est triste
-        /*
-        // Get the list of books read by the reader's friends
-        $query = $entityManager
-        ->createQuery("SELECT b.id FROM \App\Entity\Borrow bo JOIN bo.idBook b
-            JOIN bo.idReader r JOIN r.friends f WHERE f.id = :id")
-        ->setParameter("id", $id);
-        $books = $query->getResult();
-        // Get the list of books read by the reader's friends
-        $booksReadByFriends = [];
-        foreach ($books as $book) {
-        $booksReadByFriends[] = $book["id"];
-        }
-        */
 
         return $this->json($books, 200);
     }

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Write
  *
- * @ORM\Table(name="Write_", indexes={@ORM\Index(name="id_book", columns={"id_book"}), @ORM\Index(name="id_author", columns={"id_author"})})
+ * @ORM\Table(name="Write_", uniqueConstraints={@ORM\UniqueConstraint(name="UQ_Write_id_author_id_book", columns={"id_author", "id_book"})}, indexes={@ORM\Index(name="id_book", columns={"id_book"}), @ORM\Index(name="id_reader", columns={"id_author"})})
  * @ORM\Entity
  */
 class Write

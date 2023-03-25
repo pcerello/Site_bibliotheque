@@ -61,6 +61,9 @@ class Reader
      *
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
+    #[ORM\Column]
+    #[Groups("reader_infos")]
+    #[OA\Property(example: "https://www.google.com/images.png", description: "Picture of the reader")]
     private $picture;
 
     /**

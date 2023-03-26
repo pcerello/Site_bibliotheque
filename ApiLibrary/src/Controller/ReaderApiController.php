@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\BookRepository;
+use App\Repository\ReaderRepository;
 use ContainerURNMEDA\getSluggerService;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,14 +33,9 @@ class ReaderApiController extends AbstractController
      * Return a list of readers
      * @return mixed
      */
-    public function listReader(EntityManagerInterface $entityManager)
+    public function listReader(ReaderRepository $readerRepository)
     {
-        $query = $entityManager->createQueryBuilder()
-            ->select('r.id, r.firstName, r.lastName, r.email, r.picture')
-            ->from('\App\Entity\Reader', 'r')
-            ->getQuery();
-
-        $readers = $query->getResult();
+        $readers = $readerRepository->findAll();
 
         return $this->json($readers, 200);
     }
@@ -61,16 +58,9 @@ class ReaderApiController extends AbstractController
      * Return a reader
      * @return mixed
      */
-    public function readerShow(EntityManagerInterface $entityManager, int $id)
+    public function readerShow(ReaderRepository $readerRepository, int $id)
     {
-        $query = $entityManager->createQueryBuilder()
-            ->select('r.id, r.firstName, r.lastName, r.email, r.picture')
-            ->from('\App\Entity\Reader', 'r')
-            ->where('r.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery();
-
-        $reader = $query->getOneOrNullResult();
+        $reader = $readerRepository->find($id);
 
         if (!$reader) {
             return $this->json(["message" => "Reader not found"], 404);
@@ -97,23 +87,18 @@ class ReaderApiController extends AbstractController
      * Return a list of books read by a reader
      * @return mixed
      */
-    public function booksReadByReader(EntityManagerInterface $entityManager, int $id)
+    public function booksReadByReader(BookRepository $bookRepository, int $id)
     {
-        $query = $entityManager->createQueryBuilder()
-            ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
-            ->from('\App\Entity\Book', 'b')
-            ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
-            ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id')
-            ->innerJoin('\App\Entity\Borrow', 'bo', Expr\Join::WITH, 'b.id = bo.idBook')
-            ->innerJoin('\App\Entity\Reader', 'r', Expr\Join::WITH, 'bo.idReader = r.id')
-            ->where('r.id = :id')
+        $queryBuilder = $bookRepository->findBook();
+
+        $queryBuilder->where('bo.idReader = :id')
             ->setParameter('id', $id)
             ->getQuery();
 
-        $books = $query->getResult();
+        $books = $queryBuilder->getQuery()->getResult();
 
         if (!$books) {
-            return $this->json(["message" => "Reader not found"], 404);
+            return $this->json(["message" => "Books not found"], 404);
         }
 
         return $this->json($books, 200);
@@ -137,32 +122,27 @@ class ReaderApiController extends AbstractController
      * Return a list of books recommended for a reader
      * @return mixed
      */
-    public function booksRecommendationForReader(EntityManagerInterface $entityManager, int $id)
+    public function booksRecommendationForReader(BookRepository $bookRepository, ReaderRepository $readerRepository, int $id)
     {
-        // recuperer les id de mes followers
-        $query = $entityManager->createQueryBuilder()
-            ->select('r.id')
-            ->from('\App\Entity\Reader', 'r')
-            ->innerJoin('\App\Entity\Follow', 'f', Expr\Join::WITH, 'r.id = f.idIsFollowed')
-            ->where('f.idFollow = :id')
+        $queryBuilder = $readerRepository->findFollow();
+
+        $queryBuilder->where('f.idFollow = :id')
             ->setParameter('id', $id)
             ->getQuery();
 
-        $friends = $query->getResult();
+        $myFollow = $queryBuilder->getQuery()->getResult();
 
-        // recuperer les id des livres que mes followers ont lu
-        $query = $entityManager->createQueryBuilder()
-            ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
-            ->from('\App\Entity\Book', 'b')
-            ->innerJoin('\App\Entity\Borrow', 'bo', Expr\Join::WITH, 'b.id = bo.idBook')
-            ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
-            ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id')
-            ->where('bo.idReader IN (:friends)')
-            ->setParameter('friends', $friends)
+        $queryBuilder = $bookRepository->findBook();
+
+        $queryBuilder->where('bo.idReader IN (:readers)')
+            ->setParameter('readers', $myFollow)
             ->getQuery();
 
-        $books = $query->getResult();
+        $books = $queryBuilder->getQuery()->getResult();
 
+        if (!$books) {
+            return $this->json(["message" => "Books not found"], 404);
+        }
 
         return $this->json($books, 200);
     }

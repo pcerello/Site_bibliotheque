@@ -27,4 +27,14 @@ class Category
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
     private $name;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
 }

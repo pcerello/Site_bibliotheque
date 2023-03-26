@@ -114,4 +114,54 @@ class Book
     #[Groups("book_infos")]
     #[OA\Property(example: 1, description: "Id of the category")]
     private $category;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function getNbrPages(): ?int
+    {
+        return $this->nbrPages;
+    }
+
+    public function getResume(): ?string
+    {
+        return $this->resume;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function getEditor(): ?string
+    {
+        return $this->editor->getName();
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category->getName();
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 }

@@ -9,7 +9,7 @@ use OpenApi\Attributes as OA;
 /**
  * Reader
  *
- * @ORM\Table(name="Reader", uniqueConstraints={@ORM\UniqueConstraint(name="UQ_Reader_email", columns={"email"})}, indexes={@ORM\Index(name="friend", columns={"friend"})})
+ * @ORM\Table(name="Reader", uniqueConstraints={@ORM\UniqueConstraint(name="UQ_Reader_email", columns={"email"})})
  * @ORM\Entity
  */
 #[ORM\Entity(repositoryClass: ReaderRepository::class)]

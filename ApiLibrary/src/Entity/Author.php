@@ -10,10 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="Author")
  * @ORM\Entity
  */
-#[
-    ORM\Table(name: 'Author'),
-    ORM\Entity,
-]
 class Author
 {
     /**

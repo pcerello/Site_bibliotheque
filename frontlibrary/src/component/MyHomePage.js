@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import defaultImage from './livre.png';
+import defaultImage from "./livre.png";
 
 function MyHomePage({ readerId }) {
   const [books, setBooks] = useState([]);
- 
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/readers/${readerId}/books`, {
@@ -13,7 +12,9 @@ function MyHomePage({ readerId }) {
       .then((data) => {
         // Trier les livres en fonction de la date de retour
         console.log(data);
-        const sortedBooks = data.sort((a, b) => new Date(b.dateBorrow) - new Date(a.dateBorrow));
+        const sortedBooks = data.sort(
+          (a, b) => new Date(b.dateBorrow) - new Date(a.dateBorrow)
+        );
         setBooks(sortedBooks.slice(0, 4));
       });
   }, [readerId]);
@@ -30,7 +31,7 @@ function MyHomePage({ readerId }) {
               <img
                 src={defaultImage}
                 alt="default"
-                style={{ width: "128px"}}
+                style={{ width: "128px" }}
               />
             )}
             {book[0].title} - {book[0].author} - {book[0].year}

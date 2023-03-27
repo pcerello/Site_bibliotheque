@@ -2,6 +2,7 @@ image: jakzal/phpqa:php8.1
 
 before_script:
   - cd ApiLibrary && composer install
+  - symfony composer require --dev dama/doctrine-test-bundle
 
 cache:
   paths: 

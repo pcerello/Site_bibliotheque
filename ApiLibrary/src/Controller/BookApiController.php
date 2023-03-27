@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
+use App\Repository\BookRepository;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\View;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr;
 
 #[Route("/api")]
 #[OA\Tag("Books")]
@@ -18,6 +17,27 @@ use Doctrine\ORM\Query\Expr;
 class BookApiController extends AbstractController
 {
     #[OA\Get(summary: "List of books")]
+    #[OA\Parameter(
+        name: "author",
+        in: "query",
+        description: "Author name",
+        required: false,
+        example: "J.K. Rowling"
+    )]
+    #[OA\Parameter(
+        name: "max",
+        in: "query",
+        description: "Maximum number of books",
+        required: false,
+        example: 10
+    )]
+    #[OA\Parameter(
+        name: "title",
+        in: "query",
+        description: "Book title",
+        required: false,
+        example: "Harry Potter"
+    )]
     #[OA\Response(
         response: 200,
         description: "List of books",
@@ -31,42 +51,49 @@ class BookApiController extends AbstractController
      * Return a list of books
      * @return mixed
      */
-    public function listBook(Request $request, EntityManagerInterface $entityManager)
+    public function listBook(Request $request, BookRepository $bookRepository)
     {
-        $query = $entityManager->createQueryBuilder()
-        ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
-        ->from('\App\Entity\Book', 'b')
-        ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
-        ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id');
+        $queryBuilder = $bookRepository->findBook();
 
-        /* Gestion des paramètres de la query string de la requête */
-        $author_name = $request->get('author');
-        // Nombre maximum de livres
-        $max = $request->get('max');
-        // Vérification des valeurs des paramètres
-        if ($author_name) {
-            $query
-            ->innerJoin('\App\Entity\Write', 'w', Expr\Join::WITH, 'b.id = w.idBook')
-            ->innerJoin('\App\Entity\Author', 'a', Expr\Join::WITH, 'w.idAuthor = a.id')
-            ->where("a.name LIKE :author_name")
-            ->setParameter('author_name', "%$author_name%");
+        $author = $request->query->get('author');
+        $max = $request->query->get('max');
+        $title = $request->query->get('title');
+
+        if ($title) {
+            $queryBuilder->andWhere('b.title LIKE :title')
+                ->setParameter('title', "%$title%");
         }
+
+        if ($author) {
+            $queryBuilder->andWhere('a.name LIKE :author')
+                ->setParameter('author', "%$author%");
+        }
+
         if ($max && is_numeric($max)) {
-            // Si la valeur est négative
             if ($max < 0) {
                 return $this->json(["message" => "Nombre maximum de pages invalide"], 400);
             } else {
-                $query->setMaxResults($max);
+                $queryBuilder->setMaxResults($max);
             }
         }
-        
-        $query = $query->getQuery();
-        $books = $query->getResult();
+
+        $books = $queryBuilder->getQuery()->getResult();
+
+        if (!$books) {
+            return $this->json(["message" => "Aucun livre trouvé"], 404);
+        }
 
         return $this->json($books, 200);
     }
 
     #[OA\Get(summary: "Get a book")]
+    #[OA\Parameter(
+        name: "id",
+        in: "path",
+        description: "Book id",
+        required: true,
+        example: 1
+    )]
     #[OA\Response(
         response: 200,
         description: "Get a book",
@@ -84,23 +111,19 @@ class BookApiController extends AbstractController
      * Return a book
      * @return mixed
      */
-    public function bookShow(EntityManagerInterface $entityManager, int $id)
+    public function bookShow(BookRepository $bookRepository, int $id)
     {
-        $query = $entityManager->createQueryBuilder()
-        ->select('b.id, b.title, b.picture, b.language, b.nbrPages as nbr_pages, b.resume, b.year, c.name as category, e.name as editor')
-        ->from('\App\Entity\Book', 'b')
-        ->where('b.id = :id')
-        ->setParameter('id', $id)
-        ->innerJoin('\App\Entity\Category', 'c', Expr\Join::WITH, 'b.category = c.id')
-        ->innerJoin('\App\Entity\Editor', 'e', Expr\Join::WITH, 'b.editor = e.id')
-        ->getQuery();
+        $query = $bookRepository->findBook()
+            ->andWhere('b.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
 
-        $reader = $query->getOneOrNullResult();
+        $book = $query->getOneOrNullResult();
 
-        if (!$reader) {
-            return $this->json(["message" => "Book not found"], 404);
+        if (!$book) {
+            return $this->json(["message" => "Livre non trouvé"], 404);
         }
 
-        return $this->json($reader, 200);
+        return $this->json($book, 200);
     }
 }

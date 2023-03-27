@@ -61,6 +61,9 @@ class Reader
      *
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
+    #[ORM\Column]
+    #[Groups("reader_infos")]
+    #[OA\Property(example: "https://www.google.com/images.png", description: "Picture of the reader")]
     private $picture;
 
     /**
@@ -70,13 +73,28 @@ class Reader
      */
     private $password;
 
-    /**
-     * @var \Reader
-     *
-     * @ORM\ManyToOne(targetEntity="Reader")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="friend", referencedColumnName="id")
-     * })
-     */
-    private $friend;
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
 }

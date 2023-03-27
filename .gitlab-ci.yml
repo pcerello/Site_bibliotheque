@@ -28,8 +28,17 @@ phpcs:
 phpunit:
    image: php:8.1
     stage: UnitTests
+    services:
+        - name: mysql:latest
+          alias: mysql
     variables:
-      DATABASE_URL: 'mysql://root:jesuisroot!@185.212.225.127:3306/bibliotheque'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      #MYSQL_ROOT_PASSWORD: pass_test
+      MYSQL_DATABASE: myapptest
+      #MYSQL_USER: myapptest
+      #MYSQL_PASSWORD: myapptest
+      #DATABASE_URL: 'mysql://myapptest:myapptest@mysql:3306/myapptest'
+      DATABASE_URL: 'mysql://root:@mysql:3306/bibliotheque'
     before_script:
         - cd symfony
         - apt-get update && apt-get install -y git libzip-dev
@@ -40,6 +49,7 @@ phpunit:
         - php bin/console doctrine:migration:migrate --env=test --no-interaction
         - php bin/console --env=test doctrine:schema:update --force
         - php bin/console --env=test doctrine:fixtures:load -n
+
   script:
       - php bin/phpunit
   allow_failure: false

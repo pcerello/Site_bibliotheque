@@ -78,6 +78,10 @@ html,body,#root,.App{
   background-color: #086969;
 }
 
+footer a:hover{
+  text-decoration: underline;
+}
+
 input::placeholder{
   @apply text-color;
 }

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Borrow
  *
@@ -54,4 +55,32 @@ class Borrow
      * })
      */
     private $idBook;
+
+    public function setReader(Reader $reader): self
+    {
+        $this->idReader = $reader;
+
+        return $this;
+    }
+
+    public function setBook(Book $book): self
+    {
+        $this->idBook = $book;
+
+        return $this;
+    }
+
+    public function setDateBorrow(\DateTime $dateBorrow): self
+    {
+        $this->dateBorrow = $dateBorrow;
+
+        return $this;
+    }
+
+    public function setDateReturn(\DateTime $dateReturn): self
+    {
+        $this->dateReturn = $dateReturn;
+
+        return $this;
+    }
 }

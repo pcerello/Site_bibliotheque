@@ -49,7 +49,6 @@ phpunit:
         - php bin/console doctrine:migration:migrate --env=test --no-interaction
         - php bin/console --env=test doctrine:schema:update --force
         - php bin/console --env=test doctrine:fixtures:load -n
-
-  script:
-      - php bin/phpunit
-  allow_failure: false
+    script:
+        - php bin/phpunit
+    allow_failure: false

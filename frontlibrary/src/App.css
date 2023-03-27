@@ -71,6 +71,7 @@ html,body,#root,.App{
 
 .bg-color{
   background-color: #009999;
+  transition: background-color .2s;
 }
 
 .bg-color:hover{

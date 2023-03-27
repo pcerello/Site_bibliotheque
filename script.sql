@@ -501,7 +501,7 @@ INSERT INTO `Book` (`id`, `title`, `picture`, `language`, `nbr_pages`, `resume`,
 
 CREATE TABLE `Borrow` (
   `id` int(11) NOT NULL,
-  `date_borrow` date DEFAULT NULL,
+  `date_borrow` date NOT NULL,
   `date_return` date DEFAULT NULL CHECK (`date_borrow` < `date_return`),
   `id_book` int(11) NOT NULL,
   `id_reader` int(11) NOT NULL

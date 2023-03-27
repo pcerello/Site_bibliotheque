@@ -54,4 +54,19 @@ class Borrow
      * })
      */
     private $idBook;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getDateBorrow(): ?\DateTimeInterface
+    {
+        return $this->dateBorrow;
+    }
+
+    public function getDateReturn(): ?\DateTimeInterface
+    {
+        return $this->dateReturn;
+    }
 }

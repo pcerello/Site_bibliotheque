@@ -31,4 +31,14 @@ class BookRepository extends ServiceEntityRepository
             ->leftJoin('\App\Entity\Borrow', 'bo', Expr\Join::WITH, 'b.id = bo.idBook')
             ->groupBy('b.id');
     }
+
+    public function findBookBorrow(): QueryBuilder
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('\App\Entity\Write', 'w', Expr\Join::WITH, 'b.id = w.idBook')
+            ->leftJoin('\App\Entity\Author', 'a', Expr\Join::WITH, 'w.idAuthor = a.id')
+            ->leftJoin('\App\Entity\Borrow', 'bo', Expr\Join::WITH, 'b.id = bo.idBook')
+            ->addSelect('b, bo.dateBorrow as dateBorrow, bo.dateReturn as dateReturn')
+            ->groupBy('b.id');
+    }
 }

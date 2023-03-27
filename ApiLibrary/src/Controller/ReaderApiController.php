@@ -89,7 +89,7 @@ class ReaderApiController extends AbstractController
      */
     public function booksReadByReader(BookRepository $bookRepository, int $id)
     {
-        $queryBuilder = $bookRepository->findBook();
+        $queryBuilder = $bookRepository->findBookBorrow();
 
         $queryBuilder->where('bo.idReader = :id')
             ->setParameter('id', $id)

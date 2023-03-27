@@ -1,14 +1,14 @@
 import "./App.css";
-import MyConnection from "./component/MyConnection";
+import BookInfo from "./component/BookInfo";
 import Layout from "./component/Layout";
 
-function ConnectionPage() {
+function BookPage() {
   return (
     <div className="App">
       <Layout>
-        <MyConnection />
+        <BookInfo />
       </Layout>
     </div>
   );
 }
-export default ConnectionPage;
+export default BookPage;

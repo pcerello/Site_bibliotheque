@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Book from "./Book";
-import defaultImage from "./livre.png";
 
 function MyHomePage({ readerId }) {
   const [books, setBooks] = useState([]);

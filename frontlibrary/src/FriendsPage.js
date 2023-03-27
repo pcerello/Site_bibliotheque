@@ -1,9 +1,12 @@
 import React from "react";
+import Layout from "./component/Layout";
 
 function FriendsPage() {
   return (
     <div>
-      <h1>FriendsPage</h1>
+      <Layout>
+        <h1>Friends Page</h1>
+      </Layout>
     </div>
   );
 }

@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Layout from "./component/Layout";
 
 function ErrorPage() {
   return (
     <div>
-      <h1>Page non trouvée</h1>
-      <Link to="/">Retour à l'accueil</Link>
+      <Layout>
+        <h1>Page non trouvée</h1>
+      </Layout>
     </div>
   );
 }

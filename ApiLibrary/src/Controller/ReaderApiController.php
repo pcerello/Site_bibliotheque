@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\View;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
+use Symfony\Component\HttpFoundation\Request;
+
 
 #[Route("/api")]
 #[OA\Tag("Readers")]
@@ -70,6 +72,13 @@ class ReaderApiController extends AbstractController
     }
 
     #[OA\Get(summary: "List book read by a reader")]
+    #[OA\Parameter(
+        name: "max",
+        in: "query",
+        description: "Maximum number of books",
+        required: false,
+        example: 4
+    )]
     #[OA\Response(
         response: 200,
         description: "List book read by a reader",
@@ -87,13 +96,19 @@ class ReaderApiController extends AbstractController
      * Return a list of books read by a reader
      * @return mixed
      */
-    public function booksReadByReader(BookRepository $bookRepository, int $id)
+    public function booksReadByReader(BookRepository $bookRepository, int $id, Request $request)
     {
+        $max = $request->query->get('max');
+
         $queryBuilder = $bookRepository->findBookBorrow();
 
         $queryBuilder->where('bo.idReader = :id')
             ->setParameter('id', $id)
             ->getQuery();
+
+        if ($max) {
+            $queryBuilder->setMaxResults($max);
+        }
 
         $books = $queryBuilder->getQuery()->getResult();
 

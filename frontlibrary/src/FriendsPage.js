@@ -1,11 +1,15 @@
 import React from "react";
 import Layout from "./component/Layout";
+import MyFriends from "./component/MyFriends";
+import PersonalInfos from "./component/PersonalInfos";
 
 function FriendsPage() {
   return (
     <div>
       <Layout>
-        <h1>Friends Page</h1>
+        <PersonalInfos readerId={1}/>
+        <MyFriends />
+
       </Layout>
     </div>
   );

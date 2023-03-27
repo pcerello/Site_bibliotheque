@@ -40,7 +40,6 @@ phpunit:
     #DATABASE_URL: 'mysql://myapptest:myapptest@mysql:3306/myapptest'
     DATABASE_URL: 'mysql://root:@mysql:3306/bibliotheque'
   before_script:
-      - cd symfony
       - apt-get update && apt-get install -y git libzip-dev
       - curl -sSk https://getcomposer.org/installer | php -- --disable-tls && mv composer.phar /usr/local/bin/composer
       - docker-php-ext-install mysqli pdo pdo_mysql zip

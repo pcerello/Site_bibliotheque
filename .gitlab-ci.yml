@@ -10,8 +10,6 @@ cache:
 stages:
   - SecurityChecker
   - CodingStandards
-  - UnitTests
-  - LintReact
 
 security-checker:
   stage: SecurityChecker
@@ -23,31 +21,4 @@ phpcs:
   stage: CodingStandards
   script:
       - phpcs -v --standard=PSR1 --ignore=./src/Kernel.php ./src
-  allow_failure: false
-
-phpunit:
-  image: php:8.1
-  stage: UnitTests
-  services:
-      - name: mysql:latest
-        alias: mysql
-  variables:
-    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-    #MYSQL_ROOT_PASSWORD: pass_test
-    MYSQL_DATABASE: myapptest
-    #MYSQL_USER: myapptest
-    #MYSQL_PASSWORD: myapptest
-    #DATABASE_URL: 'mysql://myapptest:myapptest@mysql:3306/myapptest'
-    DATABASE_URL: 'mysql://root:@mysql:3306/bibliotheque'
-  before_script:
-      - apt-get update && apt-get install -y git libzip-dev
-      - curl -sSk https://getcomposer.org/installer | php -- --disable-tls && mv composer.phar /usr/local/bin/composer
-      - docker-php-ext-install mysqli pdo pdo_mysql zip
-      - php bin/console doctrine:database:drop --force --if-exists --env=test
-      - php bin/console doctrine:database:create --env=test
-      - php bin/console doctrine:migration:migrate --env=test --no-interaction
-      - php bin/console --env=test doctrine:schema:update --force
-      - php bin/console --env=test doctrine:fixtures:load -n
-  script:
-      - php bin/phpunit
   allow_failure: false

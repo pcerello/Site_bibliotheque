@@ -6,7 +6,7 @@
   * [Context](#context)
   * [Objectives](#objectives)
 * [Installation](#installation)
-    * [Deploy database](#deploy-database)
+    * [Database](#database)
     * [Deploy API](#deploy-api)
     * [Deploy website](#deploy-website)
 * [SGBD used](#sgbd-used)
@@ -28,10 +28,17 @@ The result to be provided is therefore a database in MySQL, APIs made in Symfony
 
 ## Installation
 
-### Deploy database
+### Database
 
-```bash
-...
+```sql
+SELECT COUNT(*) FROM Author
+SELECT COUNT(*) FROM Book
+SELECT COUNT(*) FROM Editor
+SELECT COUNT(*) FROM Category
+SELECT COUNT(*) FROM Follow
+SELECT COUNT(*) FROM Borrow
+SELECT COUNT(*) FROM Reader
+SELECT COUNT(*) FROM Write_
 ```
 
 ### Deploy API
@@ -84,3 +91,5 @@ Here are the requirements for setting up the development enironment:
 - Pauline Cerello : Front-end
 - Benjamin Loupiac : Back-end and Database
 - Younes El Mesaoudi Maftah : Back-end
+
+

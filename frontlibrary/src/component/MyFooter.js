@@ -10,13 +10,13 @@ class MyFooter extends React.Component {
             <h1 className="text-color pb-4">IUT - Bibliothèque</h1>
             <p>15 rue de Naudet - CS 10207</p>
             <p>33 175 Gradignan Cedex</p>
-            <p>Tél. +33 (0)5 56 84 57 57</p>
+            <a href="tel:33556845757">Tél. +33 (0)5 56 84 57 57</a>
           </div>
           <div >
             <h1 className="text-color pb-4">Liens</h1>
             <p>IUT de Bordeaux</p>
-            <p>Bibliothèque de l'université de Bordeaux</p>
-            <p>Nous contacter</p>
+            <a href="https://www.iut.u-bordeaux.fr/general/" target="_blank">Bibliothèque de l'université de Bordeaux</a>
+            <a href="mailto:bibliotheque@iut.u-bordeaux.fr">Nous contacter</a>
           </div>
           <div>
             <div className="flex space-x-4">

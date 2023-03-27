@@ -83,7 +83,7 @@ class ReaderApiController extends AbstractController
         response: 200,
         description: "List book read by a reader",
         content: new OA\JsonContent(
-            ref: "#/components/schemas/BookInfos"
+            ref: "#/components/schemas/BookBorrow"
         )
     )]
     #[OA\Response(
@@ -124,7 +124,7 @@ class ReaderApiController extends AbstractController
         response: 200,
         description: "Recommendation of books for a reader",
         content: new OA\JsonContent(
-            ref: "#/components/schemas/BookInfos"
+            ref: "#/components/schemas/BookAuthors"
         )
     )]
     #[OA\Response(
@@ -160,5 +160,88 @@ class ReaderApiController extends AbstractController
         }
 
         return $this->json($books, 200);
+    }
+
+    #[OA\Get(summary: "List of follows")]
+    #[OA\Response(
+        response: 200,
+        description: "List of follows",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/ReaderInfos"
+        )
+    )]
+    #[View(serializerGroups: ["reader_infos"])]
+    #[Route("/readers/{id}/follow", methods: ["GET"])]
+    /**
+     * Return a list of follows
+     * @return mixed
+     */
+    public function listFollow(ReaderRepository $readerRepository, int $id)
+    {
+        $queryBuilder = $readerRepository->findFollow();
+
+        $queryBuilder->where('f.idFollow = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        $follows = $queryBuilder->getQuery()->getResult();
+
+        if (!$follows) {
+            return $this->json(["message" => "Follows not found"], 404);
+        }
+
+        return $this->json($follows, 200);
+    }
+
+    #[OA\Get(summary: "List of followers recommended")]
+    #[OA\Response(
+        response: 200,
+        description: "List of followers recommended",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/ReaderInfos"
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "Reader not found"
+    )]
+    #[View(serializerGroups: ["reader_infos"])]
+    #[Route("/readers/{id}/follow/recommendations", methods: ["GET"])]
+    /**
+     * Return a list of followers recommended
+     * It's the follow of the follow of the reader
+     * +1 level of recommendation
+     * 
+     * @return mixed
+     */
+    public function listFollowRecommendation(ReaderRepository $readerRepository, int $id)
+    {
+        $queryBuilder = $readerRepository->findFollow();
+
+        // follow of the reader
+        $queryBuilder->where('f.idFollow = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        $myFollow = $queryBuilder->getQuery()->getResult();
+
+        $queryBuilder = $readerRepository->findFollow();
+
+        // follow of the follow of the reader
+        $queryBuilder->where('f.idFollow IN (:readers)')
+            ->setParameter('readers', $myFollow)
+            ->andWhere('f.idIsFollowed != :id')
+            ->setParameter('id', $id)
+            ->andWhere('f.idIsFollowed NOT IN (:myFollow)')
+            ->setParameter('myFollow', $myFollow)
+            ->getQuery();
+
+        $follows = $queryBuilder->getQuery()->getResult();
+
+        if (!$follows) {
+            return $this->json(["message" => "Follows not found"], 404);
+        }
+
+        return $this->json($follows, 200);
     }
 }

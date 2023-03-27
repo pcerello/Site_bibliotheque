@@ -9,7 +9,7 @@ use OpenApi\Attributes as OA;
 /**
  * Reader
  *
- * @ORM\Table(name="Reader", uniqueConstraints={@ORM\UniqueConstraint(name="UQ_Reader_email", columns={"email"})}, indexes={@ORM\Index(name="friend", columns={"friend"})})
+ * @ORM\Table(name="Reader", uniqueConstraints={@ORM\UniqueConstraint(name="UQ_Reader_email", columns={"email"})})
  * @ORM\Entity
  */
 #[ORM\Entity(repositoryClass: ReaderRepository::class)]
@@ -83,9 +83,23 @@ class Reader
         return $this->firstName;
     }
 
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
     public function getLastName(): ?string
     {
         return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -93,8 +107,29 @@ class Reader
         return $this->email;
     }
 
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getPicture(): ?string
     {
         return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 }

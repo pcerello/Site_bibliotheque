@@ -82,6 +82,7 @@ class Borrow
         $this->dateReturn = $dateReturn;
 
         return $this;
+    }
 
     public function getId(): ?int
     {

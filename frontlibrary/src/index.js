@@ -2,16 +2,25 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import ConnectionPage from "./ConnectionPage";
+import ErrorPage from "./ErrorPage";
+import FriendsPage from "./FriendsPage";
+import BookPage from "./BookPage";
 
+export default function Index() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/connexion" element={<ConnectionPage />} />
+        <Route path="*" element={<ErrorPage />} />
+        <Route path="/amis" element={<FriendsPage />} />
+        <Route path="/books/:id" element={<BookPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+root.render(<Index />);

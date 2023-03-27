@@ -49,11 +49,11 @@ html,body,#root,.App{
   @apply py-2 px-3;
 }
 
-.bar-button>button{
+.bar-button{
   color: gray;
 }
 
-.bar-button>button:hover{
+.bar-button :hover{
   @apply text-color-hover;
 }
 
@@ -71,6 +71,7 @@ html,body,#root,.App{
 
 .bg-color{
   background-color: #009999;
+  transition: background-color .2s;
 }
 
 .bg-color:hover{

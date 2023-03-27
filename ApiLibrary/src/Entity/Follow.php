@@ -22,7 +22,7 @@ class Follow
     private $id;
 
     /**
-     * @var \Reader
+     * @var Reader
      *
      * @ORM\ManyToOne(targetEntity="Reader")
      * @ORM\JoinColumns({
@@ -32,7 +32,7 @@ class Follow
     private $idFollow;
 
     /**
-     * @var \Reader
+     * @var Reader
      *
      * @ORM\ManyToOne(targetEntity="Reader")
      * @ORM\JoinColumns({
@@ -40,4 +40,23 @@ class Follow
      * })
      */
     private $idIsFollowed;
+
+    public function setFollow(Reader $idFollow): self
+    {
+        $this->idFollow = $idFollow;
+
+        return $this;
+    }
+
+    public function setFollowed(Reader $idIsFollowed): self
+    {
+        $this->idIsFollowed = $idIsFollowed;
+
+        return $this;
+    }
+
+    public function getIdFollow(): ?Reader
+    {
+        return $this->idFollow->getId();
+    }
 }

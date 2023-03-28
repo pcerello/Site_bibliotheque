@@ -13,7 +13,7 @@ function MyMenu() {
   const renderMenuItems = () => {
     return Object.entries(routes).map(([route, label]) => {
       const isActive = location.pathname === route;
-      const className = isActive ? "border-b-4 border-[#009999]" : "";
+      const className = isActive ? "border-b-8 border-[#009999]": "";
 
       return (
         <Link to={route} key={route} className={`p-4 ${className}`}>
@@ -26,8 +26,8 @@ function MyMenu() {
   return (
     <>
       <div className="pt-14"></div>
-      <header className="flex w-full justify-center pt-4 pb-4 fixed top-0 bg-white">
-        <div className="flex flex-row justify-between w-5/6 content-center">
+      <header className="flex w-full justify-center fixed top-0 bg-white shadow z-50">
+        <div className="flex flex-row justify-between items-center w-5/6 content-center">
           <Link to="/" className="text-blue">
             IUT - Bibliothèque
           </Link>

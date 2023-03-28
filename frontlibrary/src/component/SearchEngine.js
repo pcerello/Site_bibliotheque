@@ -34,7 +34,7 @@ function SearchEngine() {
       {selectedAuthor ? (
         <AuthorBooks authorName={selectedAuthor} />
       ) : (
-        <form className="bg-sky-800 pt-16 pb-16" onSubmit={handleSubmit}>
+        <form className=" pt-16 pb-16" onSubmit={handleSubmit}>
           <input
             type="text"
             className="p-1 text-color-hover"

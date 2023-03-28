@@ -7,7 +7,7 @@ function FriendsPage() {
   return (
     <div>
       <Layout>
-        <PersonalInfos readerId={1}/>
+        <PersonalInfos readerId={3}/>
         <MyFriends />
 
       </Layout>

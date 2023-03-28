@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Attributes as OA;
 
 /**
  * Author
@@ -19,6 +21,9 @@ class Author
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column]
+    #[Groups("author_infos")]
+    #[OA\Property(example: 2000, description: "id of the author")]
     private $id;
 
     /**
@@ -26,6 +31,9 @@ class Author
      *
      * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
+    #[ORM\Column]
+    #[Groups("author_infos")]
+    #[OA\Property(example: "Bea", description: "name of the author")]
     private $name;
 
     public function getId(): ?int

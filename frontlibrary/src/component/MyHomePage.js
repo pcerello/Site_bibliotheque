@@ -54,19 +54,19 @@ function MyHomePage({ readerId }) {
       <h2 className="text-2xl p-16">4 derniers livres lus par le lecteur</h2>
       <ul className="flex flex-row flex-wrap space-x-4">
         {books.map((book) => (
-          <Book book={book} />
+          <Book key={book.id} book={book} />
         ))}
       </ul>
       <h2 className="text-2xl p-16">Les dernières acquisitions de la Bibliothèque</h2>
       <ul className="flex flex-row flex-wrap space-x-4">
         {booksBought.map((book) => (
-          <Book book={book} />
+          <Book key={book.id} book={book} />
         ))}
       </ul>
       <h2 className="text-2xl p-16">Tous les livres de la Bibliothèque</h2>
       <ul className="flex flex-row flex-wrap space-x-4 space-y-16 ">
         {currentBooks.map((book) => (
-          <Book book={book} />
+          <Book key={book.id} book={book} />
         ))}
       </ul>
       <div className="flex flex-row justify-center">

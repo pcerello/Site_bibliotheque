@@ -6,15 +6,18 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import MyHomePage from "./component/MyHomePage";
 import Layout from "./component/Layout";
+import AuthorBooks from "./component/AuthorBooks";
+
 
 library.add(fas, far, fab);
 
-function App() {
+function App({authorId}) {
   return (
     <div className="App">
       <Layout>
         <SearchEngine />
-        <MyHomePage readerId={3} />
+        {authorId ? (<AuthorBooks author={authorId}/>) : (<MyHomePage readerId={3} />)}
+        
       </Layout>
     </div>
   );

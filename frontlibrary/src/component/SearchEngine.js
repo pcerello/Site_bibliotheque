@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function SearchEngine() {
   return (
-    <form className="bg-sky-800 pt-16 pb-16">
+    <form className="pt-16 pb-16">
       <input
         type="text"
         className="p-1 text-color-hover"

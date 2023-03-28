@@ -5,6 +5,8 @@
 .App {
   text-align: center;
   @apply text-color;
+  background-image: url(/src/component/livres.jpg);
+  background-attachment: fixed;
 }
 
 .App-logo {
@@ -55,12 +57,6 @@ html,body,#root,.App{
 
 .bar-button :hover{
   @apply text-color-hover;
-}
-
-.bar-button :focus-within{
-  @apply text-color-hover;
-  text-decoration: underline;
-  background-color: #086969;
 }
 
 .text-color{

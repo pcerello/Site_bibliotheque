@@ -824,10 +824,9 @@ INSERT INTO `Editor` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `Follow` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `id_follow` int(11) NOT NULL,
-  `id_is_followed` int(11) NOT NULL,
-  INDEX (`id`)
+  `id_is_followed` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

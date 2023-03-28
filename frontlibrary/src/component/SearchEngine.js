@@ -45,7 +45,7 @@ function SearchEngine() {
   return (
     <div onClick={handleClickOutside} className="flex flex-col items-center text-left">
       {selectedAuthor ? (
-        <App authorId={selectedAuthor} />
+        <AuthorBooks authorId={selectedAuthor} />
       ) : (
         <form className="bg-sky-800 pt-16 pb-16" onSubmit={handleSubmit} ref={formRef}>
           <input

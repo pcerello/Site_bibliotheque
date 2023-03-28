@@ -28,4 +28,13 @@ class AuthorRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->orderBy('a.name', 'ASC');
     }
+
+    public function findAuthorsOfBook(int $idBook): QueryBuilder
+    {
+        return $this->createQueryBuilder('a')
+            ->innerJoin('\App\Entity\Write', 'w', Expr\Join::WITH, 'a.id = w.idAuthor')
+            ->where('w.idBook = :idBook')
+            ->setParameter('idBook', $idBook)
+            ->orderBy('a.name', 'ASC');
+    }
 }

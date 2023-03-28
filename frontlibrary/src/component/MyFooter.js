@@ -5,13 +5,14 @@ function MyFooter() {
   return (
     <footer className="bg-gray-200 flex flex-col space-y-16 px-16 pt-8 pb-4 text-left inset-x-0 bottom-0">
       <div className="flex flex-row justify-between grey flex-wrap">
-        <div>
+        <div className="flex flex-col">
           <h1 className="text-color pb-4">IUT - Bibliothèque</h1>
           <a className="flex flex-col" target="_blank" href="https://www.google.fr/maps/search/D%C3%A9partement+informatique+IUT+de+Bordeaux,+15,+rue+Naudet,+CS+10207+33175+Gradignan+Cedex,+France/@44.7911271,-0.6112299,18z/data=!3m1!4b1">
             <p>15 rue de Naudet - CS 10207</p>
             <p>33 175 Gradignan Cedex</p>
           </a>
-          <a href="tel:+330556845757">Tél. +33 (0)5 56 84 57 57</a>
+          <a href="tel:+33556845757">Tél. +33 (0)5 56 84 57 57</a>
+          <a href="fax:+33556845821">Fax. 05 56 84 58 21</a>
         </div>
         <div className="flex flex-col">
           <h1 className="text-color pb-4">Liens</h1>

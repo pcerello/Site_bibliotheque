@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ReaderRepository;
+use App\Security\AccessTokenHandler;
 use OpenApi\Attributes as OA;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,5 +73,47 @@ class LoginApiController extends AbstractController
         return $this->json([
             "message" => "No user corresponds to the given e-mail address and password."
         ], 400);
+    }
+
+    #[Route("/logout", name: "api_logout", methods: ["GET"])]
+    #[OA\Get(summary: "Log out to the API")]
+    #[OA\Response(
+        response: 200,
+        description: "Successful logout."
+    )]
+    #[OA\Response(
+        response: 401,
+        description: "No user logged in or no user associated to the session token."
+    )]
+    /**
+     * Log out to the API
+     * @return mixed
+     */
+    public function logout(Request $request, ReaderRepository $readers, EntityManagerInterface $em)
+    {
+        // Obtenir le token sauvegardé en session
+        $token = $request->getSession()->get("user_token");
+
+        // S'il n'y pas de token de session, alors il n'y pas d'utilisateur connecté
+        if (!$token) {
+            return $this->json(["message" => "No user logged in."], 401);
+        }
+        
+        // Obtenir l'utilisateur associé au token
+        $user = $readers->findOneBy(["token" => $token]);
+        
+        // Si aucun utilisateur n'est associé à ce token
+        if (!$user) {
+            return $this->json(["message" => "No user associated to the token.", 401]);
+        }
+
+        // L'utilisateur existe, donc on supprime le token dans la base de données et dans la session
+        $user->setToken(null);
+        $em->persist($user);
+        $em->flush();
+
+        $request->getSession()->remove('user_token');
+
+        return new Response();
     }
 }

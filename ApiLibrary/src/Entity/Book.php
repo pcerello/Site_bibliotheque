@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Repository\AuthorRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use OpenApi\Attributes as OA;
@@ -114,11 +116,6 @@ class Book
     #[Groups("book_infos")]
     #[OA\Property(example: 1, description: "Id of the category")]
     private $category;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getTitle(): ?string
     {

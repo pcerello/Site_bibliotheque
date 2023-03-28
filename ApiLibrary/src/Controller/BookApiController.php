@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -139,19 +140,56 @@ class BookApiController extends AbstractController
      * Return a book
      * @return mixed
      */
-    public function bookShow(BookRepository $bookRepository, int $id)
+    public function bookShow(BookRepository $bookRepository, AuthorRepository $authorRepository, int $id)
     {
-        $query = $bookRepository->findBook()
-            ->andWhere('b.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery();
-
-        $book = $query->getOneOrNullResult();
+        $book = $bookRepository->findOneBy(["id" => $id]);
 
         if (!$book) {
             return $this->json(["message" => "Livre non trouvé"], 404);
         }
 
-        return $this->json($book, 200);
+        $query = $authorRepository->findAuthorsOfBook($id);
+
+        $authors = $query->getQuery()->getResult();
+
+        return $this->json(["book" => $book, "authors" => $authors], 200);
+    }
+
+    #[OA\Get(summary: "Get the authors of a book")]
+    #[OA\Parameter(
+        name: "id",
+        in: "path",
+        description: "Book id",
+        required: true,
+        example: 1
+    )]
+    #[OA\Response(
+        response: 200,
+        description: "Get the authors of a book",
+        content: new OA\JsonContent(
+            ref: "#/components/schemas/BookAuthors"
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: "Book not found or no author found"
+    )]
+    #[View(serializerGroups: ["authors_infos"])]
+    #[Route("/books/{id}/authors", methods: ["GET"])]
+    /**
+     * Return the authors of a book
+     * @return mixed
+     */
+    public function bookAuthors(AuthorRepository $authorRepository, int $id)
+    {
+    $query = $authorRepository->findAuthorsOfBook($id);
+
+    $authors = $query->getQuery()->getResult();
+
+    if (!$authors) {
+        return $this->json(["message" => "Aucun auteur trouvé"], 404);
+    }
+
+    return $this->json($authors, 200);
     }
 }

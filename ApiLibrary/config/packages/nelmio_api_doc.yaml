@@ -3,6 +3,7 @@ nelmio_api_doc:
         names:
             - { alias: ReaderInfos, type: App\Entity\Reader, groups: [reader_infos] }
             - { alias: BookInfos, type: App\Entity\Book, groups: [book_infos] }
+            - { alias: AuthorInfos, type: App\Entity\Author, groups: [author_infos] }
     documentation:
         info:
             title: Library

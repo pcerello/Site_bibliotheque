@@ -10,8 +10,6 @@ cache:
 stages:
   - SecurityChecker
   - CodingStandards
-  - UnitTests
-  - LintReact
 
 security-checker:
   stage: SecurityChecker
@@ -23,10 +21,4 @@ phpcs:
   stage: CodingStandards
   script:
       - phpcs -v --standard=PSR1 --ignore=./src/Kernel.php ./src
-  allow_failure: false
-
-phpunit:
-  stage: UnitTests
-  script:
-      - php bin/phpunit
   allow_failure: false

@@ -12,10 +12,6 @@ use OpenApi\Attributes as OA;
  * @ORM\Table(name="Author")
  * @ORM\Entity
  */
-#[
-    ORM\Table(name: 'Author'),
-    ORM\Entity,
-]
 class Author
 {
     /**
@@ -48,5 +44,12 @@ class Author
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 }

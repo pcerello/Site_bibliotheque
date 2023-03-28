@@ -9,6 +9,36 @@ nelmio_api_doc:
             title: Library
             description: Find a Book !
             version: 1.0.0
+        components:
+            schemas:
+                BookBorrow:
+                    properties:
+                        book:
+                            ref: "#/components/schemas/BookInfos"
+                        dateBorrow:
+                            type: date
+                            example: '2023-03-24T00:00:00+01:00'
+                        dateReturn:
+                            type: date
+                            example: '2023-03-24T00:00:00+01:00'
+                        author:
+                            type: string
+                            example: 'John Doe'
+                BookAuthors:
+                    properties:
+                        book:
+                            ref: "#/components/schemas/BookInfos"
+                        author:
+                            type: string
+                            example: 'JK Rowling'
+                User:
+                    properties:
+                        email:
+                            type: string
+                            example: 'maud@g'
+                        password:
+                            type: string
+                            example: '1234'
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

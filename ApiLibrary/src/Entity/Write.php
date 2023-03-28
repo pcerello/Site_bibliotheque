@@ -22,7 +22,7 @@ class Write
     private $id;
 
     /**
-     * @var \Book
+     * @var Book
      *
      * @ORM\ManyToOne(targetEntity="Book")
      * @ORM\JoinColumns({
@@ -32,7 +32,7 @@ class Write
     private $idBook;
 
     /**
-     * @var \Author
+     * @var Author
      *
      * @ORM\ManyToOne(targetEntity="Author")
      * @ORM\JoinColumns({
@@ -40,4 +40,23 @@ class Write
      * })
      */
     private $idAuthor;
+
+    public function setIdBook(Book $idBook): self
+    {
+        $this->idBook = $idBook;
+
+        return $this;
+    }
+
+    public function getIdBook(): ?Book
+    {
+        return $this->idBook->getId();
+    }
+
+    public function setIdAuthor(Author $idAuthor): self
+    {
+        $this->idAuthor = $idAuthor;
+
+        return $this;
+    }
 }

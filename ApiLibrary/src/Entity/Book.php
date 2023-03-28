@@ -125,9 +125,23 @@ class Book
         return $this->title;
     }
 
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
     public function getPicture(): ?string
     {
         return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 
     public function getLanguage(): ?string
@@ -135,9 +149,23 @@ class Book
         return $this->language;
     }
 
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
     public function getNbrPages(): ?int
     {
         return $this->nbrPages;
+    }
+
+    public function setNbrPages(int $nbrPages): self
+    {
+        $this->nbrPages = $nbrPages;
+
+        return $this;
     }
 
     public function getResume(): ?string
@@ -145,9 +173,23 @@ class Book
         return $this->resume;
     }
 
+    public function setResume(string $resume): self
+    {
+        $this->resume = $resume;
+
+        return $this;
+    }
+
     public function getYear(): ?int
     {
         return $this->year;
+    }
+
+    public function setYear(int $year): self
+    {
+        $this->year = $year;
+
+        return $this;
     }
 
     public function getEditor(): ?string
@@ -155,9 +197,23 @@ class Book
         return $this->editor->getName();
     }
 
+    public function setEditor(?Editor $editor): self
+    {
+        $this->editor = $editor;
+
+        return $this;
+    }
+
     public function getCategory(): ?string
     {
         return $this->category->getName();
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 
     public function __toString()

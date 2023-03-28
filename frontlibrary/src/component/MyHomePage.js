@@ -50,8 +50,8 @@ function MyHomePage({ readerId }) {
       : [totalPages];
 
   return (
-    <div>
-      <h2 className="text-2xl p-16">Vos derniers livres empruntés</h2>
+    <div className="bg-white min-h-[52vh]">
+      <h2 className="text-2xl p-16">4 derniers livres lus par le lecteur</h2>
       <ul className="flex flex-row flex-wrap space-x-4">
         {books.map((book) => (
           <Book book={book} />

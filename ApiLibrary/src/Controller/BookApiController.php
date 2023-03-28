@@ -55,7 +55,7 @@ class BookApiController extends AbstractController
         response: 200,
         description: "List of books",
         content: new OA\JsonContent(
-            ref: "#/components/schemas/BookInfos"
+            ref: "#/components/schemas/BookAuthors"
         )
     )]
     #[View(serializerGroups: ["book_infos"])]
@@ -126,7 +126,7 @@ class BookApiController extends AbstractController
         response: 200,
         description: "Get a book",
         content: new OA\JsonContent(
-            ref: "#/components/schemas/BookInfos"
+            ref: "#/components/schemas/BookAuthors"
         )
     )]
     #[OA\Response(

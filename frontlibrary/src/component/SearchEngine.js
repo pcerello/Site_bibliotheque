@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function SearchEngine() {
+  
   return (
     <form className="bg-sky-800 pt-16 pb-16">
       <input
@@ -12,6 +13,7 @@ function SearchEngine() {
       <button
         type="submit"
         className="p-1 px-6 bg-color hover:bg-color-hover text-white"
+        
       >
         <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
       </button>

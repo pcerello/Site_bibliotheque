@@ -13,7 +13,7 @@ function MyMenu() {
   const renderMenuItems = () => {
     return Object.entries(routes).map(([route, label]) => {
       const isActive = location.pathname === route;
-      const className = isActive ? "border-b-8 border-[#009999]" : "";
+      const className = isActive ? "border-b-8 border-[#009999]": "";
 
       return (
         <Link to={route} key={route} className={`p-4 ${className}`}>

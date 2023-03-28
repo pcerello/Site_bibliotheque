@@ -50,16 +50,16 @@ function MyHomePage({ readerId }) {
       : [totalPages];
 
   return (
-    <div className="bg-white min-h-[52vh] flex flex-col items-center">
+    <div className="bg-white min-h-[52vh] flex flex-col items-center text-left">
       <div className="w-[90%] md:w-[80%]">
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
-        <ul className="flex flex-col md:flex-row flex-wrap md:space-x-4 md:justify-between justify-center space-y-8 md:space-y-4">
+        <ul className="flex flex-col md:flex-row flex-wrap md:space-x-4 md:justify-between justify-center space-y-4 md:space-y-0">
           {books.map((book) => (
             <Book book={book} />
           ))}
         </ul>
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
-        <ul className="flex flex-row flex-wrap space-x-4 justify-between">
+        <ul className="flex flex-col md:flex-row flex-wrap md:space-x-4 md:justify-between justify-center space-y-8 md:space-y-4">
           {booksBought.map((book) => (
             <Book book={book} />
           ))}
@@ -70,7 +70,7 @@ function MyHomePage({ readerId }) {
             <Book book={book} />
           ))}
         </ul>
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row justify-center py-16">
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}

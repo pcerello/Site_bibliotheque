@@ -8,10 +8,10 @@ function Book(props) {
   const resumeLimit = 50;
 
   return (
-    <Link to={`/books/${book[0].id}`} className="bg-gray-100 p-3">
-      <li key={book[0].id} className="md:w-[18vw] h-full flex flex-col md:flex-row text-left">
+    <Link to={`/books/${book[0].id}`} className="bg-white p-3 drop-shadow-lg ease-out duration-150 hover:scale-110 hover:z-10">
+      <li key={book[0].id} className="md:w-[18vw] flex flex-col md:flex-row text-left">
         {book[0].picture ? (
-          <img src={`${book[0].picture}`} alt={book[0].title} className="object-cover h-[24vh] w-[100%] md:object-contain "/>
+          <img src={`${book[0].picture}`} alt={book[0].title} className="object-cover h-[24vh] w-[100%] md:object-contain drop-shadow-md"/>
         ) : (
           <img src={defaultImage} alt="default" style={{ width: "128px" }} />
         )}

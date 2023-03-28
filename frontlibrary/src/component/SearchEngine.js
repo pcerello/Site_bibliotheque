@@ -13,7 +13,7 @@ function SearchEngine() {
   const handleChange = (event) => {
     const value = event.target.value;
     setAuthorName(value);
-    if (value) {
+    if (value.length >= 4) {
       fetch(`http://localhost:8000/api/authors?name=${value}&max=5`, {
         mode: "cors",
       })
@@ -42,6 +42,22 @@ function SearchEngine() {
     }
   };
 
+  const boldenMatchingCharacters = (name, search) => {
+    const regex = new RegExp(`(${search})`, "i");
+    const matches = name.match(regex);
+    if (matches) {
+      return name.split(matches[1]).reduce((acc, curr, index) => {
+        if (index !== 0) {
+          acc.push(<b key={index}>{matches[1]}</b>);
+        }
+        acc.push(curr);
+        return acc;
+      }, []);
+    } else {
+      return name;
+    }
+  };
+
   return (
     <div onClick={handleClickOutside} className="flex flex-col items-center text-left">
       {selectedAuthor ? (
@@ -65,25 +81,26 @@ function SearchEngine() {
           {suggestedAuthors.length > 0 ? (
             <ul className="bg-gray-100 text-gray-800 absolute inset-x-0 border-[#009999] border-t-2 border-b-2">
               {suggestedAuthors.map((author) => (
-                <a href="" className="">
-                <li className="p-1 border border-1 bg-white"
-                  key={author.id}
-                  onClick={() => handleAuthorClick(author)}
-                > 
-                  {author.name}
-                </li>
+                <a href="" className="" key={author.id}>
+                  <li
+                    className="p-1 border border-1 bg-white"
+                    onClick={() => handleAuthorClick(author)}
+                  >
+                    {boldenMatchingCharacters(author.name, authorName)}
+                  </li>
                 </a>
               ))}
             </ul>
-          ): (
-            <div className="bg-gray-100 text-gray-800">
-              {authorName && <p>Aucun auteur</p>}
-            </div>
+          ) : (
+            authorName.length >= 4 && (
+              <div className="bg-gray-100 text-gray-800">
+                <p>Aucun auteur</p>
+              </div>
+            )
           )}
         </form>
       )}
     </div>
   );
 }
-
 export default SearchEngine;

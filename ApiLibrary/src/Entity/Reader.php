@@ -49,7 +49,7 @@ class Reader
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
      */
     #[ORM\Column]
     #[Groups("reader_infos")]
@@ -72,6 +72,13 @@ class Reader
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
     private $password;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="token", type="string", length=255, nullable=true)
+     */
+    private $token;
 
     public function getId(): ?int
     {
@@ -126,10 +133,37 @@ class Reader
         return $this;
     }
 
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
     public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * The public representation of the user (e.g. a username, an email address, etc.)
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 }

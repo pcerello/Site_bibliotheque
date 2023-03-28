@@ -30,6 +30,14 @@ nelmio_api_doc:
                         author:
                             type: string
                             example: 'JK Rowling'
+                User:
+                    properties:
+                        email:
+                            type: string
+                            example: 'maud@g'
+                        password:
+                            type: string
+                            example: '1234'
     areas: # to filter documented areas
         path_patterns:
             - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

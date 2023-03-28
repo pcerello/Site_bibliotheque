@@ -5,6 +5,8 @@
 .App {
   text-align: center;
   @apply text-color;
+  background-image: url(/src/component/livres.jpg);
+  background-attachment: fixed;
 }
 
 .App-logo {
@@ -76,6 +78,10 @@ html,body,#root,.App{
 
 .bg-color:hover{
   background-color: #086969;
+}
+
+footer a:hover{
+  text-decoration: underline;
 }
 
 input::placeholder{

@@ -79,13 +79,6 @@ class ReaderApiController extends AbstractController
         required: false,
         example: 4
     )]
-    #[OA\Parameter(
-        name: "sortDate",
-        in: "query",
-        description: "sort by date",
-        required: false,
-        example: "ASC"
-    )]
     #[OA\Response(
         response: 200,
         description: "List book read by a reader",
@@ -106,7 +99,6 @@ class ReaderApiController extends AbstractController
     public function booksReadByReader(BookRepository $bookRepository, int $id, Request $request)
     {
         $max = $request->query->get('max');
-        $sortDate = $request->query->get('sortDate');
 
         $queryBuilder = $bookRepository->findBookBorrow();
 
@@ -116,16 +108,6 @@ class ReaderApiController extends AbstractController
 
         if ($max) {
             $queryBuilder->setMaxResults($max);
-        }
-
-        if ($sortDate) {
-            if ($sortDate == "ASC") {
-                $queryBuilder->orderBy('bo.dateBorrow', 'ASC');
-            } else if ($sortDate == "DESC") {
-                $queryBuilder->orderBy('bo.dateBorrow', 'DESC');
-            } else {
-                return $this->json(["message" => "SortDate must be ASC or DESC"], 400);
-            }
         }
 
         $books = $queryBuilder->getQuery()->getResult();

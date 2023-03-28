@@ -8,14 +8,14 @@ function Book(props) {
   const resumeLimit = 50;
 
   return (
-    <Link to={`/books/${book[0].id}`}>
-      <li key={book[0].id} className="w-[18vw] flex flex-row text-left">
+    <Link to={`/books/${book[0].id}`} className="bg-gray-100 p-3">
+      <li key={book[0].id} className="md:w-[18vw] h-full flex flex-col md:flex-row text-left">
         {book[0].picture ? (
-          <img src={`${book[0].picture}`} alt={book[0].title} />
+          <img src={`${book[0].picture}`} alt={book[0].title} className="object-cover h-[24vh] w-[100%] md:object-contain "/>
         ) : (
           <img src={defaultImage} alt="default" style={{ width: "128px" }} />
         )}
-        <div className="ml-4">
+        <div className="ml-4 flex flex-col justify-between">
           <h3 className="text-lg font-medium">
             {book[0].title.length > titleLimit
               ? book[0].title.substring(0, titleLimit) + "..."

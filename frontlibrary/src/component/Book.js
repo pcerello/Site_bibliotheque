@@ -9,7 +9,7 @@ function Book(props) {
 
   return (
     <Link to={`/books/${book[0].id}`}>
-      <li key={book[0].id} className="w-[20vw] flex flex-row text-left">
+      <li key={book[0].id} className="w-[18vw] flex flex-row text-left">
         {book[0].picture ? (
           <img src={`${book[0].picture}`} alt={book[0].title} />
         ) : (

@@ -50,34 +50,51 @@ function MyHomePage({ readerId }) {
       : [totalPages];
 
   return (
-    <div className="bg-white min-h-[52vh]">
-      <h2 className="text-2xl p-16">4 derniers livres lus par le lecteur</h2>
-      <ul className="flex flex-row flex-wrap space-x-4">
-        {books.map((book) => (
-          <Book book={book} />
-        ))}
-      </ul>
-      <h2 className="text-2xl p-16">Les dernières acquisitions de la Bibliothèque</h2>
-      <ul className="flex flex-row flex-wrap space-x-4">
-        {booksBought.map((book) => (
-          <Book book={book} />
-        ))}
-      </ul>
-      <h2 className="text-2xl p-16">Tous les livres de la Bibliothèque</h2>
-      <ul className="flex flex-row flex-wrap space-x-4 space-y-16 ">
-        {currentBooks.map((book) => (
-          <Book book={book} />
-        ))}
-      </ul>
-      <div className="flex flex-row justify-center">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Page précédente
-        </button>
-        {currentPage > 1 &&
-          prevPages.map((page) => (
+    <div className="bg-white min-h-[52vh] flex flex-col items-center">
+      <div className="w-[80%]">
+        <h2 className="text-2xl pt-32 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
+        <ul className="flex flex-row flex-wrap space-x-4 justify-around">
+          {books.map((book) => (
+            <Book book={book} />
+          ))}
+        </ul>
+        <h2 className="text-2xl pt-32 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
+        <ul className="flex flex-row flex-wrap space-x-4 justify-center">
+          {booksBought.map((book) => (
+            <Book book={book} />
+          ))}
+        </ul>
+        <h2 className="text-2xl pt-32 pb-8 flex flex-start ">Tous les livres de la Bibliothèque</h2>
+        <ul className="flex flex-row flex-wrap space-x-4 space-y-16 w-[80%]">
+          {currentBooks.map((book) => (
+            <Book book={book} />
+          ))}
+        </ul>
+        <div className="flex flex-row justify-center">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Page précédente
+          </button>
+          {currentPage > 1 &&
+            prevPages.map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`${currentPage === page ? "bg-blue-500" : ""}`}
+              >
+                {page}
+              </button>
+            ))}
+          <button
+            key={currentPage}
+            disabled={true}
+            className="cursor-default"
+          >
+            {currentPage}
+          </button>
+          {nextPages.map((page) => (
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
@@ -86,28 +103,13 @@ function MyHomePage({ readerId }) {
               {page}
             </button>
           ))}
-        <button
-          key={currentPage}
-          disabled={true}
-          className="cursor-default"
-        >
-          {currentPage}
-        </button>
-        {nextPages.map((page) => (
           <button
-            key={page}
-            onClick={() => setCurrentPage(page)}
-            className={`${currentPage === page ? "bg-blue-500" : ""}`}
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
           >
-            {page}
+            Page suivante
           </button>
-        ))}
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Page suivante
-        </button>
+        </div>
       </div>
     </div>
   );

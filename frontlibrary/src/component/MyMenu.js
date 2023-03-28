@@ -26,7 +26,7 @@ function MyMenu() {
   return (
     <>
       <div className="pt-14"></div>
-      <header className="flex w-full justify-center fixed top-0 bg-white shadow">
+      <header className="flex w-full justify-center fixed top-0 bg-white shadow z-10">
         <div className="flex flex-row justify-between items-center w-5/6 content-center">
           <Link to="/" className="text-blue">
             IUT - Bibliothèque

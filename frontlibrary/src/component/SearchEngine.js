@@ -30,11 +30,11 @@ function SearchEngine() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center text-left">
       {selectedAuthor ? (
         <AuthorBooks authorName={selectedAuthor} />
       ) : (
-        <form className=" pt-16 pb-16" onSubmit={handleSubmit}>
+        <form className="relative w-fit pt-16 pb-16" onSubmit={handleSubmit}>
           <input
             type="text"
             className="p-1 text-color-hover"
@@ -50,14 +50,16 @@ function SearchEngine() {
             <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
           </button>
           {suggestedAuthors.length > 0 && (
-            <ul className="bg-gray-100 text-gray-800">
+            <ul className="bg-gray-100 text-gray-800 absolute inset-x-0 border-[#009999] border-t-2 border-b-2">
               {suggestedAuthors.map((author) => (
-                <li
+                <a href="" className="">
+                <li className="p-1 border border-1 bg-white"
                   key={author.id}
                   onClick={() => handleAuthorClick(author)}
-                >
+                > 
                   {author.name}
                 </li>
+                </a>
               ))}
             </ul>
           )}

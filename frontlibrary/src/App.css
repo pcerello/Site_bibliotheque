@@ -57,6 +57,12 @@ html,body,#root,.App{
   @apply text-color-hover;
 }
 
+.bar-button :focus-within{
+  @apply text-color-hover;
+  text-decoration: underline;
+  background-color: #086969;
+}
+
 .text-color{
   color: #009999;
 }

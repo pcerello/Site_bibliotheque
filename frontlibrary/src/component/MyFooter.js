@@ -57,11 +57,11 @@ function MyFooter() {
               <FontAwesomeIcon icon="fa-brands fa-youtube" />
             </a>
           </div>
-          <p>Conditions générales d'utilisation</p>
+          <a href="/mention" className="focus:bg-yellow-200" target="_blank">Conditions générales d'utilisation</a>
         </div>
       </div>
       <div className="flex flex-row justify-between grey">
-        <p>Copyright 2020 IUT - Bibliothèque. Tous droits réservés.</p>
+        <p>Copyright 2023 IUT - Bibliothèque. Tous droits réservés.</p>
         <p>Réalisé par le groupe 2</p>
       </div>
     </footer>

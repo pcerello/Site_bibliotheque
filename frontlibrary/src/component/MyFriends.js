@@ -4,7 +4,7 @@ import defaultImage from "./livre.png";
 
 function MyFriends(props) {
     const follower = props.follow;
-
+    
   
   return (
     <li key={follower.id} className=" flex flex-col text-left mb-12 ml-12">

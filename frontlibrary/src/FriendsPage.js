@@ -6,7 +6,7 @@ import PersonalInfos from "./component/PersonalInfos";
 function FriendsPage() {
   const userId = localStorage.getItem("userId");
   return (
-    <div>
+    <div className="App">
       <Layout>
         <PersonalInfos readerId={userId}/>
         <MyFriends />

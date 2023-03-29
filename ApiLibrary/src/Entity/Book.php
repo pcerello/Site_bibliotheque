@@ -217,4 +217,9 @@ class Book
     {
         return $this->getTitle();
     }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 }

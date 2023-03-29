@@ -52,7 +52,7 @@ function MyHomePage({ readerId }) {
   function pagination(){
     return(
       <div className="flex flex-row justify-center py-8">
-          <button className="mx-8 bg-white drop-shadow-md p-2"
+          <button className="mx-8 bg-white drop-shadow-md p-2 disabled:text-gray-300 disabled:drop-shadow-none disabled:bg-gray-50 disabled:shadow-inner"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}
           >
@@ -84,7 +84,7 @@ function MyHomePage({ readerId }) {
               {page}
             </button>
           ))}
-          <button className="mx-8 bg-white drop-shadow-md p-2"
+          <button className="mx-8 bg-white drop-shadow-md p-2 disabled:text-gray-300 disabled:drop-shadow-none disabled:bg-gray-50 disabled:shadow-inner"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(currentPage + 1)}
           >

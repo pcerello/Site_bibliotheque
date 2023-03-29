@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import logoIUT from "./logoIUT_Info.png";
 
 function MyMenu() {
   const location = useLocation();
@@ -29,7 +30,8 @@ function MyMenu() {
       <div className="pt-14"></div>
       <header className="flex w-full justify-center fixed top-0 bg-white shadow z-50">
         <div className="flex flex-row justify-between items-center w-5/6 content-center">
-          <Link to={"/?userId="+userId}  className="text-blue">
+          <Link to={"/?userId="+userId}  className="text-blue flex flex-row items-center">
+            <img src={logoIUT} alt="logo iut info" className="max-h-[4vh] mr-2"/>
             IUT - Bibliothèque
           </Link>
           <div className="flex space-x-4 bar-button">{renderMenuItems()}</div>

@@ -8,8 +8,8 @@ function FriendsPage() {
   return (
     <div className="App">
       <Layout>
-        <PersonalInfos readerId={userId}/>
-        <MyFriends />
+        
+        <MyFriends readerId={userId}/>
 
       </Layout>
     </div>

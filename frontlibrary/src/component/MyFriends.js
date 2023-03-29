@@ -1,10 +1,26 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import Book from "./Book";
 import defaultImage from "./livre.png";
 
 function MyFriends(props) {
     const follower = props.follow;
-    
+    const [books, setBook] = useState(null);
+    useEffect(() => {
+        fetch(`http://localhost:8000/api/readers/${follower.id}/books?max=3`, {
+          mode: "cors",
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("404 Not Found");
+            }
+            return response.json();
+          })
+          .then((data) => setBook(data))
+          .catch((error) => {
+            console.error("Error fetching follower:", error);
+            setBook(null);
+          });
+      }, [follower.id]);
   
   return (
     <li key={follower.id} className=" flex flex-col text-left mb-12 ml-12">
@@ -18,6 +34,14 @@ function MyFriends(props) {
             <p>{follower.firstName} {follower.lastName}</p>
           </h3>
         </div>
+        
+        <ul className="flex flex-row w-full justify-between">
+        {books ? (books.map((book) => (
+            book[0].picture ?(<img className="w-[3vw]" src={`${book[0].picture}`} alt={book[0].title} />) : (<img className="w-[3vw]" src={defaultImage} alt="default" />)
+        ))) : (<div className="text-red-500">Pas de dernière lecture</div>
+            )}
+        </ul>
+        
     </li>
 
     

@@ -92,7 +92,7 @@ function MyHomePage({ readerId }) {
           >
             {currentPage}
           </button>
-          {nextPages.map((page) => (
+          {currentPage < totalPages && nextPages.map((page) => (
             <button 
               key={page}
               onClick={() => setCurrentPage(page)}

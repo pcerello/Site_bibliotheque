@@ -7,18 +7,25 @@ function MyFriends({ readerId }) {
 const [follower, setFollower] = useState(null);
   console.log("readerId", readerId);
   useEffect(() => {
-    fetch(`http://localhost:8000/api/readers/${readerId}/follow`, {
-      mode: "cors",
+  fetch(`http://localhost:8000/api/readers/${readerId}/follow`, {
+    mode: "cors",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("404 Not Found");
+      }
+      return response.json();
     })
-      .then((response) => response.json())
-      .then((data) => setFollower(data));
+    .then((data) => setFollower(data))
+    .catch((error) => {
+      console.error("Error fetching follower:", error);
+      setFollower(null);
+    });
+}, [readerId]);
 
-  }, [readerId]);
-
-
-  if (!follower) {
-    return <div>tu n'as pas d'amis...désolé</div>;
-  }
+if (follower === null) {
+  return <div className="bg-white py-16">Tu n'as pas d'amis...désolé</div>;
+}
   
   
   return (

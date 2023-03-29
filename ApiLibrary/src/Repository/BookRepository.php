@@ -18,13 +18,24 @@ use Doctrine\ORM\Query\Expr;
  */
 class BookRepository extends ServiceEntityRepository
 {
+    /**
+     * Method __construct
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Book::class);
     }
 
+    /**
+     * Method findBook
+     *
+     * @return QueryBuilder
+     */
     public function findBook(): QueryBuilder
     {
+        // return the query builder for the books
         return $this->createQueryBuilder('b')
             ->leftJoin('\App\Entity\Write', 'w', Expr\Join::WITH, 'b.id = w.idBook')
             ->leftJoin('\App\Entity\Author', 'a', Expr\Join::WITH, 'w.idAuthor = a.id')
@@ -33,8 +44,14 @@ class BookRepository extends ServiceEntityRepository
             ->groupBy('b.id');
     }
 
+    /**
+     * Method findBookBorrow
+     *
+     * @return QueryBuilder
+     */
     public function findBookBorrow(): QueryBuilder
     {
+        // return the query builder for the books with the date of borrow and return
         return $this->createQueryBuilder('b')
             ->leftJoin('\App\Entity\Write', 'w', Expr\Join::WITH, 'b.id = w.idBook')
             ->leftJoin('\App\Entity\Author', 'a', Expr\Join::WITH, 'w.idAuthor = a.id')

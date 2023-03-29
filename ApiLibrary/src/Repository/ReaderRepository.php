@@ -18,13 +18,24 @@ use Doctrine\ORM\Query\Expr;
  */
 class ReaderRepository extends ServiceEntityRepository
 {
+    /**
+     * Method __construct
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Reader::class);
     }
 
+    /**
+     * Method findFollow
+     *
+     * @return QueryBuilder
+     */
     public function findFollow(): QueryBuilder
     {
+        // return the query builder for the follow
         return $this->createQueryBuilder('r')
             ->innerJoin('\App\Entity\Follow', 'f', Expr\Join::WITH, 'r.id = f.idIsFollowed');
     }

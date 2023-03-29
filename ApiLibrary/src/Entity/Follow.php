@@ -41,6 +41,13 @@ class Follow
      */
     private $idIsFollowed;
 
+    /**
+     * Set the reader who follows
+     *
+     * @param Reader $idFollow
+     *
+     * @return self
+     */
     public function setFollow(Reader $idFollow): self
     {
         $this->idFollow = $idFollow;
@@ -48,6 +55,13 @@ class Follow
         return $this;
     }
 
+    /**
+     * Set the reader who is followed
+     *
+     * @param Reader $idIsFollowed
+     *
+     * @return self
+     */
     public function setFollowed(Reader $idIsFollowed): self
     {
         $this->idIsFollowed = $idIsFollowed;
@@ -55,7 +69,12 @@ class Follow
         return $this;
     }
 
-    public function getIdFollow(): ?Reader
+    /**
+     * Get the reader who follows
+     *
+     * @return int
+     */
+    public function getIdFollow(): int
     {
         return $this->idFollow->getId();
     }

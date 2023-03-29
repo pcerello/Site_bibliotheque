@@ -90,7 +90,7 @@ class Book
     private $year;
 
     /**
-     * @var \Editor
+     * @var Editor
      *
      * @ORM\ManyToOne(targetEntity="Editor")
      * @ORM\JoinColumns({
@@ -104,7 +104,7 @@ class Book
     private $editor;
 
     /**
-     * @var \Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
@@ -117,109 +117,93 @@ class Book
     #[OA\Property(example: 1, description: "Id of the category")]
     private $category;
 
+    /**
+     * Get the value of id
+     *
+     * @return  int
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the title
+     *
+     * @return  string
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
+    /**
+     * Get the picture
+     *
+     * @return  string|null
+     */
     public function getPicture(): ?string
     {
         return $this->picture;
     }
 
-    public function setPicture(?string $picture): self
-    {
-        $this->picture = $picture;
-
-        return $this;
-    }
-
+    /**
+     * Get the language
+     *
+     * @return  string
+     */
     public function getLanguage(): ?string
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
+    /**
+     * Get the number of pages
+     *
+     * @return  int
+     */
     public function getNbrPages(): ?int
     {
         return $this->nbrPages;
     }
 
-    public function setNbrPages(int $nbrPages): self
-    {
-        $this->nbrPages = $nbrPages;
-
-        return $this;
-    }
-
+    /**
+     * Get the resume
+     *
+     * @return  string
+     */
     public function getResume(): ?string
     {
         return $this->resume;
     }
 
-    public function setResume(string $resume): self
-    {
-        $this->resume = $resume;
-
-        return $this;
-    }
-
+    /**
+     * Get the year
+     *
+     * @return  int
+     */
     public function getYear(): ?int
     {
         return $this->year;
     }
 
-    public function setYear(int $year): self
-    {
-        $this->year = $year;
-
-        return $this;
-    }
-
+    /**
+     * Get the name of the editor
+     *
+     * @return  string|null
+     */
     public function getEditor(): ?string
     {
         return $this->editor->getName();
     }
 
-    public function setEditor(?Editor $editor): self
-    {
-        $this->editor = $editor;
-
-        return $this;
-    }
-
+    /**
+     * Get the category
+     *
+     * @return  string
+     */
     public function getCategory(): ?string
     {
         return $this->category->getName();
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->getTitle();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 }

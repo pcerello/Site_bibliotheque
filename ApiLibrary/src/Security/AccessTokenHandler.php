@@ -1,5 +1,7 @@
 <?php
+
 // src/Security/AccessTokenHandler.php
+
 namespace App\Security;
 
 use App\Repository\ReaderRepository;

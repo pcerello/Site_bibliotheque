@@ -41,22 +41,13 @@ class Write
      */
     private $idAuthor;
 
-    public function setIdBook(Book $idBook): self
-    {
-        $this->idBook = $idBook;
-
-        return $this;
-    }
-
-    public function getIdBook(): ?Book
+    /**
+     * Get the book id
+     *
+     * @return int|null
+     */
+    public function getIdBook(): ?int
     {
         return $this->idBook->getId();
-    }
-
-    public function setIdAuthor(Author $idAuthor): self
-    {
-        $this->idAuthor = $idAuthor;
-
-        return $this;
     }
 }

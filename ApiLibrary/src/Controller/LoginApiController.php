@@ -5,25 +5,17 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\ReaderRepository;
-use App\Security\AccessTokenHandler;
 use OpenApi\Attributes as OA;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\ORM\EntityManager;
-use FOS\RestBundle\Controller\Annotations\View;
-use Nelmio\ApiDocBundle\Annotation\Security as AnnotationSecurity;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted as ConfigurationIsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route("/api")]
 #[OA\Tag("Login")]
 /**
- * LoginApiController
+ * Class LoginApiController
  */
 class LoginApiController extends AbstractController
 {
@@ -34,42 +26,51 @@ class LoginApiController extends AbstractController
         description: "Log in to the API"
     )]
     #[OA\RequestBody(
-        required : true,
+        required: true,
         description: "fichier jason",
-        content : new OA\JsonContent(
+        content: new OA\JsonContent(
             ref: "#/components/schemas/User"
         )
     )]
     /**
-     * Log in to the API
-     * @return mixed
+     * Log in the reader
+     *
+     * @param Request $request
+     * @param TokenGeneratorInterface $tokenGenerator
+     * @param ReaderRepository $readers
+     * @param EntityManagerInterface $em
+     *
+     * @return mixed json with the user or a 400 error
      */
     public function login(Request $request, TokenGeneratorInterface $tokenGenerator, ReaderRepository $readers, EntityManagerInterface $em)
     {
-        // Récupérer les données de la requête json
+        // Get the data from the request json
         $data = json_decode($request->getContent(), true);
         $email = $data["email"];
         $password = $data["password"];
 
-        // Vérifier si les identifiants de l'utilisateur sont bons
+        // Find the user in the database with the given e-mail address
         $user = $readers->findOneBy(["email" => $email]);
+
+        // If the user exists and the password is correct
         if ($user && $user->getPassword() == $password) {
-            // Le nouveau token associé à l'utilisateur
+            // Generate a token
             $token = $tokenGenerator->generateToken();
             $user->setToken($token);
-            // Le sauvegarder en base de données
+            // Save the token in the database
             $em->persist($user);
             $em->flush();
 
-            // Enregistrer le token dans la session courante
+            // Save the token in the session
             $request->getSession()->set("user_token", $token);
 
-            // TODO : à voir quoi retourner en réponse avec les développeurs front-end
+            // Return the reader
             return $this->json([
                 "user" => $user
             ]);
         }
-        // TODO : à voir avec les développeurs front-end
+        // if the user does not exist or the password is incorrect
+        // return a 400 error
         return $this->json([
             "message" => "No user corresponds to the given e-mail address and password."
         ], 400);
@@ -86,34 +87,43 @@ class LoginApiController extends AbstractController
         description: "No user logged in or no user associated to the session token."
     )]
     /**
-     * Log out to the API
-     * @return mixed
+     * Log out the reader
+     *
+     * @param Request $request
+     * @param ReaderRepository $readers
+     * @param EntityManagerInterface $em
+     *
+     * @return mixed json with the user or a 400 error
      */
     public function logout(Request $request, ReaderRepository $readers, EntityManagerInterface $em)
     {
-        // Obtenir le token sauvegardé en session
+        // Get the token from the session
         $token = $request->getSession()->get("user_token");
 
-        // S'il n'y pas de token de session, alors il n'y pas d'utilisateur connecté
+        // If no token is found in the session, there is no user logged in
         if (!$token) {
+            // Return a 401 error
             return $this->json(["message" => "No user logged in."], 401);
         }
-        
-        // Obtenir l'utilisateur associé au token
+
+        // Get the user associated to the token
         $user = $readers->findOneBy(["token" => $token]);
-        
-        // Si aucun utilisateur n'est associé à ce token
+
+        // If no user is found, there is no user associated to the token
         if (!$user) {
+            // Return a 401 error
             return $this->json(["message" => "No user associated to the token.", 401]);
         }
 
-        // L'utilisateur existe, donc on supprime le token dans la base de données et dans la session
+        // Remove the token from the user
         $user->setToken(null);
         $em->persist($user);
         $em->flush();
 
+        // Remove the token from the session
         $request->getSession()->remove('user_token');
 
+        // Return a 200 response
         return new Response();
     }
 }

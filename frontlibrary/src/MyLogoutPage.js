@@ -3,6 +3,8 @@ import Layout from "./component/Layout";
 import { Link } from "react-router-dom";
 
 function MyLogoutPage() {
+  localStorage.removeItem("userId");
+  localStorage.removeItem("token");
   return (
     <div>
       <Layout>

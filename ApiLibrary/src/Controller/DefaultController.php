@@ -9,6 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     #[Route('/', name: 'app_default')]
+    /**
+     * Redirect to /api/doc
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         return $this->redirectToRoute('app.swagger_ui');

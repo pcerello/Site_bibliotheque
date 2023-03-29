@@ -36,20 +36,23 @@ class Author
     #[OA\Property(example: "Bea", description: "name of the author")]
     private $name;
 
+    /**
+     * Get the value of id
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Get the value of name
+     *
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 }

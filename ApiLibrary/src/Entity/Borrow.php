@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * Borrow
  *
@@ -37,7 +36,7 @@ class Borrow
     private $dateReturn;
 
     /**
-     * @var \Reader
+     * @var Reader
      *
      * @ORM\ManyToOne(targetEntity="Reader")
      * @ORM\JoinColumns({
@@ -47,7 +46,7 @@ class Borrow
     private $idReader;
 
     /**
-     * @var \Book
+     * @var Book
      *
      * @ORM\ManyToOne(targetEntity="Book")
      * @ORM\JoinColumns({
@@ -56,44 +55,31 @@ class Borrow
      */
     private $idBook;
 
-    public function setReader(Reader $reader): self
-    {
-        $this->idReader = $reader;
-
-        return $this;
-    }
-
-    public function setBook(Book $book): self
-    {
-        $this->idBook = $book;
-
-        return $this;
-    }
-
-    public function setDateBorrow(\DateTime $dateBorrow): self
-    {
-        $this->dateBorrow = $dateBorrow;
-
-        return $this;
-    }
-
-    public function setDateReturn(\DateTime $dateReturn): self
-    {
-        $this->dateReturn = $dateReturn;
-
-        return $this;
-    }
-
-    public function getId(): ?int
+    /**
+     * Get the value of id
+     *
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getDateBorrow(): ?\DateTimeInterface
+    /**
+     * Get the date of borrow
+     *
+     * @return \DateTimeInterface
+     */
+    public function getDateBorrow(): \DateTimeInterface
     {
         return $this->dateBorrow;
     }
 
+    /**
+     * Get the date of return
+     *
+     * @return \DateTimeInterface|null
+     */
     public function getDateReturn(): ?\DateTimeInterface
     {
         return $this->dateReturn;

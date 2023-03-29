@@ -28,20 +28,25 @@ class Editor
      */
     private $name;
 
+    /**
+     * Get the value of id
+     *
+     * @return int
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Set the id
+     *
+     * @param int $id
+     *
+     * @return self
+     */
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 }

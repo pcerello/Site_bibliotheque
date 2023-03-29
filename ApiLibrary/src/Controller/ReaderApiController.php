@@ -4,15 +4,11 @@ namespace App\Controller;
 
 use App\Repository\BookRepository;
 use App\Repository\ReaderRepository;
-use ContainerURNMEDA\getSluggerService;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\View;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr;
 use Symfony\Component\HttpFoundation\Request;
-
 
 #[Route("/api")]
 #[OA\Tag("Readers")]
@@ -33,12 +29,16 @@ class ReaderApiController extends AbstractController
     #[Route("/readers", methods: ["GET"])]
     /**
      * Return a list of readers
-     * @return mixed
+     *
+     * @param ReaderRepository $readerRepository
+     * @return mixed json with the list of readers
      */
     public function listReader(ReaderRepository $readerRepository)
     {
+        // get all readers
         $readers = $readerRepository->findAll();
 
+        // return a json with the list of readers
         return $this->json($readers, 200);
     }
 
@@ -57,17 +57,24 @@ class ReaderApiController extends AbstractController
     #[View(serializerGroups: ["reader_infos"])]
     #[Route("/readers/{id}", methods: ["GET"])]
     /**
-     * Return a reader
-     * @return mixed
+     * Return a reader with the given id
+     *
+     * @param ReaderRepository $readerRepository
+     * @param int $id
+     *
+     * @return mixed json with the reader or a 404 error
      */
     public function readerShow(ReaderRepository $readerRepository, int $id)
     {
+        // get the reader with the given id
         $reader = $readerRepository->find($id);
 
+        // if the reader is not found, return a 404 error
         if (!$reader) {
             return $this->json(["message" => "Reader not found"], 404);
         }
 
+        // return a json with the reader
         return $this->json($reader, 200);
     }
 
@@ -93,29 +100,42 @@ class ReaderApiController extends AbstractController
     #[View(serializerGroups: ["book_infos"])]
     #[Route("/readers/{id}/books", methods: ["GET"])]
     /**
-     * Return a list of books read by a reader
-     * @return mixed
+     * Return a list of books read by a reader with the given id
+     * and the possibility to limit the number of books
+     *
+     * @param BookRepository $bookRepository
+     * @param int $id
+     * @param Request $request
+     *
+     * @return mixed json with the list of books or a 404 error
      */
     public function booksReadByReader(BookRepository $bookRepository, int $id, Request $request)
     {
+        // get the maximum number of books
         $max = $request->query->get('max');
 
+        // get the query builder
         $queryBuilder = $bookRepository->findBookBorrow();
 
+        // add the where clause with the id of the reader
         $queryBuilder->where('bo.idReader = :id')
             ->setParameter('id', $id)
             ->getQuery();
 
+        // if we have a maximum number of books, add the limit
         if ($max) {
             $queryBuilder->setMaxResults($max);
         }
 
+        // get the list of books
         $books = $queryBuilder->getQuery()->getResult();
 
+        // if the list of books is empty, return a 404 error
         if (!$books) {
             return $this->json(["message" => "Books not found"], 404);
         }
 
+        // return a json with the list of books
         return $this->json($books, 200);
     }
 
@@ -135,30 +155,44 @@ class ReaderApiController extends AbstractController
     #[Route("/readers/{id}/books/recommendations", methods: ["GET"])]
     /**
      * Return a list of books recommended for a reader
+     * It's the list of books read by the readers followed by the reader
+     *
+     * @param BookRepository $bookRepository
+     * @param ReaderRepository $readerRepository
+     * @param int $id
+     *
      * @return mixed
      */
     public function booksRecommendationForReader(BookRepository $bookRepository, ReaderRepository $readerRepository, int $id)
     {
+        // get the query builder
         $queryBuilder = $readerRepository->findFollow();
 
+        // add the where clause with the id of the reader to get the list of readers followed by the reader
         $queryBuilder->where('f.idFollow = :id')
             ->setParameter('id', $id)
             ->getQuery();
 
+        // get the list of readers followed by the reader
         $myFollow = $queryBuilder->getQuery()->getResult();
 
+        // get the query builder of the books
         $queryBuilder = $bookRepository->findBook();
 
+        // add the where clause with the list of readers followed by the reader
         $queryBuilder->where('bo.idReader IN (:readers)')
             ->setParameter('readers', $myFollow)
             ->getQuery();
 
+        // get the list of books
         $books = $queryBuilder->getQuery()->getResult();
 
+        // if the list of books is empty, return a 404 error
         if (!$books) {
             return $this->json(["message" => "Books not found"], 404);
         }
 
+        // return a json with the list of books
         return $this->json($books, 200);
     }
 
@@ -173,23 +207,32 @@ class ReaderApiController extends AbstractController
     #[View(serializerGroups: ["reader_infos"])]
     #[Route("/readers/{id}/follow", methods: ["GET"])]
     /**
-     * Return a list of follows
-     * @return mixed
+     * Return the list of readers followed by a reader
+     *
+     * @param ReaderRepository $readerRepository
+     * @param int $id
+     *
+     * @return mixed json with the list of readers or a 404 error
      */
     public function listFollow(ReaderRepository $readerRepository, int $id)
     {
+        // get the query builder
         $queryBuilder = $readerRepository->findFollow();
 
+        // add the where clause with the id of the reader
         $queryBuilder->where('f.idFollow = :id')
             ->setParameter('id', $id)
             ->getQuery();
 
+        // get the list of readers followed by the reader
         $follows = $queryBuilder->getQuery()->getResult();
 
+        // if the list of readers is empty, return a 404 error
         if (!$follows) {
             return $this->json(["message" => "Follows not found"], 404);
         }
 
+        // return a json with the list of readers
         return $this->json($follows, 200);
     }
 
@@ -211,23 +254,27 @@ class ReaderApiController extends AbstractController
      * Return a list of followers recommended
      * It's the follow of the follow of the reader
      * +1 level of recommendation
-     * 
+     *
      * @return mixed
      */
     public function listFollowRecommendation(ReaderRepository $readerRepository, int $id)
     {
+        // get the query builder
         $queryBuilder = $readerRepository->findFollow();
 
-        // follow of the reader
+        // set the where clause with the id of the reader
         $queryBuilder->where('f.idFollow = :id')
             ->setParameter('id', $id)
             ->getQuery();
 
+        // get the list of readers followed by the reader
         $myFollow = $queryBuilder->getQuery()->getResult();
 
+        // get the query builder of the readers
         $queryBuilder = $readerRepository->findFollow();
 
-        // follow of the follow of the reader
+        // we want the follow of the follow of the reader
+        // and not the reader himself and not the reader already followed
         $queryBuilder->where('f.idFollow IN (:readers)')
             ->setParameter('readers', $myFollow)
             ->andWhere('f.idIsFollowed != :id')
@@ -236,12 +283,15 @@ class ReaderApiController extends AbstractController
             ->setParameter('myFollow', $myFollow)
             ->getQuery();
 
+        // get the list of readers
         $follows = $queryBuilder->getQuery()->getResult();
 
+        // if the list of readers is empty, return a 404 error
         if (!$follows) {
             return $this->json(["message" => "Follows not found"], 404);
         }
 
+        // return a json with the list of readers
         return $this->json($follows, 200);
     }
 }

@@ -80,69 +80,64 @@ class Reader
      */
     private $token;
 
+    /**
+     * Get the value of id
+     *
+     * @return  int
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Get the firstName
+     *
+     * @return  string
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
+    /**
+     * Get the lastName
+     *
+     * @return  string
+     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
+    /**
+     * Get the value of email
+     *
+     * @return  string
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
+    /**
+     * Get the value of picture
+     *
+     * @return  string|null
+     */
     public function getPicture(): ?string
     {
         return $this->picture;
     }
 
-    public function setPicture(?string $picture): self
-    {
-        $this->picture = $picture;
-
-        return $this;
-    }
-
+    /**
+     * Get the value of password
+     *
+     * @return  string
+     */
     public function getPassword(): ?string
     {
         return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
     }
 
     public function getToken(): ?string

@@ -4,18 +4,29 @@ namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Test of the ReaderApiController
+ */
 class ReaderApiControllerTest extends WebTestCase
 {
-   /* public function testListBook(): void
+    /**
+     * Test the list of readers
+     */
+    public function testListReaders(): void
     {
+        // Create a client to make requests
         $client = static::createClient();
+        // Make a GET request to /api/readers
         $client->request('GET', '/api/readers');
 
+        // Get the response
         $readers = json_decode($client->getResponse()->getContent(), true);
 
+        // Check that the response is successful
         $this->assertResponseIsSuccessful("List of readers is available");
 
-        $this->assertEquals(3, count($readers), "The number of readers is 3");
+        // Check if we have 51 readers
+        $this->assertEquals(51, count($readers), "The number of readers is 51");
 
         $firstnames = [];
         $lastnames = [];
@@ -23,6 +34,7 @@ class ReaderApiControllerTest extends WebTestCase
         $picture = [];
 
         foreach ($readers as $r) {
+            // Check that each reader has an id, a firstname, a lastname and an email
             $this->assertArrayHasKey('id', $r, "The reader has an id");
             $this->assertArrayHasKey('firstName', $r, "The reader has a firstname");
             $this->assertArrayHasKey('lastName', $r, "The reader has a lastname");
@@ -34,39 +46,206 @@ class ReaderApiControllerTest extends WebTestCase
             $picture[] = $r['picture'];
         }
 
-        $this->assertContains('maud', $firstnames, "The reader has the firstname 'maud'");
-        $this->assertContains('genetet', $lastnames, "The reader has the lastname 'genetet'");
-        $this->assertContains('maud.genetet@', $emails, "The reader has the email 'maud.genetet@'");
-        $this->assertContains('image.png', $picture, "The reader has the image 'image.png'");
+        // Check that the readers have the correct firstname, lastname and email
+        $this->assertContains('admin', $firstnames, "The reader has the firstname 'admin'");
+        $this->assertContains('admin', $lastnames, "The reader has the lastname 'admin'");
+        $this->assertContains('admin@admin', $emails, "The reader has the email 'admin@admin'");
 
-        $this->assertContains('pauline', $firstnames, "The reader has the firstname 'pauline'");
-        $this->assertContains('cerello', $lastnames, "The reader has the lastname 'cerello'");
-        $this->assertContains('pauline.cerello@', $emails, "The reader has the email 'pauline.cerello@'");
-        $this->assertContains('image.png', $picture, "The reader has the image 'image.png'");
+        $this->assertContains('Alexandre', $firstnames, "The reader has the firstname 'pauline'");
+        $this->assertContains('Vaillant', $lastnames, "The reader has the lastname 'cerello'");
+        $this->assertContains('Alexandre@Vaillant', $emails, "The reader has the email 'pauline.cerello@'");
 
-        $this->assertContains('benjamin', $firstnames, "The reader has the firstname 'benjamin'");
-        $this->assertContains('loupiac', $lastnames, "The reader has the lastname 'loupiac'");
-        $this->assertContains('benjamin.loupiac@', $emails, "The reader has the email 'benjamin.loupiac@'");
+        $this->assertContains('Lucas-Stéphane', $firstnames, "The reader has the firstname 'benjamin'");
+        $this->assertContains('Rossi', $lastnames, "The reader has the lastname 'loupiac'");
+        $this->assertContains('Lucas-Stéphane@Rossi', $emails, "The reader has the email 'benjamin.loupiac@'");
+
         $this->assertContains(null, $picture, "The reader has the image 'null'");
+    }
 
-        // Test show reader
-
+    /**
+     * Test the route /api/readers/{id}
+     */
+    public function testReaderShow(): void
+    {
+        // Create a client to make requests
+        $client = static::createClient();
+        // Make a GET request to /api/readers/1
         $client->request('GET', '/api/readers/1');
 
+        // Get the response
         $reader = json_decode($client->getResponse()->getContent(), true);
 
+        // Check that the response is successful 200
         $this->assertResponseIsSuccessful("The reader is available");
 
+        // Check that the reader has an id, a firstname, a lastname and an email
         $this->assertArrayHasKey('id', $reader, "The reader has an id");
         $this->assertArrayHasKey('firstName', $reader, "The reader has a firstname");
         $this->assertArrayHasKey('lastName', $reader, "The reader has a lastname");
         $this->assertArrayHasKey('email', $reader, "The reader has an email");
         $this->assertArrayHasKey('picture', $reader, "The reader has a picture");
 
+        // Check that the reader has the correct id, firstname, lastname and email
         $this->assertEquals(1, $reader['id'], "The reader has the id '1'");
-        $this->assertEquals('maud', $reader['firstName'], "The reader has the firstname 'maud'");
-        $this->assertEquals('genetet', $reader['lastName'], "The reader has the lastname 'genetet'");
-        $this->assertEquals('maud.genetet@', $reader['email'], "The reader has the email 'maud.genetet@'");
-        $this->assertEquals('image.png', $reader['picture'], "The reader has the image 'image.png'");
-    }*/
+        $this->assertEquals('Antoine', $reader['firstName'], "The reader has the firstname 'Antoine'");
+        $this->assertEquals('Lelièvre', $reader['lastName'], "The reader has the lastname 'Lelièvre'");
+        $this->assertEquals('Antoine@Lelièvre', $reader['email'], "The reader has the email 'Antoine@Lelièvre'");
+    }
+
+    /**
+     * Test the route /api/readers/{id}/books
+     */
+    public function testBooksReadByReader(): void
+    {
+        // Create a client to make requests
+        $client = static::createClient();
+        // Make a GET request to /api/readers/3/books
+        $client->request('GET', '/api/readers/3/books');
+
+        // Get the response
+        $books = json_decode($client->getResponse()->getContent(), true);
+
+        // Check that the response is successful 200
+        $this->assertResponseIsSuccessful("The books are available");
+
+        // Check if we have 5 books
+        $this->assertEquals(5, count($books), "The number of books is 5");
+
+        $idBooks = [];
+
+        // Check that each book has an id, a title, an author, a dateBorrow and a dateReturn
+        foreach ($books as $b) {
+            $this->assertArrayHasKey('dateBorrow', $b, "The book has an id");
+            $idBooks[] = $b['0']['id'];
+        }
+
+        // Check that the books have the correct id
+        $this->assertContains(57, $idBooks, "The reader read the book '57'");
+        $this->assertContains(1, $idBooks, "The reader read the book '1'");
+        $this->assertContains(60, $idBooks, "The reader read the book '60'");
+        $this->assertContains(105, $idBooks, "The reader read the book '105'");
+        $this->assertContains(52, $idBooks, "The reader read the book '52'");
+
+        // Check with a limit of 4 books ( route /api/readers/{id}/books?max=4 )
+        $client->request('GET', '/api/readers/3/books?max=4');
+
+        // Get the response
+        $books = json_decode($client->getResponse()->getContent(), true);
+
+        // Check that the response is successful 200
+        $this->assertResponseIsSuccessful("The books are available");
+
+        // Check if we have 4 books
+        $this->assertEquals(4, count($books), "The number of books is 4");
+    }
+
+    /**
+     * Test the route /api/readers/{id}/books/recommendations
+     */
+    public function testBooksRecommendationForReader(): void
+    {
+        // Create a client to make requests
+        $client = static::createClient();
+        // Make a GET request to /api/readers/2/books/recommendations
+        $client->request('GET', '/api/readers/2/books/recommendations');
+
+        // Get the response
+        $books = json_decode($client->getResponse()->getContent(), true);
+
+        // Check that the response is successful 200
+        $this->assertResponseIsSuccessful("The books are available");
+
+        // Check if we have 5 books
+        $this->assertEquals(5, count($books), "The number of books is 5");
+
+        $idBooks = [];
+
+        // Check that each book has an id
+        foreach ($books as $b) {
+            $idBooks[] = $b['0']['id'];
+        }
+
+        // Check that the books have the correct id
+        $this->assertContains(68, $idBooks, "The reader read the book '68'");
+        $this->assertContains(112, $idBooks, "The reader read the book '112'");
+        $this->assertContains(116, $idBooks, "The reader read the book '116'");
+        $this->assertContains(121, $idBooks, "The reader read the book '121'");
+        $this->assertContains(125, $idBooks, "The reader read the book '125'");
+    }
+
+    /**
+     * Test the route /api/readers/{id}/follow
+     */
+    public function testListFollow(): void
+    {
+        // Create a client to make requests
+        $client = static::createClient();
+        // Make a GET request to /api/readers/2/follow
+        $client->request('GET', '/api/readers/2/follow');
+
+        // Get the response
+        $readers = json_decode($client->getResponse()->getContent(), true);
+
+        // Check that the response is successful 200
+        $this->assertResponseIsSuccessful("The follow are available");
+
+        //  Check if we have 3 follow
+        $this->assertEquals(3, count($readers), "The number of follow is 3");
+
+        $firstnames = [];
+
+        // Check that each follow has an id, a firstname, a lastname, an email and a picture
+        foreach ($readers as $r) {
+            $this->assertArrayHasKey('id', $r, "The reader has an id");
+            $this->assertArrayHasKey('firstName', $r, "The reader has a firstname");
+            $this->assertArrayHasKey('lastName', $r, "The reader has a lastname");
+            $this->assertArrayHasKey('email', $r, "The reader has an email");
+            $this->assertArrayHasKey('picture', $r, "The reader has a picture");
+
+            $firstnames[] = $r['firstName'];
+        }
+
+        // Check that the follow have the correct firstname
+        $this->assertContains('Grégoire', $firstnames, "The reader has the firstname 'Grégoire'");
+        $this->assertContains('Bernard', $firstnames, "The reader has the firstname 'Bernard'");
+        $this->assertContains('Laure', $firstnames, "The reader has the firstname 'Laure'");
+    }
+
+    /**
+     * Test the route /api/readers/{id}/follow/recommendations
+     */
+    public function testListFollowRecommendation(): void
+    {
+        // Create a client to make requests
+        $client = static::createClient();
+        // Make a GET request to /api/readers/2/follow/recommendations
+        $client->request('GET', '/api/readers/2/follow/recommendations');
+
+        // Get the response
+        $readers = json_decode($client->getResponse()->getContent(), true);
+
+        // Check that the response is successful 200
+        $this->assertResponseIsSuccessful("The follow are available");
+
+        //  Check if we have 4 follow
+        $this->assertEquals(4, count($readers), "The number of follow is 4");
+
+        $firstnames = [];
+
+        // Check that each follow has an id, a firstname, a lastname, an email
+        foreach ($readers as $r) {
+            $this->assertArrayHasKey('id', $r, "The reader has an id");
+            $this->assertArrayHasKey('firstName', $r, "The reader has a firstname");
+            $this->assertArrayHasKey('lastName', $r, "The reader has a lastname");
+            $this->assertArrayHasKey('email', $r, "The reader has an email");
+
+            $firstnames[] = $r['firstName'];
+        }
+
+        // Check that the follow have the correct firstname
+        $this->assertContains('Emmanuel', $firstnames, "The reader has the firstname 'Emmanuel'");
+        $this->assertContains('Alice-Aurore', $firstnames, "The reader has the firstname 'Alice-Aurore'");
+        $this->assertContains('Julie', $firstnames, "The reader has the firstname 'Julie'");
+        $this->assertContains('Caroline', $firstnames, "The reader has the firstname 'Caroline'");
+    }
 }

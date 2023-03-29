@@ -18,19 +18,36 @@ use Doctrine\ORM\Query\Expr;
  */
 class AuthorRepository extends ServiceEntityRepository
 {
+    /**
+     * Method __construct
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Author::class);
     }
 
+    /**
+     * Method findAuthor
+     *
+     * @return QueryBuilder
+     */
     public function findAuthor(): QueryBuilder
     {
+        // return the query builder for the author with the name in ascending order
         return $this->createQueryBuilder('a')
             ->orderBy('a.name', 'ASC');
     }
 
+    /**
+     * Method findAuthorsOfBook
+     *
+     * @return QueryBuilder
+     */
     public function findAuthorsOfBook(int $idBook): QueryBuilder
     {
+        // return the query builder for find the authors of the book
         return $this->createQueryBuilder('a')
             ->innerJoin('\App\Entity\Write', 'w', Expr\Join::WITH, 'a.id = w.idAuthor')
             ->where('w.idBook = :idBook')

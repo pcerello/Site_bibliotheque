@@ -28,11 +28,23 @@ class Category
      */
     private $name;
 
-    public function getId(): ?int
+    /**
+     * Get the value of id
+     *
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * Set the id
+     *
+     * @param int $id
+     *
+     * @return self
+     */
     public function setId(int $id): self
     {
         $this->id = $id;
@@ -40,11 +52,23 @@ class Category
         return $this;
     }
 
+    /**
+     * Get the name
+     *
+     * @return string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Set the name
+     *
+     * @param string $name
+     *
+     * @return self
+     */
     public function setName(string $name): self
     {
         $this->name = $name;

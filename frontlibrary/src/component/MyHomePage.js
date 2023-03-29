@@ -25,6 +25,7 @@ function MyHomePage({ readerId }) {
       .then((response) => response.json())
       .then((data) => {
         setBooksAll(data);
+        console.log("data", data);
       });
   }, []);
 
@@ -48,7 +49,7 @@ function MyHomePage({ readerId }) {
     currentPage < totalPages - 1
       ? [currentPage + 1, currentPage + 2]
       : [totalPages];
-
+  console.log("bookssss", books);
   return (
     <div className="bg-white min-h-[52vh] flex flex-col items-center text-left">
       <div className="w-[90%] md:w-[80%]">

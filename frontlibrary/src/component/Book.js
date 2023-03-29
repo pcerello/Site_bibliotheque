@@ -6,6 +6,8 @@ function Book(props) {
   const book = props.book;
   const titleLimit = 20;
   const resumeLimit = 50;
+  console.log("book", book);
+  console.log("book[0].id", book[0].id);
 
   return (
     <Link to={`/books/${book[0].id}`} className="bg-white p-3 drop-shadow-lg ease-out duration-150 hover:scale-110 hover:z-10">

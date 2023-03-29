@@ -4,12 +4,15 @@ import { Link, useLocation } from "react-router-dom";
 function MyMenu() {
   const location = useLocation();
   const userId = localStorage.getItem("userId");
-  const routes = {
-    "/": "Accueil",
-    "/amis": "Amis",
-    "/connexion": "Connexion",
-    "/deconnexion": "Déconnexion",
-  };
+  
+   
+  const connect= true;
+const routes = {
+  "/": "Accueil",
+  ...(connect && { "/amis": "Amis" }),
+  ...(connect && { "/profil": "Profil" }),
+  [connect ? "/deconnexion" : "/connexion"]: connect ? "Déconnexion" : "Connexion",
+};
 
   const renderMenuItems = () => {
     return Object.entries(routes).map(([route, label]) => {

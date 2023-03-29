@@ -32,21 +32,28 @@ function BookInfo() {
   }
 
   return (
-    <div>
-      {book.book.picture ? (
-        <img src={`${book.book.picture}`} alt={book.book.title} />
-      ) : (
-        <img src={defaultImage} alt="default" style={{ width: "128px" }} />
-      )}
-      <h2>{book.book.title}</h2>
-      <p>Auteur(s):</p>
-      <ul>
-        {book.authors.map((author) => (
-          <li>{author.name}</li>
-        ))}
-      </ul>
-      <p>Year: {book.book.year}</p>
-      <p>Description: {book.book.resume}</p>
+    <div className="bg-white mt-40 flex flex-col items-center text-left">
+      <div className="w-[90%] md:w-[80%] py-16 flex flex-col">
+        <h2 className="text-2xl">{book.book.title}</h2>
+        <div className="flex flex-row items-center">
+          {book.book.picture ? (
+            <img src={`${book.book.picture}`} alt={book.book.title} />
+          ) : (
+            <img src={defaultImage} alt="default" style={{ width: "128px" }} />
+          )}
+          <div className="ml-4 flex flex-col">
+            <p className="text-gray-400">Auteur(s):</p>
+            <ul>
+              {book.authors.map((author) => (
+                <li>{author.name}</li>
+              ))}
+            </ul>
+            <p className="text-gray-400">Year:<p className="text-color">{book.book.year}</p></p>
+          </div>
+        </div>
+        <h2 className="mt-4 text-xl ">Description:</h2>
+        <p className="text-gray-400">{book.book.resume}</p>
+      </div>
     </div>
   );
 }

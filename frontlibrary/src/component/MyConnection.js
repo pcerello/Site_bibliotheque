@@ -14,11 +14,8 @@ function MyConnection() {
       password: password,
     })
       .then((response) => {
-        console.log("Response from server: ", response);
         localStorage.setItem("token", response.data.user.token);
         localStorage.setItem("userId", response.data.user.id);
-        console.log("AZEAEZ", response.data.user.id);
-        console.log("Token stored in localStorage");
         navigate('/?userId=' + response.data.user.id);
       })
       .catch((error) => {

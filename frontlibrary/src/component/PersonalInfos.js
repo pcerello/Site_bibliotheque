@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 function PersonalInfos({ readerId }) {
   const [reader, setReader] = useState(null);
-  console.log("readerId", readerId);
   useEffect(() => {
     fetch(`http://localhost:8000/api/readers/${readerId}`, {
       mode: "cors",

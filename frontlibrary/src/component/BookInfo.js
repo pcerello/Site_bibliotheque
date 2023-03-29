@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 function BookInfo() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
-  console.log("id", id);
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/books/${id}`, {

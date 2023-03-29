@@ -8,8 +8,8 @@ function Book(props) {
   const resumeLimit = 50;
 
   return (
-    <Link to={`/books/${book[0].id}`} className="bg-white p-3 drop-shadow-lg ease-out duration-150 hover:scale-110 hover:z-10">
-      <li key={book[0].id} className="md:w-[18vw] flex flex-col md:flex-row text-left">
+    <Link to={`/books/${book[0].id}`} className="bg-white p-3 drop-shadow-lg ease-out duration-150 hover:scale-110 hover:z-10 md:w-[18vw] mx-4 mt-4">
+      <li key={book[0].id} className=" flex flex-col md:flex-row text-left ">
         {book[0].picture ? (
           <img src={`${book[0].picture}`} alt={book[0].title} className="object-cover h-[24vh] w-[100%] md:object-contain drop-shadow-md"/>
         ) : (
@@ -21,7 +21,7 @@ function Book(props) {
               ? book[0].title.substring(0, titleLimit) + "..."
               : book[0].title}
           </h3>
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-300 text-sm">
             {book.nameAuthor ? book.nameAuthor : "auteur inconnu"} -{" "}
             {book[0].year}
           </p>

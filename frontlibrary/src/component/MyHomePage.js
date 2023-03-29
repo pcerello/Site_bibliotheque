@@ -49,29 +49,10 @@ function MyHomePage({ readerId }) {
       ? [currentPage + 1, currentPage + 2]
       : [totalPages];
 
-  return (
-    <div className="bg-white min-h-[52vh] flex flex-col items-center text-left">
-      <div className="w-[90%] md:w-[80%]">
-        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
-        <ul className="flex flex-col md:flex-row flex-wrap md:space-x-4 md:justify-between justify-center space-y-4 md:space-y-0">
-          {books.map((book) => (
-            <Book book={book} />
-          ))}
-        </ul>
-        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
-        <ul className="flex flex-col md:flex-row flex-wrap md:space-x-4 md:justify-between justify-center space-y-8 md:space-y-4">
-          {booksBought.map((book) => (
-            <Book book={book} />
-          ))}
-        </ul>
-        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Tous les livres de la Bibliothèque</h2>
-        <ul className="flex flex-row flex-wrap space-x-4 space-y-16 justify-between">
-          {currentBooks.map((book) => (
-            <Book book={book} />
-          ))}
-        </ul>
-        <div className="flex flex-row justify-center py-16">
-          <button
+  function pagination(){
+    return(
+      <div className="flex flex-row justify-center py-8">
+          <button className="mx-8 bg-white drop-shadow-md p-2"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}
           >
@@ -82,7 +63,7 @@ function MyHomePage({ readerId }) {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`${currentPage === page ? "bg-blue-500" : ""}`}
+                className="mx-2"
               >
                 {page}
               </button>
@@ -90,26 +71,52 @@ function MyHomePage({ readerId }) {
           <button
             key={currentPage}
             disabled={true}
-            className="cursor-default"
+            className="cursor-default underline mx-2"
           >
             {currentPage}
           </button>
           {nextPages.map((page) => (
-            <button
+            <button 
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`${currentPage === page ? "bg-blue-500" : ""}`}
+              className="mx-2"
             >
               {page}
             </button>
           ))}
-          <button
+          <button className="mx-8 bg-white drop-shadow-md p-2"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(currentPage + 1)}
           >
             Page suivante
           </button>
         </div>
+    );
+  }
+
+  return (
+    <div className="bg-white min-h-[52vh] flex flex-col items-center text-left">
+      <div className="w-[90%] md:w-[80%]">
+        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
+        <ul className="flex flex-col md:flex-row flex-wrap ">
+          {books.map((book) => (
+            <Book book={book} />
+          ))}
+        </ul>
+        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
+        <ul className="flex flex-col md:flex-row flex-wrap ">
+          {booksBought.map((book) => (
+            <Book book={book} />
+          ))}
+        </ul>
+        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Tous les livres de la Bibliothèque</h2>
+        {pagination()}
+        <ul className="flex flex-col md:flex-row flex-wrap ">
+          {currentBooks.map((book) => (
+            <Book book={book} />
+          ))}
+        </ul>
+        {pagination()}
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ library.add(fas, far, fab);
 function App({authorId} ) {
   const values = queryString.parse(window.location.search);
   const userId = values.userId;
+  console.log("userId", userId);
   return (
     <div className="App">
       <Layout>

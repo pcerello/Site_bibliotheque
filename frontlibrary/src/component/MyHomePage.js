@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Book from "./Book";
 
 function MyHomePage({ readerId }) {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState(null);
   const [booksBought, setBooksBought] = useState([]);
   const [booksAll, setBooksAll] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,10 +12,24 @@ function MyHomePage({ readerId }) {
     fetch(`http://localhost:8000/api/readers/${readerId}/books?max=4`, {
       mode: "cors",
     })
-      .then((response) => response.json())
+      .then((response) => {
+      if(!response.ok){
+        throw Error("404 Not Found");
+      }
+      return response.json();
+
+  })
       .then((data) => {
+      
         setBooks(data);
-      });
+        console.log("data", books);
+      })
+      .catch((error) => {
+        console.error("Erreur fetching book:", error);
+        setBooks(null);
+      })
+      ;
+
   }, [readerId]);
 
   useEffect(() => {
@@ -49,6 +63,9 @@ function MyHomePage({ readerId }) {
       ? [currentPage + 1, currentPage + 2]
       : [totalPages];
 
+
+
+    
   function pagination(){
     return(
       <div className="flex flex-row justify-center py-8">
@@ -93,15 +110,15 @@ function MyHomePage({ readerId }) {
         </div>
     );
   }
-
+  
   return (
     <div className="bg-white min-h-[52vh] flex flex-col items-center text-left">
       <div className="w-[90%] md:w-[80%]">
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
         <ul className="flex flex-col md:flex-row flex-wrap ">
-          {books.map((book) => (
+          {books ? (books.map((book) => (
             <Book book={book} />
-          ))}
+          ))) : (<div>Vous n'avez pas encore emprunté de livre</div>)}
         </ul>
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
         <ul className="flex flex-col md:flex-row flex-wrap ">

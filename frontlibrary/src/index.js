@@ -8,6 +8,7 @@ import ConnectionPage from "./ConnectionPage";
 import ErrorPage from "./ErrorPage";
 import FriendsPage from "./FriendsPage";
 import BookPage from "./BookPage";
+import MyLogoutPage from "./MyLogoutPage";
 
 export default function Index() {
   return (
@@ -18,6 +19,7 @@ export default function Index() {
         <Route path="*" element={<ErrorPage />} />
         <Route path="/amis" element={<FriendsPage />} />
         <Route path="/books/:id" element={<BookPage />} />
+        <Route path="/deconnexion" element={<MyLogoutPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -4,10 +4,11 @@ import MyFriends from "./component/MyFriends";
 import PersonalInfos from "./component/PersonalInfos";
 
 function FriendsPage() {
+  const userId = localStorage.getItem("userId");
   return (
     <div>
       <Layout>
-        <PersonalInfos readerId={3}/>
+        <PersonalInfos readerId={userId}/>
         <MyFriends />
 
       </Layout>

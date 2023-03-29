@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 function MyMenu() {
   const location = useLocation();
+  const userId = localStorage.getItem("userId");
   const routes = {
     "/": "Accueil",
     "/amis": "Amis",
@@ -28,7 +29,7 @@ function MyMenu() {
       <div className="pt-14"></div>
       <header className="flex w-full justify-center fixed top-0 bg-white shadow z-50">
         <div className="flex flex-row justify-between items-center w-5/6 content-center">
-          <Link to="/" className="text-blue">
+          <Link to={"/?userId="+userId}  className="text-blue">
             IUT - Bibliothèque
           </Link>
           <div className="flex space-x-4 bar-button">{renderMenuItems()}</div>

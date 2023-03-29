@@ -7,16 +7,18 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import MyHomePage from "./component/MyHomePage";
 import Layout from "./component/Layout";
 import AuthorBooks from "./component/AuthorBooks";
-
+import queryString from 'query-string';
 
 library.add(fas, far, fab);
 
-function App({authorId}) {
+function App({authorId} ) {
+  const values = queryString.parse(window.location.search);
+  const userId = values.userId;
   return (
     <div className="App">
       <Layout>
         <SearchEngine />
-        {authorId ? (<AuthorBooks author={authorId}/>) : (<MyHomePage readerId={3} />)}
+        {authorId ? (<AuthorBooks author={authorId}/>) : (<MyHomePage readerId={userId} />)}
         
       </Layout>
     </div>

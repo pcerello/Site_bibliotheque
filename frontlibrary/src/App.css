@@ -55,7 +55,7 @@ html,body,#root,.App{
   color: gray;
 }
 
-.bar-button :hover, ul :hover{
+.bar-button :hover{
   @apply text-color-hover;
 }
 

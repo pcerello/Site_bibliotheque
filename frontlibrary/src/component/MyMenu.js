@@ -26,7 +26,7 @@ function MyMenu() {
       const className = isActive ? "border-b-8 border-[#009999]" : "";
 
       return (
-        <Link to={route} key={route} className={`p-4 ${className}`}>
+        <Link to={route} key={route} className={`p-4 ${className}`} arial-label={label} >
           {label}
         </Link>
       );
@@ -38,7 +38,7 @@ function MyMenu() {
       <div className="pt-14"></div>
       <header className="flex w-full justify-center fixed top-0 bg-white shadow z-50">
         <div className="flex flex-row justify-between items-center w-5/6 content-center">
-          <Link to={"/"}  className="text-blue flex flex-row items-center">
+          <Link to={"/"}  className="text-blue flex flex-row items-center" aria-label="IUT - Bibliothèque">
             <img src={logoIUT} alt="logo iut info" className="max-h-[4vh] mr-2"/>
             IUT - Bibliothèque
           </Link>

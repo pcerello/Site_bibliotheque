@@ -66,58 +66,70 @@ function MyHomePage({ readerId }) {
 
 
     
-  function pagination(){
-    return(
-      <div className="flex flex-row justify-center py-8">
-          <button className="mx-8 bg-white drop-shadow-md p-2 disabled:text-gray-300 disabled:drop-shadow-none disabled:bg-gray-50 disabled:shadow-inner"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            Page précédente
-          </button>
-          {currentPage > 1 &&
-            prevPages.map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className="mx-2"
-              >
-                {page}
-              </button>
-            ))}
-          <button
-            key={currentPage}
-            disabled={true}
-            className="cursor-default underline mx-2"
-          >
-            {currentPage}
-          </button>
-          {currentPage < totalPages && nextPages.map((page) => (
-            <button 
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className="mx-2"
+      function pagination() {
+        return (
+          <div className="flex flex-row justify-center py-8">
+            <button
+              tabIndex={currentPage === 1 ? -1 : 0}
+              aria-hidden={currentPage === 1 ? true : false}
+              className="mx-8 bg-white drop-shadow-md p-2 disabled:text-gray-300 disabled:drop-shadow-none disabled:bg-gray-50 disabled:shadow-inner"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
             >
-              {page}
+              Page précédente
             </button>
-          ))}
-          <button className="mx-8 bg-white drop-shadow-md p-2 disabled:text-gray-300 disabled:drop-shadow-none disabled:bg-gray-50 disabled:shadow-inner"
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            Page suivante
-          </button>
-        </div>
-    );
-  }
+            {currentPage > 1 &&
+              prevPages.map((page) => (
+                <button
+                  key={page}
+                  tabIndex={0}
+                  className="mx-2"
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+            <button
+              key={currentPage}
+              tabIndex={-1}
+              aria-hidden="true"
+              disabled={true}
+              className="cursor-default underline mx-2"
+            >
+              {currentPage}
+            </button>
+            {currentPage < totalPages &&
+              nextPages.map((page) => (
+                <button
+                  key={page}
+                  tabIndex={0}
+                  className="mx-2"
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+            <button
+              tabIndex={currentPage === totalPages ? -1 : 0}
+              aria-hidden={currentPage === totalPages ? true : false}
+              className="mx-8 bg-white drop-shadow-md p-2 disabled:text-gray-300 disabled:drop-shadow-none disabled:bg-gray-50 disabled:shadow-inner"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Page suivante
+            </button>
+          </div>
+        );
+      }
+      
   
   return (
     <div className="bg-white min-h-[52vh] flex flex-col items-center text-left">
       <div className="w-[90%] md:w-[80%]">
-        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
+        <h2 className="text-2xl pt-24 pb-8 flex flex-start " >Vos derniers livres empruntés</h2>
         <ul className="flex flex-col md:flex-row flex-wrap ">
           {books ? (books.map((book) => (
-            <Book book={book} />
+            <Book book={book} aria-label={`Titre : ${book.title}. Auteur : ${book.author}.`} />
           ))) : (<div>Vous n'avez pas encore emprunté de livre</div>)}
         </ul>
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>

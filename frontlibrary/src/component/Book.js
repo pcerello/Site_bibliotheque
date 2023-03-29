@@ -8,10 +8,23 @@ function Book(props) {
   const resumeLimit = 50;
 
   return (
-    <Link to={`/books/${book[0].id}`} arial-label={`Lire plus sur le livre ${book[0].title}`} className="bg-white p-3 drop-shadow-lg ease-out duration-150 hover:scale-110 hover:z-10 md:w-[18vw] mx-4 mt-4">
-      <li key={book[0].id} role="listitem" className=" flex flex-col md:flex-row text-left ">
+    <Link
+      to={`/books/${book[0].id}`}
+      arial-label={`Lire plus sur le livre ${book[0].title}`}
+      className="bg-white p-3 drop-shadow-lg ease-out duration-150 hover:scale-110 hover:z-10 md:w-[18vw] mx-4 mt-4"
+    >
+      <li
+        key={book[0].id}
+        role="listitem"
+        className=" flex flex-col md:flex-row text-left "
+      >
         {book[0].picture ? (
-          <img src={`${book[0].picture}`} alt={book[0].title} title={`Couverture du livre ${book[0].title}`} className="object-cover h-[24vh] w-[100%] md:object-contain drop-shadow-md"/>
+          <img
+            src={`${book[0].picture}`}
+            alt={book[0].title}
+            title={`Couverture du livre ${book[0].title}`}
+            className="object-cover h-[24vh] w-[100%] md:object-contain drop-shadow-md"
+          />
         ) : (
           <img src={defaultImage} alt="default" style={{ width: "128px" }} />
         )}

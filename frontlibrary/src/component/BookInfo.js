@@ -20,6 +20,7 @@ function BookInfo() {
       })
       .then((data) => {
         setBook(data);
+        console.log(data);
       })
       .catch((error) => {
         console.log(error);
@@ -47,7 +48,11 @@ function BookInfo() {
                 <li>{author.name}</li>
               ))}
             </ul>
-            <p className="text-gray-400">Year:<p className="text-color">{book.book.year}</p></p>
+            <p className="text-gray-400">Langue:<p className="text-color">{book.book.language}</p></p>
+            <p className="text-gray-400">Nombre de pages:<p className="text-color">{book.book.nbrPages}</p></p>
+            <p className="text-gray-400">Editeur:<p className="text-color">{book.book.editor}</p></p>
+            <p className="text-gray-400">Catégorie:<p className="text-color">{book.book.category}</p></p>
+            <p className="text-gray-400">Année:<p className="text-color">{book.book.year}</p></p>
           </div>
         </div>
         <h2 className="mt-4 text-xl ">Description:</h2>

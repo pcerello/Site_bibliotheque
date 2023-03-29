@@ -47,7 +47,7 @@ function SearchEngine() {
       {selectedAuthor ? (
         <App authorId={selectedAuthor} />
       ) : (
-        <form className="bg-sky-800 pt-16 pb-16" onSubmit={handleSubmit} ref={formRef}>
+        <form className="relative w-fit pt-16 pb-16" onSubmit={handleSubmit} ref={formRef}>
           <input
             type="text"
             className="p-1 text-color-hover"
@@ -66,7 +66,7 @@ function SearchEngine() {
             <ul className="bg-gray-100 text-gray-800 absolute inset-x-0 border-[#009999] border-t-2 border-b-2">
               {suggestedAuthors.map((author) => (
                 <a href="" className="">
-                <li className="p-1 border border-1 bg-white"
+                <li className=" p-1 border border-1 bg-white"
                   key={author.id}
                   onClick={() => handleAuthorClick(author)}
                 > 
@@ -76,8 +76,8 @@ function SearchEngine() {
               ))}
             </ul>
           ): (
-            <div className="bg-gray-100 text-gray-800">
-              {authorName && <p>Aucun auteur</p>}
+            <div className="bg-gray-100 text-gray-800 absolute inset-x-0 border-[#009999] border-t-2 border-b-2">
+              {authorName && <p>Aucun auteur...</p>}
             </div>
           )}
         </form>

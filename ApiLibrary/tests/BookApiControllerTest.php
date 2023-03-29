@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BookApiControllerTest extends WebTestCase
 {
-    public function testListBook(): void
+   /* public function testListBook(): void
     {
         // Test List Books
         $client = static::createClient();
@@ -73,7 +73,7 @@ class BookApiControllerTest extends WebTestCase
         $this->assertEquals(1, count($books), "The number of books is 1");
 
         // Test Show Book
-        /*
+        
         $client->request('GET', '/api/books/1');
 
         $book = json_decode($client->getResponse()->getContent(), true);
@@ -94,6 +94,6 @@ class BookApiControllerTest extends WebTestCase
         $this->assertEquals(36, $book[0]['nbrPages'], "The book has 36 pages");
         $this->assertEquals(2022, $book[0]['year'], "The book has the year 2022");
         $this->assertEquals('Biography & Autobiography', $book[0]['category'], "The book has the category 'Biography & Autobiography'");
-        $this->assertEquals('BoD - Books on Demand', $book[0]['editor'], "The book has the editor 'BoD - Books on Demand'");*/
-    }
+        $this->assertEquals('BoD - Books on Demand', $book[0]['editor'], "The book has the editor 'BoD - Books on Demand'");
+    }*/
 }

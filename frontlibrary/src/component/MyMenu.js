@@ -5,17 +5,25 @@ import logoIUT from "./logoIUT_Info.png";
 function MyMenu() {
   const location = useLocation();
   const userId = localStorage.getItem("userId");
+  var connect;
+  if (!userId) {
+    connect = false;
+  } else {
+    connect = true;
+  }
   const routes = {
     "/": "Accueil",
-    "/amis": "Amis",
-    "/connexion": "Connexion",
-    "/deconnexion": "Déconnexion",
+    ...(connect && { "/amis": "Amis" }),
+    ...(connect && { "/profil": "Profil" }),
+    [connect ? "/deconnexion" : "/connexion"]: connect
+      ? "Déconnexion"
+      : "Connexion",
   };
 
   const renderMenuItems = () => {
     return Object.entries(routes).map(([route, label]) => {
       const isActive = location.pathname === route;
-      const className = isActive ? "border-b-8 border-[#009999]": "";
+      const className = isActive ? "border-b-8 border-[#009999]" : "";
 
       return (
         <Link to={route} key={route} className={`p-4 ${className}`}>

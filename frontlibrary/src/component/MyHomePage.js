@@ -25,6 +25,7 @@ function MyHomePage({ readerId }) {
       .then((response) => response.json())
       .then((data) => {
         setBooksAll(data);
+        console.log("data", data);
       });
   }, []);
 

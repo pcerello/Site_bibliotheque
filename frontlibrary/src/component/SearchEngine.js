@@ -1,7 +1,5 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AuthorBooks from "./AuthorBooks";
-import MyHomePage from "./MyHomePage";
 import App from "../App";
 
 function SearchEngine() {
@@ -59,36 +57,55 @@ function SearchEngine() {
   };
 
   return (
-    <div onClick={handleClickOutside} className="flex flex-col items-center text-left">
+    <div
+      onClick={handleClickOutside}
+      className="flex flex-col items-center text-left"
+    >
       {selectedAuthor ? (
         <App authorId={selectedAuthor} />
       ) : (
-        <form className="relative w-fit pt-16 pb-16" onSubmit={handleSubmit} ref={formRef}>
+        <form
+          className="relative w-fit pt-16 pb-16"
+          onSubmit={handleSubmit}
+          ref={formRef}
+        >
           <input
+            id="search-input"
             type="text"
             className="p-1 text-color-hover"
             placeholder="Rechercher un auteur"
             value={authorName}
             onChange={handleChange}
+            aria-label="Rechercher un auteur"
           />
+          <label htmlFor="search-button" className="sr-only">
+            Rechercher
+          </label>
           <button
+            id="search-button"
             type="submit"
             className="p-1 px-6 bg-color hover:bg-color-hover text-white"
             onClick={() => setSelectedAuthor(authorName)}
+            arial-label="Rechercher"
           >
-            <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
+            <FontAwesomeIcon icon="fa-solid fa-magnifying-glass"
+              alt="Icône de loupe"
+            />
           </button>
           {suggestedAuthors.length > 0 ? (
-            <ul className="bg-gray-100 text-gray-800 absolute inset-x-0 border-[#009999] border-t-2 border-b-2">
+            <ul
+              className="bg-gray-100 text-gray-800 absolute inset-x-0 border-[#009999] border-t-2 border-b-2 flex flex-col"
+              role="listbox"
+              aria-labelledby="Suggestions d'auteurs"
+            >
               {suggestedAuthors.map((author) => (
-                <a href="" className="" key={author.id}>
-                  <li
-                    className="p-1 border border-1 bg-white"
-                    onClick={() => handleAuthorClick(author)}
-                  >
-                    {boldenMatchingCharacters(author.name, authorName)}
-                  </li>
-                </a>
+                <button
+                  className="border border-1 bg-white p-1"
+                  onClick={() => handleAuthorClick(author)}
+                  key={author.id}
+                >
+                  {boldenMatchingCharacters(author.name, authorName)}
+                </button>
               ))}
             </ul>
           ) : (

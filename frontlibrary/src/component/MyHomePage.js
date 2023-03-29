@@ -97,18 +97,25 @@ function MyHomePage({ readerId }) {
   return (
     <div className="bg-white min-h-[52vh] flex flex-col items-center text-left">
       <div className="w-[90%] md:w-[80%]">
-        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
-        <ul className="flex flex-col md:flex-row flex-wrap ">
-          {books.map((book) => (
-            <Book book={book} />
-          ))}
-        </ul>
-        <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
-        <ul className="flex flex-col md:flex-row flex-wrap ">
-          {booksBought.map((book) => (
-            <Book book={book} />
-          ))}
-        </ul>
+        {readerId ? 
+        (
+          <>
+            <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vos derniers livres empruntés</h2>
+            <ul className="flex flex-col md:flex-row flex-wrap ">
+              {books.map((book) => (
+                <Book book={book} />
+              ))}
+            </ul>
+            <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
+            <ul className="flex flex-col md:flex-row flex-wrap ">
+              {booksBought.map((book) => (
+                <Book book={book} />
+              ))}
+            </ul>
+          </>
+        ) :(<></>)
+        }
+
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Tous les livres de la Bibliothèque</h2>
         {pagination()}
         <ul className="flex flex-col md:flex-row flex-wrap ">

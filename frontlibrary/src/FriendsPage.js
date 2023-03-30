@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "./component/Layout";
 import MyFriends from "./component/MyFriends";
+import MyFriendsRecom from "./component/MyFriendsRecom";
 
 import { useEffect, useState } from "react";
 
@@ -145,7 +146,7 @@ console.log("folow" ,followerRecommendation)
                 <ul className="flex flex-row flex-wrap ">
                     {followerRecommendation ? (followerRecommendation.map((follower) => (
                     <div>
-                        <MyFriends follow={follower}/>
+                        <MyFriendsRecom follow={follower}/>
                     </div>
                     ))) : (<div className="bg-white py-16">Aucune suggestion</div>
                     )}

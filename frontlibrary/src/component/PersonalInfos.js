@@ -47,19 +47,20 @@ function PersonalInfos({ readerId }) {
     <div className="mt-40 bg-white pt-8 flex flex-col items-center text-left "> 
       <div className="md:w-[80%] py-16">
         <h1 className="pb-4 text-2xl">Mes informations personnelles</h1>
-        <div className=" bg-white drop-shadow-md  w-fit">
-          <div className="p-8 flex flex-row">
-            <div>
-              <p>Prénom :</p>
-              <p>Nom :</p>
-              <p>Adresse mail :</p>
-              <p>Ma photo :</p>
-            </div>
-            <div className="ml-8">
-              <p>{reader.firstName}</p>
-              <p>{reader.lastName}</p>
-              <p>{reader.email}</p>
-              <p>{reader.picture}</p>
+        <div className="m-8 bg-white drop-shadow-md  w-fit">
+          <div className="p-4 flex flex-col md:flex-row">
+            <img className=" w-full md:w-[10vw]" src ={reader.picture} alt={reader.firstName}/>
+            <div className="flex mt-4 md:ml-4 flex-row">
+                <div className="text-gray-500 ">
+                <p>Prénom :</p>
+                <p>Nom :</p>
+                <p>Adresse mail :</p>
+                </div>
+                <div className="ml-8">
+                <p>{reader.firstName}</p>
+                <p>{reader.lastName}</p>
+                <p>{reader.email}</p>
+                </div>
             </div>
           </div>
         </div>

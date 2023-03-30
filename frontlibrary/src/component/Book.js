@@ -1,47 +1,48 @@
-import React from "react";
+import React, { useMemo } from "react";
 import defaultImage from "./livre.png";
 import { Link } from "react-router-dom";
 
 function Book(props) {
-  const book = props.book;
+  const book = useMemo(() => props.book[0], [props.book]); // Mettre en cache book[0]
+
   const titleLimit = 20;
   const resumeLimit = 50;
 
   return (
     <Link
-      to={`/books/${book[0].id}`}
-      arial-label={`Lire plus sur le livre ${book[0].title}`}
+      to={`/books/${book.id}`}
+      arial-label={`Lire plus sur le livre ${book.title}`}
       className="bg-white p-3 drop-shadow-lg ease-out duration-150 hover:scale-110 hover:z-10 md:w-[18vw] mx-4 mt-4"
     >
       <li
-        key={book[0].id}
+        key={book.id}
         role="listitem"
         className=" flex flex-col md:flex-row text-left "
       >
-        {book[0].picture ? (
+        {book.picture ? (
           <img
-            src={`${book[0].picture}`}
-            alt={book[0].title}
-            title={`${book[0].title}`}
+            src={`${book.picture}`}
+            alt={book.title}
+            title={`${book.title}`}
             className="object-cover  w-[100%] md:object-contain drop-shadow-md"
           />
         ) : (
-          <img src={defaultImage} alt="default" style={{ width: "128px"}} title={`${book[0].title}`} />
+          <img src={defaultImage} alt="default" style={{ width: "128px"}} title={`${book.title}`} />
         )}
         <div className="ml-4 flex flex-col justify-between">
           <h3 className="text-lg font-medium">
-            {book[0].title.length > titleLimit
-              ? book[0].title.substring(0, titleLimit) + "..."
-              : book[0].title}
+            {book.title.length > titleLimit
+              ? book.title.substring(0, titleLimit) + "..."
+              : book.title}
           </h3>
           <p className="text-gray-300 text-sm">
             {book.nameAuthor ? book.nameAuthor : "auteur inconnu"} -{" "}
-            {book[0].year}
+            {book.year}
           </p>
           <p className="text-gray-600 mt-2">
-            {book[0].resume.length > resumeLimit
-              ? book[0].resume.substring(0, resumeLimit) + "..."
-              : book[0].resume}
+            {book.resume.length > resumeLimit
+              ? book.resume.substring(0, resumeLimit) + "..."
+              : book.resume}
           </p>
         </div>
       </li>

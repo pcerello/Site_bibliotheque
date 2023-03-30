@@ -9,7 +9,7 @@ function MyConnection() {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    axios.post("http://localhost:8000/api/login", {
+    axios.post("http://185.212.225.127:8000/api/login", {
       email: email,
       password: password,
     })

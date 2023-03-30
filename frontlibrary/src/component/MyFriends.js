@@ -7,7 +7,7 @@ function MyFriends(props) {
     const follower = props.follow;
     const [books, setBook] = useState(null);
     useEffect(() => {
-        fetch(`http://localhost:8000/api/readers/${follower.id}/books?max=3`, {
+        fetch(`http://185.212.225.127:8000/api/readers/${follower.id}/books?max=3`, {
           mode: "cors",
         })
           .then((response) => {

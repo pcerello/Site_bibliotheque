@@ -140,6 +140,13 @@ class ReaderApiController extends AbstractController
     }
 
     #[OA\Get(summary: "Recommendation of books for a reader")]
+    #[OA\Parameter(
+        name: "max",
+        in: "query",
+        description: "Maximum number of books",
+        required: false,
+        example: 4
+    )]
     #[OA\Response(
         response: 200,
         description: "Recommendation of books for a reader",
@@ -163,7 +170,7 @@ class ReaderApiController extends AbstractController
      *
      * @return mixed
      */
-    public function booksRecommendationForReader(BookRepository $bookRepository, ReaderRepository $readerRepository, int $id)
+    public function booksRecommendationForReader(BookRepository $bookRepository, ReaderRepository $readerRepository, int $id, Request $request)
     {
         // get the query builder
         $queryBuilder = $readerRepository->findFollow();
@@ -181,8 +188,15 @@ class ReaderApiController extends AbstractController
 
         // add the where clause with the list of readers followed by the reader
         $queryBuilder->where('bo.idReader IN (:readers)')
-            ->setParameter('readers', $myFollow)
-            ->getQuery();
+            ->setParameter('readers', $myFollow);
+
+        // get the maximum number of books
+        $max = $request->query->get('max');
+
+        // if we have a maximum number of books, add the limit
+        if ($max) {
+            $queryBuilder->setMaxResults($max);
+        }
 
         // get the list of books
         $books = $queryBuilder->getQuery()->getResult();
@@ -237,6 +251,13 @@ class ReaderApiController extends AbstractController
     }
 
     #[OA\Get(summary: "List of followers recommended")]
+    #[OA\Parameter(
+        name: "max",
+        in: "query",
+        description: "Maximum number of followers recommended",
+        required: false,
+        example: 4
+    )]
     #[OA\Response(
         response: 200,
         description: "List of followers recommended",
@@ -257,7 +278,7 @@ class ReaderApiController extends AbstractController
      *
      * @return mixed
      */
-    public function listFollowRecommendation(ReaderRepository $readerRepository, int $id)
+    public function listFollowRecommendation(ReaderRepository $readerRepository, int $id, Request $request)
     {
         // get the query builder
         $queryBuilder = $readerRepository->findFollow();
@@ -266,6 +287,9 @@ class ReaderApiController extends AbstractController
         $queryBuilder->where('f.idFollow = :id')
             ->setParameter('id', $id)
             ->getQuery();
+
+        // get the maximum number of followers recommended
+        $max = $request->query->get('max');
 
         // get the list of readers followed by the reader
         $myFollow = $queryBuilder->getQuery()->getResult();
@@ -280,8 +304,12 @@ class ReaderApiController extends AbstractController
             ->andWhere('f.idIsFollowed != :id')
             ->setParameter('id', $id)
             ->andWhere('f.idIsFollowed NOT IN (:myFollow)')
-            ->setParameter('myFollow', $myFollow)
-            ->getQuery();
+            ->setParameter('myFollow', $myFollow);
+            
+        // if we have a maximum number of followers recommended, add the limit
+        if ($max) {
+            $queryBuilder->setMaxResults($max);
+        }
 
         // get the list of readers
         $follows = $queryBuilder->getQuery()->getResult();

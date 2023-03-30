@@ -10,7 +10,7 @@ function MyHomePage({ readerId }) {
   const [booksPerPage] = useState(8);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/readers/${readerId}/books?max=4`, {
+    fetch(`http://localhost:8000/api/readers/${readerId}/books?max=4`, {
       mode: "cors",
     })
       .then((response) => {
@@ -34,7 +34,7 @@ function MyHomePage({ readerId }) {
   }, [readerId]);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/books`, {
+    fetch(`http://localhost:8000/api/books`, {
       mode: "cors",
     })
       .then((response) => response.json())
@@ -44,7 +44,7 @@ function MyHomePage({ readerId }) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/books?max=4&date=DESC`, { 
+    fetch(`http://localhost:8000/api/books?max=4&date=DESC`, { 
       mode: "cors",
     })
       .then((response) => response.json())
@@ -54,7 +54,7 @@ function MyHomePage({ readerId }) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/readers/${readerId}/books/recommendations?max=8`, {
+    fetch(`http://localhost:8000/api/readers/${readerId}/books/recommendations?max=8`, {
       mode: "cors",
     })
       .then((response) => {
@@ -182,7 +182,7 @@ function MyHomePage({ readerId }) {
         }
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Tous les livres de la Bibliothèque</h2>
         {pagination()}
-        <ul className="flex flex-col md:flex-row flex-wrap ">
+        <ul className="flex flex-col md:flex-row flex-wrap">
           {currentBooks.map((book) => (
             <Book book={book} />
           ))}

@@ -12,7 +12,7 @@ function FriendsPage() {
   const [friendsPerPage] = useState(8);
   console.log("readerId", userId);
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/readers/${userId}/follow`, {
+    fetch(`http://localhost:8000/api/readers/${userId}/follow`, {
       mode: "cors",
     })
       .then((response) => {

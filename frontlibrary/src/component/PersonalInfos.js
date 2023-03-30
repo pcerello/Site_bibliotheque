@@ -7,7 +7,7 @@ function PersonalInfos({ readerId }) {
   const [books, setBooks] = useState(null);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/readers/${readerId}`, {
+    fetch(`http://localhost:8000/api/readers/${readerId}`, {
       mode: "cors",
     })
       .then((response) => response.json())
@@ -16,7 +16,7 @@ function PersonalInfos({ readerId }) {
   }, [readerId]);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/readers/${readerId}/books`, {
+    fetch(`http://localhost:8000/api/readers/${readerId}/books`, {
       mode: "cors",
     })
       .then((response) => {

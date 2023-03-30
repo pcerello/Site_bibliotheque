@@ -25,8 +25,8 @@ class ReaderApiControllerTest extends WebTestCase
         // Check that the response is successful
         $this->assertResponseIsSuccessful("List of readers is available");
 
-        // Check if we have 51 readers
-        $this->assertEquals(51, count($readers), "The number of readers is 51");
+        // Check if we have 101 readers
+        $this->assertEquals(101, count($readers), "The number of readers is 101");
 
         $firstnames = [];
         $lastnames = [];
@@ -51,13 +51,13 @@ class ReaderApiControllerTest extends WebTestCase
         $this->assertContains('admin', $lastnames, "The reader has the lastname 'admin'");
         $this->assertContains('admin@admin', $emails, "The reader has the email 'admin@admin'");
 
-        $this->assertContains('Alexandre', $firstnames, "The reader has the firstname 'pauline'");
-        $this->assertContains('Vaillant', $lastnames, "The reader has the lastname 'cerello'");
-        $this->assertContains('Alexandre@Vaillant', $emails, "The reader has the email 'pauline.cerello@'");
+        $this->assertContains('Alfred', $firstnames, "The reader has the firstname 'Alfred'");
+        $this->assertContains('Wagner', $lastnames, "The reader has the lastname 'Wagner'");
+        $this->assertContains('Alfred@Wagner', $emails, "The reader has the email 'Alfred@Wagner'");
 
-        $this->assertContains('Lucas-Stéphane', $firstnames, "The reader has the firstname 'benjamin'");
-        $this->assertContains('Rossi', $lastnames, "The reader has the lastname 'loupiac'");
-        $this->assertContains('Lucas-Stéphane@Rossi', $emails, "The reader has the email 'benjamin.loupiac@'");
+        $this->assertContains('Maryse', $firstnames, "The reader has the firstname 'Maryse'");
+        $this->assertContains('Bonneau', $lastnames, "The reader has the lastname 'Bonneau'");
+        $this->assertContains('Maryse@Bonneau', $emails, "The reader has the email 'Maryse@Bonneau'");
 
         $this->assertContains(null, $picture, "The reader has the image 'null'");
     }
@@ -87,9 +87,9 @@ class ReaderApiControllerTest extends WebTestCase
 
         // Check that the reader has the correct id, firstname, lastname and email
         $this->assertEquals(1, $reader['id'], "The reader has the id '1'");
-        $this->assertEquals('Antoine', $reader['firstName'], "The reader has the firstname 'Antoine'");
-        $this->assertEquals('Lelièvre', $reader['lastName'], "The reader has the lastname 'Lelièvre'");
-        $this->assertEquals('Antoine@Lelièvre', $reader['email'], "The reader has the email 'Antoine@Lelièvre'");
+        $this->assertEquals('Capucine', $reader['firstName'], "The reader has the firstname 'Capucine'");
+        $this->assertEquals('Gautier-Hebert', $reader['lastName'], "The reader has the lastname 'Gautier-Hebert'");
+        $this->assertEquals('Capucine@Gautier-Hebert', $reader['email'], "The reader has the email 'Capucine@Gautier-Hebert'");
     }
 
     /**
@@ -206,9 +206,9 @@ class ReaderApiControllerTest extends WebTestCase
         }
 
         // Check that the follow have the correct firstname
-        $this->assertContains('Grégoire', $firstnames, "The reader has the firstname 'Grégoire'");
-        $this->assertContains('Bernard', $firstnames, "The reader has the firstname 'Bernard'");
-        $this->assertContains('Laure', $firstnames, "The reader has the firstname 'Laure'");
+        $this->assertContains('Auguste', $firstnames, "The reader has the firstname 'Auguste'");
+        $this->assertContains('Aimé', $firstnames, "The reader has the firstname 'Aimé'");
+        $this->assertContains('Andrée', $firstnames, "The reader has the firstname 'Andrée'");
     }
 
     /**
@@ -243,9 +243,9 @@ class ReaderApiControllerTest extends WebTestCase
         }
 
         // Check that the follow have the correct firstname
-        $this->assertContains('Emmanuel', $firstnames, "The reader has the firstname 'Emmanuel'");
-        $this->assertContains('Alice-Aurore', $firstnames, "The reader has the firstname 'Alice-Aurore'");
-        $this->assertContains('Julie', $firstnames, "The reader has the firstname 'Julie'");
-        $this->assertContains('Caroline', $firstnames, "The reader has the firstname 'Caroline'");
+        $this->assertContains('Zoé', $firstnames, "The reader has the firstname 'Zoé'");
+        $this->assertContains('Claire-Nathalie', $firstnames, "The reader has the firstname 'Claire-Nathalie'");
+        $this->assertContains('Stéphanie', $firstnames, "The reader has the firstname 'Stéphanie'");
+        $this->assertContains('Danielle', $firstnames, "The reader has the firstname 'Danielle'");
     }
 }

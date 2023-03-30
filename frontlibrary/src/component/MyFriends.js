@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Book from "./Book";
 import defaultImage from "./livre.png";
+import { Link } from "react-router-dom";
 
 function MyFriends(props) {
     const follower = props.follow;
@@ -37,7 +38,11 @@ function MyFriends(props) {
         
         <ul className="flex flex-row w-full justify-between">
         {books ? (books.map((book) => (
-            book[0].picture ?(<img className="w-[3vw]" src={`${book[0].picture}`} alt={book[0].title} />) : (<img className="w-[3vw]" src={defaultImage} alt="default" />)
+            book[0].picture ?(
+                <Link to={`/books/${book[0].id}`}>
+            <img className="w-[3vw]" src={`${book[0].picture}`} alt={book[0].title} />
+            </Link>
+            ) : (<img className="w-[3vw]" src={defaultImage} alt="default" />)
         ))) : (<div className="text-red-500">Pas de dernière lecture</div>
             )}
         </ul>

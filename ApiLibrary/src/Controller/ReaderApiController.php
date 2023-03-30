@@ -109,8 +109,16 @@ class ReaderApiController extends AbstractController
      *
      * @return mixed json with the list of books or a 404 error
      */
-    public function booksReadByReader(BookRepository $bookRepository, int $id, Request $request)
+    public function booksReadByReader(BookRepository $bookRepository, int $id, Request $request, ReaderRepository $readerRepository)
     {
+        // get the reader with the given id
+        $reader = $readerRepository->find($id);
+
+        // if the reader is not found, return a 404 error
+        if (!$reader) {
+            return $this->json(["message" => "Reader not found"], 404);
+        }
+
         // get the maximum number of books
         $max = $request->query->get('max');
 
@@ -172,6 +180,15 @@ class ReaderApiController extends AbstractController
      */
     public function booksRecommendationForReader(BookRepository $bookRepository, ReaderRepository $readerRepository, int $id, Request $request)
     {
+
+        // get the reader with the given id
+        $reader = $readerRepository->find($id);
+
+        // if the reader is not found, return a 404 error
+        if (!$reader) {
+            return $this->json(["message" => "Reader not found"], 404);
+        }
+
         // get the query builder
         $queryBuilder = $readerRepository->findFollow();
 
@@ -230,6 +247,14 @@ class ReaderApiController extends AbstractController
      */
     public function listFollow(ReaderRepository $readerRepository, int $id)
     {
+        // get the reader with the given id
+        $reader = $readerRepository->find($id);
+
+        // if the reader is not found, return a 404 error
+        if (!$reader) {
+            return $this->json(["message" => "Reader not found"], 404);
+        }
+
         // get the query builder
         $queryBuilder = $readerRepository->findFollow();
 
@@ -280,6 +305,14 @@ class ReaderApiController extends AbstractController
      */
     public function listFollowRecommendation(ReaderRepository $readerRepository, int $id, Request $request)
     {
+        // get the reader with the given id
+        $reader = $readerRepository->find($id);
+
+        // if the reader is not found, return a 404 error
+        if (!$reader) {
+            return $this->json(["message" => "Reader not found"], 404);
+        }
+
         // get the query builder
         $queryBuilder = $readerRepository->findFollow();
 

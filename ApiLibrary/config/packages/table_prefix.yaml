@@ -5,4 +5,4 @@ parameters:
 when@test:
   parameters:
       table_prefix:
-          entity: ~
+          entity: test_

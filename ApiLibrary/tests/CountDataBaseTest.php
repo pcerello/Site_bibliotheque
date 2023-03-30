@@ -166,8 +166,8 @@ class CountDataBaseTest extends WebTestCase
         $reader = $req->getQuery()->getResult();
         $nbr_reader = count($reader);
 
-        // Check if we have the correct number of readers (51)
-        $this->assertEquals(51, $nbr_reader);
+        // Check if we have the correct number of readers (101)
+        $this->assertEquals(101, $nbr_reader);
     }
 
     /**

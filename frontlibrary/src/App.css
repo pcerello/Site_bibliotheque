@@ -88,6 +88,22 @@ input::placeholder{
   @apply text-color;
 }
 
+.bm-overlay{
+  display: none;
+}
+
+.bm-item-list{
+  font-size: 5vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bm-item{
+  width: 50%;
+}
+
 .App-link {
   color: #61dafb;
 }

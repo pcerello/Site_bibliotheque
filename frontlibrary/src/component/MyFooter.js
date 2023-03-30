@@ -1,5 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 function MyFooter() {
   return (
@@ -58,8 +59,7 @@ function MyFooter() {
               <FontAwesomeIcon icon="fa-brands fa-youtube" />
             </a>
           </div>
-          <a href="/mention_legales" className="focus:bg-yellow-200" target="_blank">Conditions générales d'utilisation</a>
-        </div>
+          <Link to={"/mentionLegales"} className="focus:bg-yellow-200" target="_blank">Conditions générales d'utilisation</Link>        </div>
       </div>
       <div className="flex flex-row justify-between grey">
         <p>Copyright 2023 IUT - Bibliothèque. Tous droits réservés.</p>

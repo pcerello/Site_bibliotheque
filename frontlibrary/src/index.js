@@ -25,7 +25,7 @@ export default function Index() {
         <Route path="/profil" element={<ProfilPage />} />
         <Route path="/books/:id" element={<BookPage />} />
         <Route path="/deconnexion" element={<MyLogoutPage />} />
-        <Route path="/mention_legales" element={<MentionLegal />} />
+        <Route path="/mentionLegales" element={<MentionLegal />} />
         <Route path="/auteur/:id" element={<AuthorPage />} />
         <Route path="/auteurs" element={<AuthorsPage />} />
       </Routes>

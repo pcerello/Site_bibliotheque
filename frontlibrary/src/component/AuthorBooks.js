@@ -102,9 +102,15 @@ function AuthorBooks() {
           </div>) : (<div>
         <h2 className="text-2xl py-8 text-gray-400">Tous les livres de <b className="font-bold text-color"> {author} </b> disponible à la bibliothèque</h2>
         {pagination()}
+<<<<<<< HEAD
         <ul className="flex flex-col md:flex-row items-center md:flex-wrap">
           {books.map((book) => (
             <li key={book[0].id} className="m-4 flex flex-col w-[60%]  md:max-w-[15%] ease-out duration-150 hover:scale-105 items-center p-2 bg-white drop-shadow-lg">
+=======
+        <ul className="flex flex-row flex-wrap">
+          {books.map((book) => (
+            <li key={book[0].id} className="m-4 flex flex-col md:w-fit max-w-[15%] ease-out duration-150 hover:scale-105 items-center p-2 bg-white drop-shadow-lg">
+>>>>>>> 7b8b738 (css pages recherches)
               {book[0].picture ? (
                 <Link to={`/books/${book[0].id}`} className="flex flex-col items-center">
                   <img src={`${book[0].picture}`} alt={book[0].title} title={book[0].title}/>

@@ -13,15 +13,8 @@ function SearchEngine() {
     const value = event.target.value;
     setAuthorName(value);
     if (value.length >= 4) {
-<<<<<<< HEAD
-<<<<<<< HEAD
       fetch(`http://localhost:8000/api/authors?name=${value}&max=10`, {
-=======
-      fetch(`http://localhost:8000/api/authors?name=${value}&max=5`, {
->>>>>>> 40963ce (fix: taille book)
-=======
-      fetch(`http://localhost:8000/api/authors?name=${value}&max=5`, {
->>>>>>> 40963ce (fix: taille book)
+
         mode: "cors",
       })
         .then((response) => response.json())

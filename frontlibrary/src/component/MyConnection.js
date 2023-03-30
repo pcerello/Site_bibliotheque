@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 function MyConnection() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
+ 
   const handleLogin = (event) => {
     event.preventDefault();
     axios.post("http://185.212.225.127:8000/api/login", {
@@ -19,7 +21,9 @@ function MyConnection() {
         navigate('/');
       })
       .catch((error) => {
+        setError(true);
         console.log("Error while logging in: ", error);
+        
       });
   };
 
@@ -27,24 +31,37 @@ function MyConnection() {
     <div className="flex flex-col items-center pt-16 min-h-[52vh] bg-white mt-40">
       <form className=" flex flex-col space-y-4" onSubmit={handleLogin}>
         <h1 className="text-2xl">Connexion</h1>
-        <input
-          className="border-2 rounded-sm p-1"
+        {error ? (<input
+          className="border-2 border-red-300 rounded-sm p-1"
           type="text"
           placeholder="Email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-        />
-        <input
-          className="border-2 rounded-sm p-1"
+        />): (<input
+            className="border-2 rounded-sm p-1"
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />)}
+        {error ?(<input
+          className="border-2 border-red-300 rounded-sm p-1"
           type="password"
           placeholder="Mot de passe"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-        />
+        />):(<input
+            className="border-2 rounded-sm p-1"
+            type="password"
+            placeholder="Mot de passe"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />)}
         <button className="bg-color text-white py-2" type="submit">
           Se connecter
         </button>
       </form>
+      {error && <p className="text-red-300 py-2">Login ou mot de passe incorrect</p>}
     </div>
   );
 }

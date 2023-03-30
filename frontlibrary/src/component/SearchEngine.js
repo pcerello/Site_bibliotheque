@@ -1,18 +1,19 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import App from "../App";
+import { useNavigate } from "react-router-dom";
 
 function SearchEngine() {
   const [authorName, setAuthorName] = useState("");
   const [suggestedAuthors, setSuggestedAuthors] = useState([]);
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const formRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const value = event.target.value;
     setAuthorName(value);
     if (value.length >= 4) {
-      fetch(`http://185.212.225.127:8000/api/authors?name=${value}&max=5`, {
+      fetch(`http://localhost:8000/api/authors?name=${value}&max=10`, {
         mode: "cors",
       })
         .then((response) => response.json())
@@ -27,7 +28,9 @@ function SearchEngine() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setSelectedAuthor(authorName);
+    console.log("authorName", authorName);
+    
+    navigate(`/auteurs`, { state: { authorName } });
   };
 
   const handleAuthorClick = (author) => {
@@ -62,7 +65,7 @@ function SearchEngine() {
       className="flex flex-col items-center text-left"
     >
       {selectedAuthor ? (
-        <App authorId={selectedAuthor} />
+        navigate(`/auteur/${selectedAuthor}`)
       ) : (
         <form
           className="relative w-fit pt-16 pb-16"
@@ -85,7 +88,7 @@ function SearchEngine() {
             id="search-button"
             type="submit"
             className="p-1 px-6 bg-color hover:bg-color-hover text-white"
-            onClick={() => setSelectedAuthor(authorName)}
+            onClick={handleSubmit}
             arial-label="Rechercher"
           >
             <FontAwesomeIcon icon="fa-solid fa-magnifying-glass"

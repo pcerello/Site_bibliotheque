@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import defaultImage from "./livre.png";
 import { Link } from "react-router-dom";
+import userImage from "./userImage.png";
 
 function MyFriends(props) {
   const follower = props.follow;

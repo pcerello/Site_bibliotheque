@@ -8,7 +8,7 @@ function BookInfo() {
   const [book, setBook] = useState(null);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/books/${id}`, {
+    fetch(`http://localhost:8000/api/books/${id}`, {
       mode: "cors",
     })
       .then((response) => {
@@ -37,9 +37,9 @@ function BookInfo() {
         <h2 className="text-2xl">{book.book.title}</h2>
         <div className="flex flex-col md:flex-row items-center mt-4">
           {book.book.picture ? (
-            <img src={`${book.book.picture}`} alt={book.book.title} />
+            <img src={`${book.book.picture}`} alt={book.book.title} title={book.book.title} />
           ) : (
-            <img src={defaultImage} alt="default" style={{ width: "128px" }} />
+            <img src={defaultImage} alt="default" style={{ width: "128px" }} title={book.book.title}/>
           )}
           <div className="m-4 flex flex-row bg-gray-100 p-4">
             <div>

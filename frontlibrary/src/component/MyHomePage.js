@@ -4,6 +4,7 @@ import Book from "./Book";
 function MyHomePage({ readerId }) {
   const [books, setBooks] = useState(null);
   const [booksBought, setBooksBought] = useState([]);
+  const [booksSuggest, setBooksSuggest] = useState([]);
   const [booksAll, setBooksAll] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(8);
@@ -51,6 +52,33 @@ function MyHomePage({ readerId }) {
         setBooksBought(data);
       });
   }, []);
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/readers/${readerId}/books/recommendations`, {
+      mode: "cors",
+    })
+      .then((response) => {
+      if(!response.ok){
+        throw Error("404 Not Found");
+      }
+      return response.json();
+
+  })
+      .then((data) => {
+      
+        setBooksSuggest(data);
+        console.log("data", books);
+      })
+      .catch((error) => {
+        console.error("Erreur fetching book:", error);
+        setBooksSuggest(null);
+      })
+      ;
+
+  }, [readerId]);
+
+
+
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -135,6 +163,14 @@ function MyHomePage({ readerId }) {
                   <Book book={book} aria-label={`Titre : ${book.title}. Auteur : ${book.author}.`} />
                 ))) : (<div>Vous n'avez pas encore emprunté de livre</div>)}
               </ul>
+              
+              <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Vous pourriez aimer aussi</h2>
+              <ul className="flex flex-col md:flex-row flex-wrap ">
+                {booksSuggest ? (booksSuggest.map((book) => (
+                  <Book book={book} />
+                ))): (<div>Vous n'avez aucun livres suggérés</div>)}
+              </ul>
+              
               <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Les dernières acquisitions de la Bibliothèque</h2>
               <ul className="flex flex-col md:flex-row flex-wrap ">
                 {booksBought.map((book) => (

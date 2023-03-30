@@ -58,7 +58,7 @@ function MyFooter() {
               <FontAwesomeIcon icon="fa-brands fa-youtube" />
             </a>
           </div>
-          <a href="/mention" className="focus:bg-yellow-200" target="_blank">Conditions générales d'utilisation</a>
+          <a href="/mention_legales" className="focus:bg-yellow-200" target="_blank">Conditions générales d'utilisation</a>
         </div>
       </div>
       <div className="flex flex-row justify-between grey">

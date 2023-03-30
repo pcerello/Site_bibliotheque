@@ -9,6 +9,7 @@ import AuthorBooks from "./component/AuthorBooks";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import defaultImage from "../src/component/livre.png";
+import { Link } from "react-router-dom";
 
 library.add(fas, far, fab);
 
@@ -107,24 +108,33 @@ function AuthorsPage() {
           </div>
         ) : (
           <div>
-            <h2>Tous les livres disponible à la bibliothèque pour la recherche : {authors}</h2>
+            <h2>
+              Tous les livres disponible à la bibliothèque pour la recherche :{" "}
+              {authors}
+            </h2>
             <ul>
               {pagination()}
               {currentBooks.map((book) => (
                 <li key={book[0].id}>
                   {book[0].picture ? (
-                    <img
-                      src={`${book[0].picture}`}
-                      alt={book[0].title}
-                      title={book[0].title}
-                    />
+                    <Link to={`/books/${book[0].id}`}>
+                      <img
+                        src={`${book[0].picture}`}
+                        alt={book[0].title}
+                        title={book[0].title}
+                      />
+                      <p>{book[0].title}</p>
+                    </Link>
                   ) : (
-                    <img
-                      src={defaultImage}
-                      alt="default"
-                      title={book[0].title}
-                      style={{ width: "128px" }}
-                    />
+                    <Link to={`/books/${book[0].id}`}>
+                      <img
+                        src={defaultImage}
+                        alt="default"
+                        title={book[0].title}
+                        style={{ width: "128px" }}
+                      />
+                      <p>{book[0].title}</p>
+                    </Link>
                   )}
                 </li>
               ))}

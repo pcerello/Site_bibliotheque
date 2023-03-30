@@ -1,8 +1,8 @@
 import React from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import defaultImage from "./livre.png";
+import { Link } from "react-router-dom";
 
 function AuthorBooks() {
   const { id } = useParams();
@@ -105,9 +105,19 @@ function AuthorBooks() {
         {books.map((book) => (
           <li key={book[0].id}>
             {book[0].picture ? (
+               <Link to={`/books/${book[0].id}`}>
             <img src={`${book[0].picture}`} alt={book[0].title} title={book[0].title} />
+            <p>
+              {book[0].title}
+            </p>
+            </Link>
           ) : (
+            <Link to={`/books/${book[0].id}`}>
             <img src={defaultImage} alt="default" style={{ width: "128px" }} title={book[0].title}/>
+            <p>
+              {book[0].title}
+            </p>
+            </Link>
           )}
           </li>
         ))}
@@ -118,61 +128,5 @@ function AuthorBooks() {
     </div>
   );
 }
-/*
-class AuthorBooks extends React.Component {
-  /**
-   * Constructor
-   * 
-   * @param {*} props
-   *
-  constructor(props) {
-    super(props);
-    this.state = {
-      books: []
-    };
-    this.bookAuthor();
-  }
-
-  /**
-   * Cherche les livres de l'auteur
-   *
-  bookAuthor() {
-    let request = "http://localhost:8000/api/books?idAuthor=" + this.props.author;
-    axios 
-      .get(request)
-      .then((response) => {
-        if (response.status === 200) {
-          this.setState({ books: response.data });
-          console.log("data", response.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  /**
-   * Affiche les livres de l'auteur
-   *  
-   * @returns html
-   * 
-   *
-  render() {
-    
-    return (
-      <div>
-        <h2>Livres de l'auteur</h2>
-        <ul>
-          {this.state.books.map((book) => (
-            <li key={book[0].id}>{book[0].title}</li>
-          ))}
-        </ul>
-        <p>
-          erzrzerz
-        </p>
-      </div>
-    );
-  }
-}*/
 
 export default AuthorBooks;

@@ -94,37 +94,40 @@ function AuthorBooks() {
       }
 
   return (
-    <div>
-      {
-        books.length === 0 ? (<div>
-          <h2>Aucun livre disponible pour cet auteur</h2>
-        </div>) : (<div>
-      <h2>Tous les livres de {author} disponible à la bibliothèque</h2>
-      <ul>
+    <div className="bg-white mt-40 flex flex-col items-center">
+      <div className="w-[90%] md:w-[80%]">
+        {
+          books.length === 0 ? (<div>
+            <h2>Aucun livre disponible pour cet auteur</h2>
+          </div>) : (<div>
+        <h2 className="text-2xl py-8 text-gray-400">Tous les livres de <b className="font-bold text-color"> {author} </b> disponible à la bibliothèque</h2>
         {pagination()}
-        {books.map((book) => (
-          <li key={book[0].id}>
-            {book[0].picture ? (
-               <Link to={`/books/${book[0].id}`}>
-            <img src={`${book[0].picture}`} alt={book[0].title} title={book[0].title} />
-            <p>
-              {book[0].title}
-            </p>
-            </Link>
-          ) : (
-            <Link to={`/books/${book[0].id}`}>
-            <img src={defaultImage} alt="default" style={{ width: "128px" }} title={book[0].title}/>
-            <p>
-              {book[0].title}
-            </p>
-            </Link>
-          )}
-          </li>
-        ))}
+        <ul className="flex flex-row flex-wrap">
+          {books.map((book) => (
+            <li key={book[0].id} className="m-4 flex flex-col md:w-fit max-w-[15%] ease-out duration-150 hover:scale-105 items-center p-2 bg-white drop-shadow-lg">
+              {book[0].picture ? (
+                <Link to={`/books/${book[0].id}`} className="flex flex-col items-center">
+                  <img src={`${book[0].picture}`} alt={book[0].title} title={book[0].title}/>
+                  <p>
+                    {book[0].title}
+                  </p>
+                </Link>
+                
+            ) : (
+              <Link to={`/books/${book[0].id}`} className="flex flex-col w-fit items-center">
+              <img src={defaultImage} alt="default" style={{ width: "128px" }} title={book[0].title}/>
+              <p>
+                {book[0].title}
+              </p>
+              </Link>
+            )}
+            </li>
+          ))}
+        </ul>
         {pagination()}
-      </ul>
-      </div>)
-      }
+        </div>)
+        }
+      </div>
     </div>
   );
 }

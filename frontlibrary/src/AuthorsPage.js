@@ -107,47 +107,51 @@ function AuthorsPage() {
   return (
     <div className="App">
       <Layout>
-        <SearchEngine />
-        {books.length === 0 ? (
-          <div>
-            <h2>Aucun livre disponible pour la recherche : {authors}</h2>
+      <SearchEngine />
+        <div className="bg-white mt-40 flex flex-col items-center">
+          <div className="w-[90%] md:w-[80%]">
+            {books.length === 0 ? (
+              <div>
+                <h2 className="text-gray-400 text-lg py-16">Aucun livre disponible pour la recherche : {authors}</h2>
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-gray-400 text-2xl py-16">
+                  Tous les livres disponible à la bibliothèque pour la recherche :{" "}
+                  <b className="font-bold text-color">{authors}</b>
+                </h2>
+                {pagination()}
+                <ul className="flex flex-col md:flex-row items-center md:flex-wrap">
+                  {currentBooks.map((book) => (
+                    <li key={book[0].id} className="m-3 flex flex-col w-[60%]  md:w-[10%] ease-out duration-150 hover:scale-105 items-center p-2 bg-white drop-shadow-lg">
+                      {book[0].picture ? (
+                        <Link to={`/books/${book[0].id}`} className="flex flex-col items-center">
+                          <img
+                            src={`${book[0].picture}`}
+                            alt={book[0].title}
+                            title={book[0].title}
+                          />
+                          <p>{book[0].title}</p>
+                        </Link>
+                      ) : (
+                        <Link to={`/books/${book[0].id}`} className="flex flex-col items-center">
+                          <img
+                            src={defaultImage}
+                            alt="default"
+                            title={book[0].title}
+                            style={{ width: "128px" }}
+                          />
+                          <p>{book[0].title}</p>
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                {pagination()}
+              </div>
+            )}
           </div>
-        ) : (
-          <div>
-            <h2>
-              Tous les livres disponible à la bibliothèque pour la recherche :{" "}
-              {authors}
-            </h2>
-            <ul>
-              {pagination()}
-              {currentBooks ? (currentBooks.map((book) => (
-                <li key={book[0].id}>
-                  {book[0].picture ? (
-                    <Link to={`/books/${book[0].id}`}>
-                      <img
-                        src={`${book[0].picture}`}
-                        alt={book[0].title}
-                        title={book[0].title}
-                      />
-                      <p>{book[0].title}</p>
-                    </Link>
-                  ) : (
-                    <Link to={`/books/${book[0].id}`}>
-                      <img
-                        src={defaultImage}
-                        alt="default"
-                        title={book[0].title}
-                        style={{ width: "128px" }}
-                      />
-                      <p>{book[0].title}</p>
-                    </Link>
-                  )}
-                </li>
-              ))): (<div><p>aucun auteur correspondant</p></div>)}
-              {pagination()}
-            </ul>
-          </div>
-        )}
+        </div>
       </Layout>
     </div>
   );

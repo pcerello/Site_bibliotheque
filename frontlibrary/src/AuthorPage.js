@@ -4,22 +4,20 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import MyHomePage from "./component/MyHomePage";
 import Layout from "./component/Layout";
 import AuthorBooks from "./component/AuthorBooks";
 
 library.add(fas, far, fab);
 
-function App() {
-  const userId = localStorage.getItem("userId");
+function AuthorPage({ authorId }) {
   return (
     <div className="App">
       <Layout>
         <SearchEngine />
-          <MyHomePage readerId={userId} />
+          <AuthorBooks author={authorId} />
       </Layout>
     </div>
   );
 }
 
-export default App;
+export default AuthorPage;

@@ -1,12 +1,14 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import App from "../App";
+import { useNavigate } from "react-router-dom";
 
 function SearchEngine() {
   const [authorName, setAuthorName] = useState("");
   const [suggestedAuthors, setSuggestedAuthors] = useState([]);
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const formRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -62,7 +64,7 @@ function SearchEngine() {
       className="flex flex-col items-center text-left"
     >
       {selectedAuthor ? (
-        <App authorId={selectedAuthor} />
+        navigate('/auteur/?author=' + selectedAuthor)
       ) : (
         <form
           className="relative w-fit pt-16 pb-16"

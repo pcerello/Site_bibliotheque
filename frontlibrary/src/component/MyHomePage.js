@@ -182,7 +182,7 @@ function MyHomePage({ readerId }) {
         }
         <h2 className="text-2xl pt-24 pb-8 flex flex-start ">Tous les livres de la Bibliothèque</h2>
         {pagination()}
-        <ul className="flex flex-col md:flex-row flex-wrap ">
+        <ul className="flex flex-col md:flex-row flex-wrap">
           {currentBooks.map((book) => (
             <Book book={book} />
           ))}

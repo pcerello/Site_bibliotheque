@@ -11,7 +11,6 @@ function FriendsPage() {
   const [follower, setFollower] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [friendsPerPage] = useState(8);
-  console.log("readerId", userId);
   useEffect(() => {
     fetch(`http://localhost:8000/api/readers/${userId}/follow`, {
       mode: "cors",

@@ -54,7 +54,7 @@ function MyHomePage({ readerId }) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/readers/${readerId}/books/recommendations`, {
+    fetch(`http://localhost:8000/api/readers/${readerId}/books/recommendations?max=8`, {
       mode: "cors",
     })
       .then((response) => {

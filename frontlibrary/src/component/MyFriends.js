@@ -42,7 +42,11 @@ function MyFriends(props) {
                 <Link to={`/books/${book[0].id}`}>
             <img className="w-[3vw]" src={`${book[0].picture}`} alt={book[0].title} />
             </Link>
-            ) : (<img className="w-[3vw]" src={defaultImage} alt="default" />)
+            ) : (
+                <Link to={`/books/${book[0].id}`}>
+            <img className="w-[3vw]" src={defaultImage} alt="default" />
+            </Link>
+            )
         ))) : (<div className="text-red-500">Pas de dernière lecture</div>
             )}
         </ul>

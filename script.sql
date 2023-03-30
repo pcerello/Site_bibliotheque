@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4deb2+deb11u1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 172.16.1.2
--- Généré le : lun. 27 mars 2023 à 18:02
--- Version du serveur :  10.3.29-MariaDB-0+deb10u1
--- Version de PHP : 7.4.33
+-- Hôte : localhost
+-- Généré le : jeu. 30 mars 2023 à 09:42
+-- Version du serveur : 10.4.27-MariaDB
+-- Version de PHP : 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `etu_mgenetet`
+-- Base de données : `bibliotheque`
 --
 
 -- --------------------------------------------------------
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `Author` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -269,11 +269,11 @@ INSERT INTO `Author` (`id`, `name`) VALUES
 
 CREATE TABLE `Book` (
   `id` int(11) NOT NULL,
-  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `language` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `picture` varchar(255) DEFAULT NULL,
+  `language` varchar(255) NOT NULL,
   `nbr_pages` int(11) NOT NULL,
-  `resume` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `resume` text NOT NULL,
   `year` int(11) NOT NULL,
   `category` int(11) NOT NULL,
   `editor` int(11) NOT NULL
@@ -493,6 +493,7 @@ INSERT INTO `Book` (`id`, `title`, `picture`, `language`, `nbr_pages`, `resume`,
 (205, 'Guinness world records 2020', '', 'fr', 255, 'L\'édition 2020 du livre millésimé le plus populaire de la planète présente des milliers de records nouveaux ou mis à jour validés par des experts dans chaque domaine. Des centaines de photos inédites et une toute nouvelle approche graphique font de chaque édition un livre unique à collectionner. 11 chapitres : Planète Terre Animaux Humains Recordologie Sports viraux Aventures Société technologies et ingénierie Arts et médias Sports. Plus : un chapitre spécial Robots avec les 10 plus grands phénomènes réels ou de fiction. (payot.ch)', 2019, 0, 0),
 (206, 'Deconstructing Harry', 'http://books.google.com/books/content?id=96VZAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 196, 'Ecrivain new-yorkais d\'aujourd\'hui Harry (Woody Allen) se penche sur les péripéties tumultueuses et multiples de son existence de créateur et de sa vie amoureuse. Une comédie écrite réalisée et interprétée par le cinéaste amércain où le héros se trouve confrontée à une succession d\'aventures débridées jusqu\'à l\'hystérie. Le film du même titre sort en salle en janvier 1998.', 1998, 48, 0),
 (209, 'Chainsaw Man Tome 8', '', 'en', 192, '', 2021, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -649,7 +650,7 @@ INSERT INTO `Borrow` (`id`, `date_borrow`, `date_return`, `id_book`, `id_reader`
 
 CREATE TABLE `Category` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -715,7 +716,7 @@ INSERT INTO `Category` (`id`, `name`) VALUES
 
 CREATE TABLE `Editor` (
   `id` int(11) NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -889,17 +890,33 @@ INSERT INTO `Follow` (`id`, `id_follow`, `id_is_followed`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `messenger_messages`
+--
+
+CREATE TABLE `messenger_messages` (
+  `id` bigint(20) NOT NULL,
+  `body` longtext NOT NULL,
+  `headers` longtext NOT NULL,
+  `queue_name` varchar(190) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `available_at` datetime NOT NULL,
+  `delivered_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `Reader`
 --
 
 CREATE TABLE `Reader` (
   `id` int(11) NOT NULL,
-  `first_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `picture` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -908,56 +925,1333 @@ CREATE TABLE `Reader` (
 
 INSERT INTO `Reader` (`id`, `first_name`, `last_name`, `email`, `picture`, `password`, `token`) VALUES
 (0, 'admin', 'admin', 'admin@admin', NULL, 'admin', NULL),
-(1, 'Antoine', 'Lelièvre', 'Antoine@Lelièvre', NULL, 'Antoine', 'XnQyBlqzIKFngzKPbzlK'),
-(2, 'Élise', 'Renaud', 'Élise@Renaud', NULL, 'Élise', 'GIdGgcesBHWhNltTBnJN'),
-(3, 'Joséphine', 'Marchal-Georges', 'Joséphine@Marchal-Georges', NULL, 'Joséphine', 'jTOuaJIYwLPGTNhnrZcV'),
-(4, 'Sébastien', 'Lombard', 'Sébastien@Lombard', NULL, 'Sébastien', NULL),
-(5, 'Françoise', 'Jean', 'Françoise@Jean', NULL, 'Françoise', NULL),
-(6, 'Alexandre', 'Vaillant', 'Alexandre@Vaillant', NULL, 'Alexandre', NULL),
-(7, 'Lucas-Stéphane', 'Rossi', 'Lucas-Stéphane@Rossi', NULL, 'Lucas-Stéphane', NULL),
-(8, 'Margot', 'Leclerc', 'Margot@Leclerc', NULL, 'Margot', NULL),
-(9, 'Christophe', 'Georges', 'Christophe@Georges', NULL, 'Christophe', NULL),
-(10, 'Émile', 'Allard-Vallet', 'Émile@Allard-Vallet', NULL, 'Émile', NULL),
-(11, 'Sylvie', 'Michel', 'Sylvie@Michel', NULL, 'Sylvie', NULL),
-(12, 'Grégoire', 'Laporte', 'Grégoire@Laporte', NULL, 'Grégoire', NULL),
-(13, 'Victor', 'Guillon', 'Victor@Guillon', NULL, 'Victor', NULL),
-(14, 'Inès', 'du', 'Inès@du', NULL, 'Inès', NULL),
-(15, 'Nicolas', 'Marques-Leblanc', 'Nicolas@Marques-Leblanc', NULL, 'Nicolas', NULL),
-(16, 'Bernard', 'Merle-Marchand', 'Bernard@Merle-Marchand', NULL, 'Bernard', NULL),
-(17, 'Chantal', 'Noël', 'Chantal@Noël', NULL, 'Chantal', NULL),
-(18, 'Arthur', 'Leroy', 'Arthur@Leroy', NULL, 'Arthur', NULL),
-(19, 'Joseph', 'Weber', 'Joseph@Weber', NULL, 'Joseph', NULL),
-(20, 'Julie', 'Leleu', 'Julie@Leleu', NULL, 'Julie', NULL),
-(21, 'Benjamin', 'Monnier', 'Benjamin@Monnier', NULL, 'Benjamin', NULL),
-(22, 'Michelle', 'Arnaud', 'Michelle@Arnaud', NULL, 'Michelle', NULL),
-(23, 'Emmanuel', 'Bonnet', 'Emmanuel@Bonnet', NULL, 'Emmanuel', NULL),
-(24, 'Aurore-Christine', 'Baudry', 'Aurore-Christine@Baudry', NULL, 'Aurore-Christine', NULL),
-(25, 'Anouk', 'Guyon-Thibault', 'Anouk@Guyon-Thibault', NULL, 'Anouk', NULL),
-(26, 'Alice-Aurore', 'Marion', 'Alice-Aurore@Marion', NULL, 'Alice-Aurore', NULL),
-(27, 'Aimé', 'Gaillard', 'Aimé@Gaillard', NULL, 'Aimé', NULL),
-(28, 'Benoît', 'Gilles', 'Benoît@Gilles', NULL, 'Benoît', NULL),
-(29, 'Sylvie', 'Dumas-Perret', 'Sylvie@Dumas-Perret', NULL, 'Sylvie', NULL),
-(30, 'Luc', 'Gautier', 'Luc@Gautier', NULL, 'Luc', NULL),
-(31, 'Daniel', 'du', 'Daniel@du', NULL, 'Daniel', NULL),
-(32, 'Laure', 'Cohen', 'Laure@Cohen', NULL, 'Laure', NULL),
-(33, 'Henri', 'Bazin', 'Henri@Bazin', NULL, 'Henri', NULL),
-(34, 'Emmanuel', 'Thierry', 'Emmanuel@Thierry', NULL, 'Emmanuel', NULL),
-(35, 'Marcel', 'Robin', 'Marcel@Robin', NULL, 'Marcel', NULL),
-(36, 'Alexandrie', 'Petit', 'Alexandrie@Petit', NULL, 'Alexandrie', NULL),
-(37, 'Aimée', 'Ribeiro', 'Aimée@Ribeiro', NULL, 'Aimée', NULL),
-(38, 'Michelle', 'Jacquet', 'Michelle@Jacquet', NULL, 'Michelle', 'NJjWDEWPJgtsOBcawrCh'),
-(39, 'Dominique', 'Renault', 'Dominique@Renault', NULL, 'Dominique', 'OySfTwkVIGMBFwmNPBXn'),
-(40, 'Édith', 'Mathieu', 'Édith@Mathieu', NULL, 'Édith', 'AxKICTXeEQmXRyQrmwgr'),
-(41, 'Hugues', 'Lebreton', 'Hugues@Lebreton', NULL, 'Hugues', 'JzOlvPKmXvYMTwytUinA'),
-(42, 'Lucas', 'Pineau', 'Lucas@Pineau', NULL, 'Lucas', 'FiCfzHgiodYHOePpeUfN'),
-(43, 'Patrick', 'Leleu', 'Patrick@Leleu', NULL, 'Patrick', 'WZFGzouXhlFORgjmizVM'),
-(44, 'Frédéric', 'Clerc', 'Frédéric@Clerc', NULL, 'Frédéric', 'PtLGfaXejnNKcnHIFFEc'),
-(45, 'Jacques', 'du', 'Jacques@du', NULL, 'Jacques', 'BptQZoZOfbHRKbVMcwbv'),
-(46, 'Zacharie', 'Pires', 'Zacharie@Pires', NULL, 'Zacharie', 'EWPqrEiUcdtcrAqSJETH'),
-(47, 'Nathalie', 'Rossi', 'Nathalie@Rossi', NULL, 'Nathalie', 'KWiYuGUJKoynoDkEUZor'),
-(48, 'Juliette', 'Delattre-Gimenez', 'Juliette@Delattre-Gimenez', NULL, 'Juliette', 'ymuJPQCCctmbbBePvRjC'),
-(49, 'Caroline', 'Alexandre', 'Caroline@Alexandre', NULL, 'Caroline', 'hYjLCXOIAioLXTrANlhS'),
-(50, 'Claudine', 'Le', 'Claudine@Le', NULL, 'Claudine', 'iwGxymUlswDDJAHqBjyl');
+(1, 'Capucine', 'Gautier-Hebert', 'Capucine@Gautier-Hebert', 'https://boredhumans.b-cdn.net/faces2/385.jpg', 'Capucine', 'UFlKSLvigtKyHLaAesLD'),
+(2, 'Martin', 'Delmas', 'Martin@Delmas', 'https://boredhumans.b-cdn.net/faces2/386.jpg', 'Martin', 'NpMNQMZmzMKDWgRTnJWM'),
+(3, 'Maurice', 'Dubois', 'Maurice@Dubois', 'https://boredhumans.b-cdn.net/faces2/387.jpg', 'Maurice', 'utSerNokLHsxEPdBSAqF'),
+(4, 'Noël', 'Rossi', 'Noël@Rossi', 'https://boredhumans.b-cdn.net/faces2/388.jpg', 'Noël', NULL),
+(5, 'Aimée-Célina', 'Le', 'Aimée-Célina@Le', 'https://boredhumans.b-cdn.net/faces2/389.jpg', 'Aimée-Célina', NULL),
+(6, 'Alfred', 'Wagner', 'Alfred@Wagner', 'https://boredhumans.b-cdn.net/faces2/390.jpg', 'Alfred', NULL),
+(7, 'Maryse', 'Bonneau', 'Maryse@Bonneau', 'https://boredhumans.b-cdn.net/faces2/391.jpg', 'Maryse', NULL),
+(8, 'Christelle', 'du', 'Christelle@du', 'https://boredhumans.b-cdn.net/faces2/392.jpg', 'Christelle', NULL),
+(9, 'Alix', 'François', 'Alix@François', 'https://boredhumans.b-cdn.net/faces2/393.jpg', 'Alix', NULL),
+(10, 'Arthur', 'Navarro', 'Arthur@Navarro', 'https://boredhumans.b-cdn.net/faces2/394.jpg', 'Arthur', NULL),
+(11, 'Maryse-Claude', 'Klein', 'Maryse-Claude@Klein', 'https://boredhumans.b-cdn.net/faces2/395.jpg', 'Maryse-Claude', NULL),
+(12, 'Auguste', 'Moreau', 'Auguste@Moreau', 'https://boredhumans.b-cdn.net/faces2/396.jpg', 'Auguste', NULL),
+(13, 'Valérie', 'Carre', 'Valérie@Carre', 'https://boredhumans.b-cdn.net/faces2/397.jpg', 'Valérie', NULL),
+(14, 'Michel', 'Guillon', 'Michel@Guillon', 'https://boredhumans.b-cdn.net/faces2/398.jpg', 'Michel', NULL),
+(15, 'Catherine', 'Berthelot', 'Catherine@Berthelot', 'https://boredhumans.b-cdn.net/faces2/399.jpg', 'Catherine', NULL),
+(16, 'Aimé', 'Delorme', 'Aimé@Delorme', 'https://boredhumans.b-cdn.net/faces2/400.jpg', 'Aimé', NULL),
+(17, 'Christophe', 'Joseph', 'Christophe@Joseph', 'https://boredhumans.b-cdn.net/faces2/401.jpg', 'Christophe', NULL),
+(18, 'Timothée', 'Rousseau-Gillet', 'Timothée@Rousseau-Gillet', 'https://boredhumans.b-cdn.net/faces2/402.jpg', 'Timothée', NULL),
+(19, 'Constance', 'Pages', 'Constance@Pages', 'https://boredhumans.b-cdn.net/faces2/403.jpg', 'Constance', NULL),
+(20, 'Stéphanie', 'Duhamel', 'Stéphanie@Duhamel', 'https://boredhumans.b-cdn.net/faces2/404.jpg', 'Stéphanie', NULL),
+(21, 'Augustin', 'Pons', 'Augustin@Pons', 'https://boredhumans.b-cdn.net/faces2/405.jpg', 'Augustin', NULL),
+(22, 'Joseph', 'Lombard-Benoit', 'Joseph@Lombard-Benoit', 'https://boredhumans.b-cdn.net/faces2/406.jpg', 'Joseph', NULL),
+(23, 'Zoé', 'Cohen', 'Zoé@Cohen', 'https://boredhumans.b-cdn.net/faces2/407.jpg', 'Zoé', NULL),
+(24, 'Victoire', 'Lebrun-Millet', 'Victoire@Lebrun-Millet', 'https://boredhumans.b-cdn.net/faces2/408.jpg', 'Victoire', NULL),
+(25, 'Benjamin', 'Diaz', 'Benjamin@Diaz', 'https://boredhumans.b-cdn.net/faces2/409.jpg', 'Benjamin', NULL),
+(26, 'Claire-Nathalie', 'Launay', 'Claire-Nathalie@Launay', 'https://boredhumans.b-cdn.net/faces2/410.jpg', 'Claire-Nathalie', NULL),
+(27, 'Charles', 'Ramos', 'Charles@Ramos', 'https://boredhumans.b-cdn.net/faces2/411.jpg', 'Charles', NULL),
+(28, 'Margaux', 'de', 'Margaux@de', 'https://boredhumans.b-cdn.net/faces2/412.jpg', 'Margaux', NULL),
+(29, 'Joseph', 'Joly', 'Joseph@Joly', 'https://boredhumans.b-cdn.net/faces2/413.jpg', 'Joseph', NULL),
+(30, 'Simone', 'Roche', 'Simone@Roche', 'https://boredhumans.b-cdn.net/faces2/414.jpg', 'Simone', NULL),
+(31, 'Timothée', 'Imbert-Leduc', 'Timothée@Imbert-Leduc', 'https://boredhumans.b-cdn.net/faces2/415.jpg', 'Timothée', NULL),
+(32, 'Andrée', 'de', 'Andrée@de', 'https://boredhumans.b-cdn.net/faces2/416.jpg', 'Andrée', NULL),
+(33, 'Simone', 'Delannoy', 'Simone@Delannoy', 'https://boredhumans.b-cdn.net/faces2/417.jpg', 'Simone', NULL),
+(34, 'Lucy', 'Gillet', 'Lucy@Gillet', 'https://boredhumans.b-cdn.net/faces2/418.jpg', 'Lucy', NULL),
+(35, 'Julien', 'du', 'Julien@du', 'https://boredhumans.b-cdn.net/faces2/419.jpg', 'Julien', NULL),
+(36, 'Christelle-Lucie', 'Guillot', 'Christelle-Lucie@Guillot', 'https://boredhumans.b-cdn.net/faces2/420.jpg', 'Christelle-Lucie', NULL),
+(37, 'Anastasie', 'de', 'Anastasie@de', 'https://boredhumans.b-cdn.net/faces2/421.jpg', 'Anastasie', NULL),
+(38, 'Aimé', 'Guillet', 'Aimé@Guillet', 'https://boredhumans.b-cdn.net/faces2/422.jpg', 'Aimé', 'frbJHGxRsEUaikxoCHWp'),
+(39, 'Gilles', 'Guibert', 'Gilles@Guibert', 'https://boredhumans.b-cdn.net/faces2/423.jpg', 'Gilles', 'ZlssfZWWoJGGxuHhlNGn'),
+(40, 'Jeannine', 'Godard', 'Jeannine@Godard', 'https://boredhumans.b-cdn.net/faces2/424.jpg', 'Jeannine', 'NIJOfbmNjrEssKmmAyDn'),
+(41, 'Isaac', 'Wagner', 'Isaac@Wagner', 'https://boredhumans.b-cdn.net/faces2/425.jpg', 'Isaac', 'jvXIGsayYrLlTKXODGrE'),
+(42, 'Emmanuel', 'Clément', 'Emmanuel@Clément', 'https://boredhumans.b-cdn.net/faces2/426.jpg', 'Emmanuel', 'xhwHlUeHkJpUCiPFEAMv'),
+(43, 'Michelle', 'Roux', 'Michelle@Roux', 'https://boredhumans.b-cdn.net/faces2/427.jpg', 'Michelle', 'JFBwprPwvPlVYUEdNRwj'),
+(44, 'Hortense', 'Legendre', 'Hortense@Legendre', 'https://boredhumans.b-cdn.net/faces2/428.jpg', 'Hortense', 'OFiXmBHnjOQRMmscmUEV'),
+(45, 'Pauline', 'du', 'Pauline@du', 'https://boredhumans.b-cdn.net/faces2/429.jpg', 'Pauline', 'cDUqutJNeTFwtzwhfTuA'),
+(46, 'Étienne', 'Evrard', 'Étienne@Evrard', 'https://boredhumans.b-cdn.net/faces2/430.jpg', 'Étienne', 'DwVuMTYxuciOEIFUktcN'),
+(47, 'Dominique', 'Camus', 'Dominique@Camus', 'https://boredhumans.b-cdn.net/faces2/431.jpg', 'Dominique', 'ThJzOOmzqUVillasjezy'),
+(48, 'Alexandre', 'Bernard', 'Alexandre@Bernard', 'https://boredhumans.b-cdn.net/faces2/432.jpg', 'Alexandre', 'umIwBKuacIGNHzZEudfU'),
+(49, 'Danielle', 'Reynaud-Mace', 'Danielle@Reynaud-Mace', 'https://boredhumans.b-cdn.net/faces2/433.jpg', 'Danielle', 'UcRiOtmjdOVnWRXCjowX'),
+(50, 'Geneviève', 'Arnaud', 'Geneviève@Arnaud', 'https://boredhumans.b-cdn.net/faces2/434.jpg', 'Geneviève', 'egVuGwiVKyTQaANFCCbU'),
+(51, 'Nicolas', 'Bernier', 'Nicolas@Bernier', 'https://boredhumans.b-cdn.net/faces2/435.jpg', 'Nicolas', 'gmSDGFERnCZpjmsYaKEi'),
+(52, 'Olivie', 'Lejeune', 'Olivie@Lejeune', 'https://boredhumans.b-cdn.net/faces2/436.jpg', 'Olivie', 'RefhcHvDYJgeGQWKITSa'),
+(53, 'Maurice', 'Couturier', 'Maurice@Couturier', 'https://boredhumans.b-cdn.net/faces2/437.jpg', 'Maurice', 'xuJfNVpxookGNIWAKOCj'),
+(54, 'Bertrand', 'Guichard-Weber', 'Bertrand@Guichard-Weber', 'https://boredhumans.b-cdn.net/faces2/438.jpg', 'Bertrand', 'tQOQYJLBvDNskHhCRdlD'),
+(55, 'Christophe', 'Martel-Gaillard', 'Christophe@Martel-Gaillard', 'https://boredhumans.b-cdn.net/faces2/439.jpg', 'Christophe', 'FcXjNitKLkdbTUdUWiaZ'),
+(56, 'Audrey', 'Guérin', 'Audrey@Guérin', 'https://boredhumans.b-cdn.net/faces2/440.jpg', 'Audrey', 'CWQvYgYBtIdaLYEtjLtt'),
+(57, 'Valentine', 'Lefebvre', 'Valentine@Lefebvre', 'https://boredhumans.b-cdn.net/faces2/441.jpg', 'Valentine', 'VdaumApmTaOPdaPfYmra'),
+(58, 'Laure', 'Germain', 'Laure@Germain', 'https://boredhumans.b-cdn.net/faces2/442.jpg', 'Laure', 'dnXtcqWLrsMqKwvwMUZd'),
+(59, 'Aimée', 'Guillon', 'Aimée@Guillon', 'https://boredhumans.b-cdn.net/faces2/443.jpg', 'Aimée', 'SQILiXiGWntTcizdLfcR'),
+(60, 'Julien', 'Jacques', 'Julien@Jacques', 'https://boredhumans.b-cdn.net/faces2/444.jpg', 'Julien', 'jfRBySyjJwpzdZrHYOGh'),
+(61, 'Bertrand', 'Bertrand', 'Bertrand@Bertrand', 'https://boredhumans.b-cdn.net/faces2/445.jpg', 'Bertrand', 'hrrzfpBmBOgAupVIKFRQ'),
+(62, 'Jacques', 'Barbier', 'Jacques@Barbier', 'https://boredhumans.b-cdn.net/faces2/446.jpg', 'Jacques', 'WKQQZgTUDCUdMoFgrqbH'),
+(63, 'David', 'Auger', 'David@Auger', 'https://boredhumans.b-cdn.net/faces2/447.jpg', 'David', 'XqPjOnTcVpsrFfXxqZKS'),
+(64, 'Émile', 'Richard', 'Émile@Richard', 'https://boredhumans.b-cdn.net/faces2/448.jpg', 'Émile', 'tbbWUQQfmMPaQbZCglia'),
+(65, 'Thibault', 'Guyot', 'Thibault@Guyot', 'https://boredhumans.b-cdn.net/faces2/449.jpg', 'Thibault', 'mHWbrvWYlyQHxjwYuMkx'),
+(66, 'Emmanuelle', 'Lucas', 'Emmanuelle@Lucas', 'https://boredhumans.b-cdn.net/faces2/450.jpg', 'Emmanuelle', 'BSuFaRQzNRHzxhLqSWZg'),
+(67, 'Pierre', 'du', 'Pierre@du', 'https://boredhumans.b-cdn.net/faces2/451.jpg', 'Pierre', 'OBbAlrWFlJCvXKlAWUAE'),
+(68, 'Michèle', 'Bouvet', 'Michèle@Bouvet', 'https://boredhumans.b-cdn.net/faces2/452.jpg', 'Michèle', 'QuhcunwUoHkUnJqFYLTp'),
+(69, 'Éric', 'Muller', 'Éric@Muller', 'https://boredhumans.b-cdn.net/faces2/453.jpg', 'Éric', 'SbJVGbicAJYFdSBjTmkL'),
+(70, 'Anouk', 'Blondel', 'Anouk@Blondel', 'https://boredhumans.b-cdn.net/faces2/454.jpg', 'Anouk', 'bdToanfRCivyPfoxeEfK'),
+(71, 'Vincent', 'Rivière-Moulin', 'Vincent@Rivière-Moulin', 'https://boredhumans.b-cdn.net/faces2/455.jpg', 'Vincent', 'QevIpAHRPfGfdKdrTNpI'),
+(72, 'Michèle', 'Noël', 'Michèle@Noël', 'https://boredhumans.b-cdn.net/faces2/456.jpg', 'Michèle', 'yUYYKGbWoamuKAQXsqwF'),
+(73, 'Gérard', 'Bourdon', 'Gérard@Bourdon', 'https://boredhumans.b-cdn.net/faces2/457.jpg', 'Gérard', 'LiboNtRTWmHUnuazpshJ'),
+(74, 'François', 'Boucher', 'François@Boucher', 'https://boredhumans.b-cdn.net/faces2/458.jpg', 'François', 'RAswvcsiHcyaHDXhzmTn'),
+(75, 'Denis', 'Schneider-Berger', 'Denis@Schneider-Berger', 'https://boredhumans.b-cdn.net/faces2/459.jpg', 'Denis', 'nOkTHaBxsjGVNpodUdJu'),
+(76, 'Olivie', 'Evrard', 'Olivie@Evrard', 'https://boredhumans.b-cdn.net/faces2/460.jpg', 'Olivie', 'kTmuGtSOSBAmxIEFATvu'),
+(77, 'Bertrand', 'Leroux', 'Bertrand@Leroux', 'https://boredhumans.b-cdn.net/faces2/461.jpg', 'Bertrand', 'uiJCUwMpTmTWZtwZSZgg'),
+(78, 'Robert', 'de', 'Robert@de', 'https://boredhumans.b-cdn.net/faces2/462.jpg', 'Robert', 'CkoXQjSaPBiIQISDVske'),
+(79, 'Anouk', 'Lenoir', 'Anouk@Lenoir', 'https://boredhumans.b-cdn.net/faces2/463.jpg', 'Anouk', 'oUCUKBrPcTNUEphkwxqA'),
+(80, 'Tristan', 'Martel', 'Tristan@Martel', 'https://boredhumans.b-cdn.net/faces2/464.jpg', 'Tristan', 'eQQqhlxCJGjEplhcuEIi'),
+(81, 'Bernard', 'Chevalier', 'Bernard@Chevalier', 'https://boredhumans.b-cdn.net/faces2/465.jpg', 'Bernard', 'zGuZSaLOZIhlNniNIudT'),
+(82, 'Michelle', 'Lemoine', 'Michelle@Lemoine', 'https://boredhumans.b-cdn.net/faces2/466.jpg', 'Michelle', 'PoQLJGgDSzbkAaFVNANO'),
+(83, 'Margot', 'Baron', 'Margot@Baron', 'https://boredhumans.b-cdn.net/faces2/467.jpg', 'Margot', 'JroYVIOpDkBefvYpZTCa'),
+(84, 'Célina', 'Martinez', 'Célina@Martinez', 'https://boredhumans.b-cdn.net/faces2/468.jpg', 'Célina', 'DOrwgzmAruUqLWWEnJCP'),
+(85, 'Alphonse', 'Ledoux', 'Alphonse@Ledoux', 'https://boredhumans.b-cdn.net/faces2/469.jpg', 'Alphonse', 'qPmXwgcWAJzqVkdehSLz'),
+(86, 'Emmanuel', 'Cohen-Dijoux', 'Emmanuel@Cohen-Dijoux', 'https://boredhumans.b-cdn.net/faces2/470.jpg', 'Emmanuel', 'VdMRhPeQwjgpnVNnusMP'),
+(87, 'Emmanuelle', 'Fischer', 'Emmanuelle@Fischer', 'https://boredhumans.b-cdn.net/faces2/471.jpg', 'Emmanuelle', 'nyRGyOKztqKYDrfluvlB'),
+(88, 'Jacqueline', 'du', 'Jacqueline@du', 'https://boredhumans.b-cdn.net/faces2/472.jpg', 'Jacqueline', 'AlnFJIPpcqwXawrUROWF'),
+(89, 'Josette', 'Collin', 'Josette@Collin', 'https://boredhumans.b-cdn.net/faces2/473.jpg', 'Josette', 'ZhBIclbVyoLrFjMVFJDf'),
+(90, 'Timothée', 'Colas', 'Timothée@Colas', 'https://boredhumans.b-cdn.net/faces2/474.jpg', 'Timothée', 'MOqVtIbqRFHBdyouLbbc'),
+(91, 'Gérard', 'Bègue', 'Gérard@Bègue', 'https://boredhumans.b-cdn.net/faces2/475.jpg', 'Gérard', 'iLCKczcOjDPIHkdVMxUM'),
+(92, 'Lucas-Marc', 'Dias', 'Lucas-Marc@Dias', 'https://boredhumans.b-cdn.net/faces2/476.jpg', 'Lucas-Marc', 'MaSWJFzymMJkVpZbBrSQ'),
+(93, 'Paulette', 'Peron', 'Paulette@Peron', 'https://boredhumans.b-cdn.net/faces2/477.jpg', 'Paulette', 'OuFOZOfISWqURLXhWvgK'),
+(94, 'Xavier', 'Legendre', 'Xavier@Legendre', 'https://boredhumans.b-cdn.net/faces2/478.jpg', 'Xavier', 'ytOVzjNNjyPKMHBYpZln'),
+(95, 'Patrick', 'Briand', 'Patrick@Briand', 'https://boredhumans.b-cdn.net/faces2/479.jpg', 'Patrick', 'IQlGMeSMrzBCrBuyjwdj'),
+(96, 'Margaud-Camille', 'Potier', 'Margaud-Camille@Potier', 'https://boredhumans.b-cdn.net/faces2/480.jpg', 'Margaud-Camille', 'UgbJvtuCrggRIowdDQUV'),
+(97, 'Yves', 'Dos', 'Yves@Dos', 'https://boredhumans.b-cdn.net/faces2/481.jpg', 'Yves', 'ZBXpSYWuaWqOjnkcdsJi'),
+(98, 'Brigitte', 'Bertin', 'Brigitte@Bertin', 'https://boredhumans.b-cdn.net/faces2/482.jpg', 'Brigitte', 'uSgisFhFgwUYTBJWdFSG'),
+(99, 'Thérèse-Patricia', 'Marchal', 'Thérèse-Patricia@Marchal', 'https://boredhumans.b-cdn.net/faces2/483.jpg', 'Thérèse-Patricia', 'oYKCDnSdaSvWeSkjDazS'),
+(100, 'Yves', 'Schmitt', 'Yves@Schmitt', 'https://boredhumans.b-cdn.net/faces2/484.jpg', 'Yves', 'HzVLDGFnPPrNXTybiODB');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Author`
+--
+
+CREATE TABLE `test_Author` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Author`
+--
+
+INSERT INTO `test_Author` (`id`, `name`) VALUES
+(0, ''),
+(1, 'Collectif'),
+(2, 'Ovide'),
+(3, 'Alfred Aho'),
+(4, 'Ravi Sethi'),
+(5, 'Jeffrey David Ullman'),
+(6, 'Harry Frankfurt'),
+(7, 'Don Miguel Ruiz'),
+(8, 'Yuval Noah Harari'),
+(9, 'Héctor GARCIA'),
+(10, 'Francesc MIRALLES'),
+(11, 'Daniel Siegel'),
+(12, 'Tom Rath'),
+(13, 'Alexander Osterwalder'),
+(14, 'Yves Pigneur'),
+(15, 'Greg Bernarda'),
+(16, 'Alan Smith'),
+(17, 'Alain Mabanckou'),
+(18, 'Jean-Paul Gabilliet'),
+(19, 'Iman Mersal'),
+(20, 'Davide Cali'),
+(21, 'Benjamin Chaud'),
+(22, 'Joub'),
+(23, 'Nicoby'),
+(24, 'Jean-Noël Jeanneney'),
+(25, 'Pierre Mounier'),
+(26, 'Olivia Tapiero'),
+(27, 'James Clear'),
+(28, 'Michelle Gable'),
+(29, 'Bhajju Shyam'),
+(30, 'Durga Bai'),
+(31, 'Ram Singh Urveti'),
+(32, 'Michel Ollendorff'),
+(33, 'Peter Handke'),
+(34, 'Bruno RACINE'),
+(35, 'John Mordechai Gottman'),
+(36, 'Nan Silver'),
+(37, 'Evgeniĭ Ivanovich Zami︠a︡tin'),
+(38, 'Jorge Semprún'),
+(39, 'Mathieu Gaborit'),
+(40, 'Alexandre Clavel'),
+(41, 'Samuel Metzener'),
+(42, 'Kazuo Ishiguro'),
+(43, 'John Ronald Reuel Tolkien'),
+(44, 'Dale Carnegie'),
+(45, 'Marshall B. Rosenberg'),
+(46, 'Robert Munsch'),
+(47, 'Niviaq Korneliussen'),
+(48, 'Margaret Wise Brown'),
+(49, 'Clement Hurd'),
+(50, 'Sam McBratney'),
+(51, 'Anita Jeram'),
+(52, 'Art Spiegelman'),
+(53, 'Simon Mason'),
+(54, 'V. E. Schwab'),
+(55, 'Rémi Courgeon'),
+(56, 'Andrew sean Greer'),
+(57, 'Mitch ALBOM'),
+(58, 'Dr. Seuss'),
+(59, 'Jennifer Egan'),
+(60, 'Patricia Cornwell'),
+(61, 'Eric Carle'),
+(62, 'Bill Martin'),
+(63, 'John Green'),
+(64, 'Adam Wallace'),
+(65, 'Sally Rooney'),
+(66, 'John Archambault'),
+(67, 'Bill Gates'),
+(68, 'Shel Silverstein'),
+(69, 'Tiffany McDaniel'),
+(70, 'Margaret Atwood'),
+(71, 'Beatrix Potter'),
+(73, 'Henry T. Blackaby'),
+(74, 'E. L. James'),
+(75, 'Denyse Beaulieu'),
+(76, 'Judith L. Rapoport'),
+(77, 'Pierre-Henry Gomont'),
+(78, 'Matthew McConaughey'),
+(79, 'Padma Venkatraman'),
+(80, 'Aisha Saeed'),
+(81, 'Lucien X. Polastron'),
+(82, 'Daniel Kahneman'),
+(83, 'Patrick Lencioni'),
+(84, 'Jordan b. Peterson'),
+(85, 'Thomas Gunzig'),
+(86, 'Toni Morrison'),
+(87, 'Jacqueline Woodson'),
+(88, 'Daniel Keyes'),
+(89, 'Paul Verlaine'),
+(90, 'Solomon Northup'),
+(91, 'Colleen Hoover'),
+(92, 'Édouard Glissant'),
+(93, 'Halldór Laxness'),
+(94, 'Brené Brown'),
+(95, 'Maggie O\'FARRELL'),
+(96, 'Laure Malaprade'),
+(97, 'Taylor Jenkins Reid'),
+(98, 'Adam SILVERA'),
+(99, 'Albert Einstein'),
+(100, 'Sigmund Freud'),
+(101, 'Elizabeth Strout'),
+(102, 'Nikita Mandryka'),
+(103, 'Bertolt Brecht'),
+(104, 'Kate Pankhurst'),
+(105, 'Anthony Marra'),
+(106, 'Eric Ries'),
+(107, 'David Levithan'),
+(108, 'Janet Ahlberg'),
+(109, 'Allan Ahlberg'),
+(110, 'Benjamin Zephaniah'),
+(111, 'Eudora Welty'),
+(112, 'Alice OSEMAN'),
+(113, 'Valérie Drouet'),
+(114, 'Platon'),
+(115, 'Bernardine Evaristo'),
+(116, 'Delia Owens'),
+(117, 'Alice Oseman'),
+(118, 'L. M. (Lucy Maud) Montgomery'),
+(119, 'C. Brené Brown'),
+(120, 'Naoki Higashida'),
+(121, 'Matt Haig'),
+(122, 'Else Marie Bruhner'),
+(123, 'Bernard Benoliel'),
+(124, 'Harper Lee'),
+(125, 'J.K. Rowling'),
+(126, 'Sara Gruen'),
+(127, 'Patrick Ness'),
+(128, 'Arthur Conan Doyle'),
+(129, 'Klaus Schwab'),
+(130, 'Jory John'),
+(131, 'Meera Lee Patel'),
+(132, 'Pausanias (Periegeta)'),
+(133, 'Jean Garrigues'),
+(134, 'Jeff Kinney'),
+(135, 'Richard Gaitet'),
+(136, 'Jandy Nelson'),
+(137, 'Nir Eyal'),
+(138, 'Constance Debré'),
+(139, 'Lucy Maud Montgomery'),
+(140, 'Ed Young'),
+(141, 'Jacques Samson'),
+(142, 'Emmanuel Guibert'),
+(143, 'Scholastique Mukasonga'),
+(144, 'Mark Manson'),
+(145, 'Jane Austen'),
+(146, 'Virginie Despentes'),
+(147, 'Becky Albertalli'),
+(148, 'Mathilde Tamae-Bouhon'),
+(149, 'Dalaï Lama'),
+(150, 'Desmond Tutu'),
+(151, 'Tomás González'),
+(152, 'Robert Greene'),
+(153, 'Joanna Gaines'),
+(154, 'Edith Wharton'),
+(155, 'Thomas Bronnec'),
+(156, 'graf Leo Tolstoy'),
+(157, 'Christine Angot'),
+(158, 'Jacques Poulin'),
+(159, 'David Melling'),
+(160, 'Tarjei Vesaas'),
+(161, 'Régis Boyer'),
+(162, 'Ashley Audrain'),
+(163, 'David Gruson'),
+(164, 'Kumo KAGYU'),
+(165, 'Noboru KANNATUKI'),
+(166, 'Stephen King'),
+(167, 'Fatima OUASSAK'),
+(168, 'Nicola Yoon'),
+(169, 'Laurence Bouvard'),
+(170, 'Sarah Pearse'),
+(171, 'Shirzad Chamine'),
+(172, 'Julia Donaldson'),
+(173, 'Axel Scheffler'),
+(174, 'Daniel J. Siegel'),
+(175, 'Tina Payne Brison'),
+(176, 'James Dean'),
+(177, 'Rutger Bregman'),
+(178, 'Michael WOLFF'),
+(179, 'Mélanie Fennell'),
+(180, 'Sharon Begley'),
+(181, 'Agatha Christie'),
+(182, 'Marcus Buckingham'),
+(183, 'Donald O.. Clifton'),
+(184, 'Gillian Butler'),
+(185, 'Martyn Lyons'),
+(186, 'William H. Davies'),
+(187, 'Christine Auché'),
+(188, 'Madeline Miller'),
+(189, 'Tom Percival'),
+(190, 'John Knoll'),
+(191, 'Jonathan W.. Rinzler'),
+(192, 'Rémi Burrowes'),
+(193, 'Robert Kiyosaki'),
+(194, 'Melvin Burgess'),
+(195, 'Dick King-Smith'),
+(196, 'David Parkins'),
+(197, 'Pearl Buck'),
+(198, 'Ma Zuo'),
+(199, 'MONTGOMERY LUCY MAUD'),
+(200, 'Keizaburō Tejima'),
+(201, 'Neal Shusterman'),
+(202, 'James Hilton'),
+(203, 'Tomie De Paola'),
+(204, 'Deloraine'),
+(205, 'Jane Yolen'),
+(206, 'Djaïli Amadou Amal'),
+(207, 'Alexandra Schwartzbrod'),
+(208, 'Francesca Sanna'),
+(209, 'Jean-Patrick Manchette'),
+(210, 'Manuele Fior'),
+(211, 'Celestia'),
+(212, 'Charlie Mackesy'),
+(213, 'Katie Chase'),
+(214, 'Pauline Harmange'),
+(215, 'Ai Yazawa'),
+(216, 'Siddhartha Mukherjee'),
+(217, 'Harry G. Frankfurt'),
+(218, 'Anne Berest'),
+(219, 'Drew Daywalt'),
+(220, 'Marcus Pfister'),
+(221, 'Janell Cannon'),
+(222, 'Albert Camus'),
+(223, 'Coralie Bickford-Smith');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Book`
+--
+
+CREATE TABLE `test_Book` (
+  `id` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `picture` varchar(255) DEFAULT NULL,
+  `language` varchar(255) NOT NULL,
+  `nbr_pages` int(11) NOT NULL,
+  `resume` text NOT NULL,
+  `year` int(11) NOT NULL,
+  `category` int(11) NOT NULL,
+  `editor` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Book`
+--
+
+INSERT INTO `test_Book` (`id`, `title`, `picture`, `language`, `nbr_pages`, `resume`, `year`, `category`, `editor`) VALUES
+(1, 'L\'Art d\'Aimer', 'http://books.google.com/books/content?id=cWMxzgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 122, 'Dans cette oeuvre sans nulle autre pareille Ovide nous propose une initiation à l\'Art de l\'Amour un guide poétique et philosophique de la séduction. D\'une modernité surprenante c\'est aussi une réflexion novatrice pour l\'époque sur les rapports amoureux. Extrait: Tandis que Vénus m\'inspire jeunes beautés prêtez l\'oreille à mes leçons. La pudeur et les lois vous le permettent; votre intérêt vous y invite. Songez dès à présent à la vieillesse qui viendra trop tôt et vous ne perdrez pas un instant. Tandis que vous le pouvez et que vous en êtes encore à vos années printanières donnez-vous du bon temps; comme l\'eau s\'écoulent les années. Le flot qui fuit ne reviendra plus à sa source; l\'heure une fois passée est passée sans retour. Profitez du bel âge: il s\'envole si vite !', 2021, 0, 2),
+(2, 'Compilateurs', '', 'fr', 875, '', 1998, 0, 0),
+(3, 'De l\'art de dire des conneries', 'http://books.google.com/books/content?id=ZkALDgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 80, '\'L’un des traits les plus caractéristiques de notre culture est l’omniprésence du baratin.\' Ce court essai dont le titre original est On bullshit a toutes les apparences du sérieux bien qu’il s’agisse d’une théorisation de ce que l’on appelle communément le baratin ou les conneries. L’un des plus grands philosophes américains Harry Gordon Frankfurt (né en 1929) professeur émérite à Princeton se penche sur le sujet : un petit livre de référence pour ne plus jamais confondre connerie avec fumisterie foutaise baliverne ou sornette et repérer à coup sûr tous les baratineurs.', 2017, 2, 3),
+(4, 'Les quatre accords toltèques', 'http://books.google.com/books/content?id=GjCHEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 108, 'Découvrez ou redécouvrez Les quatre accords toltèques et prenez comme des millions de lecteurs en France et à travers le monde la voie de la liberté personnelle. Dans ce livre Don Miguel révèle la source des croyances limitatrices qui nous privent de joie et créent des souffrances inutiles. Il montre en des termes très simples comment on peut se libérer du conditionnement collectif - le \'rêve de la planète\' basé sur la peur - afin de retrouver la dimension d\'amour inconditionnel qui est à notre origine et constitue le fondement des enseignements toltèques que Castenada fut le premier à faire découvrir au grand public. Don Miguel révèle ici 4 clés simples pour transformer sa vie et ses relations tirées de la sagesse toltèque. Leur application au quotidien permet de transformer rapidement notre vie en une expérience de liberté de vrai bonheur et d\'amour. Les quatre accords toltèques : 1 - Que ta parole soit impeccable ; 2 - Ne réagis à rien de façon personnelle ; 3 - Ne fais aucune supposition ; 4 - Fais toujours de ton mieux. Nouvelle édition tant attendue en format poche de ce best-seller ! 750\'000 exemplaires vendus en France de ce texte de référence en développement personnel. UN ÉVÉNEMENT !', 2016, 3, 4),
+(5, 'Sapiens', 'http://books.google.com/books/content?id=M89yCgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 512, 'Il y a 100 000 ans la Terre était habitée par au moins six espèces différentes d\'hominidés. Une seule a survécu. Nous les Homo Sapiens. Comment notre espèce a-t-elle réussi à dominer la planète ? Pourquoi nos ancêtres ont-ils uni leurs forces pour créer villes et royaumes ? Comment en sommes-nous arrivés à créer les concepts de religion de nation de droits de l\'homme ? À dépendre de l\'argent des livres et des lois ? À devenir esclaves de la bureaucratie des horaires de la consommation de masse ? Et à quoi ressemblera notre monde dans le millénaire à venir ? Véritable phénomène d\'édition traduit dans une trentaine de langues Sapiens est un livre audacieux érudit et provocateur. Professeur d\'Histoire à l\'Université hébraïque de Jérusalem Yuval Noah Harari mêle l\'Histoire à la Science pour remettre en cause tout ce que nous pensions savoir sur l\'humanité : nos pensées nos actes notre héritage... et notre futur.', 2015, 0, 5),
+(6, 'IKIGAI', 'http://books.google.com/books/content?id=YOh1DgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 120, 'Les secrets des Japonais pour trouver votre raison de vivre et vivre plus longtemps. La scène se passe dans un parc à Tokyo. Deux amis conversent sur le sens de la vie et sur l\'étonnante longévité des Japonais. Un mot est alors lancé : ikigai qui signifie littéralement \' la joie d\'être toujours occupé \'. D\'après les Japonais nous possédons tous un ikigai une raison d\'exister qui nous pousse à nous lever chaque matin et à être acteurs de notre vie. C\'est ainsi que les deux amis Héctor García et Francesc Miralles décident de se lancer dans une passionnante enquête à travers le Japon. Partis à la rencontre des \' supercentenaires \' du hameau d\'Ogimi dans l\'archipel d\'Okinawa ils passent de longs mois sur place à s\'imprégner de la mentalité et des us et coutumes locaux. Comment ces \' supercentenaires \' définissent-ils leur ikigai et en quoi les guide-t-il au quotidien ? Quelles sont les habitudes à adopter pour mieux vivre ? Dans un livre à mi-chemin entre le guide et le témoignage Héctor García et Francesc Miralles nous invitent à découvrir notre propre ikigai pour mener une vie longue et harmonieuse.', 2017, 4, 6),
+(7, 'Le Cerveau de votre enfant', 'http://books.google.com/books/content?id=dTcBEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 141, 'La Bible de l\'éducation positive LES PARENTS ONT BESOIN D\'UN MODE D\'EMPLOI ADAPTÉ AUX ENFANTS D\'AUJOURD\'HUI Comment élever mon enfant ? Comment l\'aider à être heureux équilibré respectueux des autres ? Que fautil faire ne pas faire ? Y a-t-il une méthode efficace pour gérer les peurs les colères ? Ces questions tous les parents se les posent. Aujourd\'hui les découvertes sur le cerveau jettent une lumière nouvelle sur le comportement des enfants. Ce livre met à la portée des parents les éléments de base pour comprendre et agir. IL EST POSSIBLE D\'AGIR POSITIVEMENT SUR LE CERVEAU DE L\'ENFANT Le cerveau est notre organe le plus complexe : il comprend deux hémisphères plusieurs aires – dont certaines sont dédiées au comportement moral d\'autres aux décisions ou à la motivation – plusieurs \' étages \' – cerveau reptilien limbique et cortex. La clé est de les intégrer dans un même circuit comme les différents systèmes du corps humain. Quand tous ces éléments ne fonctionnent pas ensemble surviennent les problèmes : colères caprices agressivité. Par notre comportement en tant que parents nous pouvons agir sur le bon fonctionnement du cerveau de l\'enfant. UNE MERVEILLE DE PÉDAGOGIE ILLUSTRÉE Il mêle le savoir et la pratique. Chaque chapitre présente une connaissance sur le cerveau (les deux hémisphères les deux étages du cerveau) et des techniques pour intégrer ce savoir au quotidien de l\'enfant. Ces techniques sont systématiquement illustrées par : – Des scenettes sous formes de BD pour montrer des situations familières (opposition troubles émotionnels) et expliquer au parents comment y répondre. – D\'autres sont destinées à expliquer aux enfants le fonctionnement de leur cerveau.', 2015, 5, 7),
+(8, 'Découvrez vos points forts avec le test CliftonStrengths', '', 'fr', 172, 'Connaissez-vous vos points forts ? Comme la majorité des individus vous êtes sûrement plus conscients de vos faiblesses. Aussi vous passez votre vie à vouloir les surmonter alors qu\'il faudrait axer votre développement sur vos forces et bâtir votre existence autour d\'elles ; : en agissant ainsi vos capacités de progression dans l\'entreprise d\'épanouissement personnel et votre bonne santé mentale seront décuplées ! Gallup a mis au point un test CliftonStrengths qui vous permettra de découvrir vos points forts. Il se compose d\'un questionnaire en ligne de 30 minutes durant lequel vous devrez répondre à 177 déclarations qui vous permettront de découvrir vos talents parmi 34 thèmes. Ce livre offre un accès grâce à un code à gratter au test CliftonStrengths reconnu mondialement. Dans cette nouvelle édition de l\'ouvrage Découvrez vos points forts Tom Rath expose ; : dans une première partie les raisons pour lesquelles il est important de découvrir ses points forts : Il est alors conseillé au lecteur de passer le test grâce au code inséré dans l\'ouvrage. dans une deuxième partie comment appliquer ses points forts avec pour chacun des 34 points forts qui existent des témoignages de personnes qui possèdent ces points forts des idées concrètes d\'optimisation de ces talents et les clefs pour collaborer avec les personnes qui en sont dotées. Fondé sur l\'analyse de millions d\'interviews et de données cette nouvelle version du test est encore plus précise et sûre dans ses résultats.', 2019, 0, 0),
+(9, 'La méthode Value Proposition Design', '', 'fr', 320, 'Suite attendue du bestseller Business Model Nouvelle Génération ce livre est indispensable pour proposer une offre de produits et services en phase avec les attentes des clients.', 2015, 6, 8),
+(10, 'Les cigognes sont immortelles', 'http://books.google.com/books/content?id=qOtgDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 303, 'À Pointe-Noire dans le quartier Voungou la vie suit son cours. Autour de la parcelle familiale où il habite avec Maman Pauline et Papa Roger le jeune collégien Michel a une réputation de rêveur. Mais les tracas du quotidien (argent égaré retards et distractions humeur variable des parents mesquineries des voisins) vont bientôt être emportés par le vent de l\'Histoire. En ce mois de mars 1977 qui devrait marquer l\'arrivée de la petite saison des pluies le camarade président Marien Ngouabi est brutalement assassiné à Brazzaville. Et cela ne sera pas sans conséquences pour le jeune Michel qui fera alors entre autres l\'apprentissage du mensonge. Partant d\'un univers familial Alain Mabanckou élargit vite le cercle et nous fait entrer dans la grande fresque du colonialisme de la décolonisation et des impasses du continent africain dont le Congo est ici la métaphore puissante et douloureuse. Mêlant l\'intimisme et la tragédie politique il explore les nuances de l\'âme humaine à travers le regard naïf d\'un adolescent qui d\'un coup apprend la vie et son prix. Alain Mabanckou est né en 1966 à Pointe-Noire au Congo-Brazzaville. Ses œuvres sont traduites dans le monde entier. Il enseigne la littérature francophone à l\'Université de Californie-Los Angeles (UCLA).', 2018, 0, 9),
+(11, 'Des comics et des hommes', '', 'fr', 478, 'Aux Etats-Unis les comic books sont un secteur du monde de l\'édition et un phénomène culturel. C\'est dans les années 30 au cœur de la Dépression économique qu\'apparurent les fascicules agrafés qui prirent le nom de \' comic books \' Jean-Paul Gabilliet retrace l\'épopée éditoriale de ces parutions avec ses pics ses crises ses rebondissements et ses acteurs souvent hauts en couleurs. \'auteur nous emmène dans les coulisses commerciales et économiques d\'un secteur de l\'industrie culturelle en esquissant tout d\'abord une typologie des créateurs de comic books à travers le temps: leurs origines sociales leurs formations scolaires leurs combats (presque toujours vains) pour faire valoir leurs droits auprès d\'éditeurs seulement soucieux de rentabilité. Puis à partir d\'une batterie d\'enquêtes et de sondages dont les plus anciens remontent aux années 20 il répond à la question: \' Qui lit des comic books?\' Enfin il précise la position de la bande dessinée dans la hiérarchie culturelle aux Etats-Unis : les discours de censure contre les illustrés stridents au cœur de la guerre froide et plus insidieux aujourd\'hui. Pour les curieux et ls collectionneurs le livre contient aussi eux bandes dessinées l\'une fantastique l\'autre sentimentale reproduites en noir et blanc à partir de leurs planches originales. Des Comics et des hommes est un ouvrage grand public qui pourra s\'avérer extrêmement utile aux chercheurs francophones désireux d\'approfondir leur connaissance de ce domaine encore peu exploré de l\'histoire culturelle américaine.', 2005, 7, 0),
+(12, 'Sur les traces d\'Enayat Zayyat', 'http://books.google.com/books/content?id=Dh0lEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 287, 'Une jeune écrivaine égyptienne Enayat El-Zayyat s’est donné la mort en 1963 et personne ne se rappelle plus de son seul et unique roman L’Amour et le Silence publié en 1967. Plus de quarante ans plus tard Iman Mersal l’a lu et intriguée par le suicide de son auteure a mené une longue et minutieuse enquête pour reconstituer son histoire. Un livre inclassable entre la biographie l’enquête historique et journalistique ou encore l’essai superbement écrit par Iman Mersal dont la prose se révèle aussi forte et émouvante que sa poésie.', 2021, 0, 10),
+(13, 'Je n\'ai pas fait mes devoirs parce que...', '', 'fr', 32, 'Je n\'ai pas fait mes devoirs parce que... mon frère et moi avons été kidnappés par un cirque parce que ma famille a découvert un puits de pétrole dans le jardin parce que notre toit s\'est brutalement volatilisé... et pour tout plein d\'autres raisons !', 2014, 8, 11),
+(14, 'Leconte fait son cinéma', 'http://books.google.com/books/content?id=FYs7EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 0, 'Joub et Nicoby sont de grands admirateurs de Patrice Leconte à qui l\'on doit Les bronzés Tandem Ridicule et tant d\'autres films aussi réussis que différents. Le duo de Dans l\'atelier de Fournier est donc parti à la rencontre du réalisateur égrenant avec lui un parcours jalonné de films à succès de rencontres avec des stars mais aussi de doutes de critiques assassines de malentendus et même... de BD puisque Leconte est lui-même dessinateur ! Leconte fait son cinéma : une conversation dessinée pleine de passion et d\'émotion !', 2021, 9, 12),
+(15, 'Quand Google défie l\'Europe', 'http://books.google.com/books/content?id=yMHagz-QhjIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 226, 'Google a inauguré sa bibliothèque numérique le 1er juin 2005 six mois après l’annonce de sa vaste entreprise de mise en ligne de 15 millions de livres soit plus de 45 milliards de pages en moins de six ans. En 2009 Google affirmait en avoir déjà numérisé 10 millions. Entre-temps Google n’a cessé de renforcer sa position dominante et de chercher à aspirer tous les « contenus » souvent au mépris du droit d’auteur. Entre-temps la « googlisation » du patrimoine si ce n’est du monde inspire partout de plus en plus de méfiance et de crainte sur les véritables intentions de l’entreprise : hégémonie sur l’indexation hégémonie sur l’accès... En France rien n’est tranché : en juin 2009 le groupe La Martinière a déposé une plainte à New York. Les éditeurs se mobilisent. En août Bruno Racine actuel président de la BNF annonce vouloir confier à Google la numérisation d’une partie des collections de la BNF rompant avec la stratégie frontale de son prédécesseur Jean-Noël Jeanneney qui avait appelé à une vaste numérisation concurrente dans le cadre du projet qu’il avait baptisé Europeana. Le grand emprunt laisse cependant espérer que soient dégagées les sommes nécessaires à l’ambition d’indépendance dont ce livre traduit en quatorze langues ici enrichi et mis à jour est le manifeste. 3e édition revue et augmentée', 2010, 10, 13),
+(16, 'Les humanités numériques', 'http://books.google.com/books/content?id=AlV1DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 176, 'Quel avenir faut-il prédire aux humanités ? Les signes d\'une désaffection pour la culture humaniste se sont multipliés au cours des dernières années en France et ailleurs. Dans ce contexte morose et déprimé le développement des humanités numériques apparaît à certains comme une planche de salut pour des disciplines autrement condamnées à disparaître. Toutefois réinventer les humanités par le numérique suppose de relever trois défis de taille : leur rapport à la technique leur relation au politique et enfin à la science elle-même. Les humanités numériques sont très critiquées : pour certains elles relèvent de la poudre aux yeux pour d\'autres elles constituent une menace extraordinaire. Mais s\'il y a bien quelque chose que l\'on ne peut contester c\'est leur capacité à poser de bonnes questions aux différentes disciplines des sciences humaines et sociales. Penser la place que les humanités doivent tenir dans notre monde implique d\'en redéfinir le contrat social et épistémique. Elles sont riches d\'opportunités de ce point de vue : à condition de ne pas dénaturer la spécificité humanistique des pratiques de recherche auxquelles elles s\'appliquent.', 2018, 0, 14),
+(17, 'Phototaxie', 'http://books.google.com/books/content?id=13NmEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 128, 'Renoncer. Sauter les barrières. Brûler les horizons. Résonnent les cris de trois anarchistes. Théo Zev et Narr résistent. Ombre et lumière musique et silence s’enlacent d’un même mouvement dans ces villes abîmées où l’homme qui tombe continue de tomber. Un roman troublant qui met le feu aux certitudes au confort des complaisances.', 2017, 0, 15),
+(18, 'Un rien peut tout changer', 'http://books.google.com/books/content?id=VA6TDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 320, 'Les gens pensent que pour modifier le cours de leur vie ils doivent faire de grands changements. Dans ce livre ils découvriront que les plus petits changements couplés à une bonne connaissance de la psychologie et des neurosciences peuvent avoir un effet révolutionnaire sur leur existence et leurs relations.', 2019, 0, 16),
+(19, 'L\'appartement oublié', 'http://books.google.com/books/content?id=CiynCgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 496, 'Un roman éblouissant inspiré d\'un fait réel qui vous fera voyager au cœur de la Belle Époque. Quand April Vogt expert en mobilier apprend qu ́un appartement fermé depuis soixante-dix ans vient d ́être découvert à Paris elle est loin de s ́imaginer les richesses et les secrets qu ́il renferme. Au milieu des nombreux trésors April trouve le journal de Marthe de Florian la très séduisante demi-mondaine qui y vécut en multipliant les amants. Comprendre la tumultueuse histoire de cette femme libre conduit April à une véritable plongée au cœur du Paris des artistes et des hommes politiques de la Belle Époque. Découvrez l\'incroyable histoire d\'un trésor retrouvé intact 70 ans après dans un luxueux appartement parisien ! EXTRAIT Elle voulait juste changer d’air. Et quand son patron avait prononcé les mots « appartement » « neuvième arrondissement » et « tout un bric-à-brac du dix-neuvième siècle » April avait pensé « vacances ». Elle aurait beaucoup de travail certes mais qu’importe elle partait à Paris. Comme tout peintre tout poète tout écrivain et tout expert en objets d’art le savait c’était l’endroit idéal pour s’évader. L’équipe parisienne se trouvait déjà sur place avec à sa tête Olivier. April le voyait déjà sillonnant l’appartement son calepin à la main griffonnant des notes de ses doigts osseux et crochus. Il avait demandé des renforts à New York car ils avaient besoin d’un autre expert et plus précisément d’un spécialiste en mobilier ancien pour compenser leur manque de compétence dans ce domaine. D’après le patron d’April l’appartement de cinq pièces contenait « de quoi meubler une douzaine de lupanars de luxe ». Si Peter ne se faisait pas beaucoup d’illusions sur ce qu’ils allaient trouver April en attendait beaucoup quoique pour des raisons différentes. CE QU\'EN PENSE LA CRITIQUE De l’amour de l’art de l’histoire Paris ... que demander de plus ? - FineBooks Magazine Une lecture charmante sur une histoire fascinante et la femme cachée derrière. - Historical Novel Society J’ai beaucoup aimé découvrir l’envers du décor de ce métier très particulier de commissaire-priseur et que je trouve tout à fait fascinant. Michelle Gable dont c’est ici le premier roman jongle habilement entre les deux époques et j’ai passé un très agréable moment avec April et Marthe ! - Blog Des livres des livres ! J\'étais totalement happée dans l\'histoire la narration est très bien menée servie par un style très agréable on est tenu en haleine à suivre les découvertes d\'April Vogt et à en apprendre plus sur Marthe de Florian. - Red Panda Babelio À PROPOS DE L’AUTEUR Michelle Gable a grandi à San Diego. Elle mène de front sa carrière d’auteur et une carrière professionnelle dans le milieu financier. Son roman devenu best-seller s’inspire d’un événement réel : la découverte en 2010 d’un appartement parisien de la Belle Époque laissé à l’abandon comme figé dans le temps.', 2015, 0, 17),
+(20, 'La vie nocturne des arbres', '', 'fr', 40, 'Entièrement fabriqué à la main cet ouvrage - au tirage limité et dont chaque exemplaire est numéroté - reproduit en sérigraphie des oeuvres originales d\'artistes Gond (centre de l\'Inde). Un véritable hymne aux arbres où chaque image s\'accompagne d\'un texte qui emmènera les lecteurs - petits et grands - dans le riche univers imaginaire et mythique de cette tribu de la forêt.', 2013, 0, 18),
+(21, 'Le métier de libraire', '', 'fr', 0, '', 2008, 0, 0),
+(22, 'La voleuse de fruits', 'http://books.google.com/books/content?id=ekEgEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 281, 'Relu par l\'auteur', 2021, 0, 19),
+(23, 'Google et le nouveau monde', 'http://books.google.com/books/content?id=TpAdEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 104, '\' Le président de la Bibliothèque nationale de France livre un état des lieux des enjeux de la numérisation du patrimoine écrit et défend l\'idée du partenariat privé avec l\'Etat Google en tête dans une alliance raisonnée et pragmatique. \' Libération On le sait la révolution du numérique est en marche y compris dans le domaine du livre. Pour nous aider à en comprendre les enjeux Bruno Racine répond dans cet ouvrage à des questions essentielles : Google et l\'édition sont-ils condamnés à s\'entendre ou au contraire à se livrer un combat sans merci ? Quel est le rôle de l\'Etat et plus largement de l\'Europe à l\'heure où le président de la République et le ministre de la Culture font de la numérisation du patrimoine une priorité nationale ? Google peut-il nous aider à numériser et à diffuser nos oeuvres et si oui quelles conditions la France est-elle en droit d\'exiger ?... Ce livre éclaire un débat dont l\'issue conditionnera pour une bonne part la place de notre culture dans ce nouveau monde. Ancien directeur de la villa Médicis et ancien président du Centre Pompidou Bruno Racine est président de la Bibliothèque nationale de France depuis avril 2007. Il est également l\'auteur de plusieurs romans. \' Le président de la Bibliothèque nationale de France livre un état des lieux des enjeux de la numérisation du patrimoine écrit et défend l\'idée du partenariat privé avec l\'Etat Google en tête dans une alliance raisonnée et pragmatique. \' Libération \' Un essai remarquable. \' Le Nouvel Observateur', 2021, 0, 20),
+(24, 'Les couples heureux ont leurs secrets', '', 'en', 343, 'Le docteur Gottman est l\'inventeur d\'une nouvelle science de l\'amour. De sa recherche menée avec les moyens d\'investigation les plus modernes il a mis au point une méthode qui permet de déterminer la qualité d\'un mariage ses aspects positifs et négatifs son horizon de longévité. Dans cet ouvrage écrit en collaboration avec Nan Silver il livre ici les secrets de son expertise qui sont aussi ceux d\'une union heureuse et durable.', 2010, 0, 0),
+(25, 'Nous autres', '', 'fr', 232, 'Nous autres évoque irrésistiblement le 1984 de George Orwell lequel a d\'ailleurs reconnu ce qu\'il devait à l\'auteur russe. La différence est qu\'Orwell écrivait du temps du stalinisme tandis que Zamiatine véritable prophète a imaginé son État Unique et son Bienfaiteur du temps de Lénine.', 2005, 0, 0),
+(26, 'Ecryme', '', 'en', 0, '', 2018, 0, 0),
+(27, 'Klara et le Soleil', 'http://books.google.com/books/content?id=7yk4EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 280, 'Klara est une AA une Amie Artifi cielle un robot de pointe ultraperformant créé spécialement pour tenir compagnie aux enfants et aux adolescents. Klara est dotée d’un extraordinaire talent d’observation et derrière la vitrine du magasin où elle se trouve elle profite des rayons bienfaisants du Soleil et étudie le comportement des passants ceux qui s’attardent pour jeter un coup d’œil depuis la rue ou qui poursuivent leur chemin sans s’arrêter. Elle nourrit l’espoir qu’un jour quelqu’un entre et vienne la choisir. Lorsque l’occasion se présente enfin Klara est toutefois mise en garde : mieux vaut ne pas accorder trop de crédit aux promesses des humains... Après l’obtention du prix Nobel de littérature Kazuo Ishiguro nous offre un nouveau chef-d’œuvre qui met en scène avec virtuosité la façon dont nous apprenons à aimer. Ce roman qui nous parle d’amitié d’éthique d’altruisme et de ce qu’être humain signifie pose une question à l’évidence troublante : à quel point sommes-nous irremplaçables ?', 2021, 0, 0),
+(28, 'Chroniques oubliées : fantasy : Anathazerïn', '', 'en', 440, '', 2015, 0, 0),
+(29, 'Le seigneur des anneaux', 'http://books.google.com/books/content?id=qgW5PAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 569, 'Avec \' Le Retour du Roi \' s\'achèvent dans un fracas d\'apocalypse les derniers combats de la guerre de l\'Anneau. Tandis que le continent se couvre de ténèbres annonçant pour le peuple des Hobbits l\'aube d\'une ère nouvelle Frodon poursuit son entreprise. Alors qu\'il n\'a pu franchir la Porte Noire il se demande comment atteindre le Mont du Destin. Peut-être est-il trop tard : le Seigneur des Ténèbres mobilise ses troupes. Les Rohirrim n\'ont plus le temps d\'en finir avec le traître assiégé dans l\'imprenable tour d\'Orthanc ; ils doivent se rassembler pour faire face à l\'ennemi. Tentant une fois de plus sa chance Frodon passe par le Haut Col où il sera livré à l\'abominable Arachné. Survivra-t-il à son dangereux périple à travers le Pays Noir ?', 2002, 0, 21),
+(30, 'Comment se faire des amis', 'http://books.google.com/books/content?id=GNhmBAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 256, 'Nos relations avec les autres sont déterminantes pour notre qualité de vie ! La facilité de contact est un puissant moteur de succès : être recherché pour ses qualités humaines créer la sympathie faire passer ses idées savoir motiver corriger sans gâcher une relation de travail... Cela s’apprend ! Ce livre utile à tous les âges et dans tous les métiers vous donnera tous les conseils pour développer des relations humaines de qualité nécessaires à l’efficacité professionnelle et personnelle. Dale Carnegie leader mondial de la formation continue est spécialisé dans les entraînements à la communication au leadership à la vente au management et à la prise de parole en public. C’est la source la plus crédible dans ces domaines.', 2013, 0, 22),
+(31, 'Les mots sont des fenêtres (ou bien ils sont des murs)', '', 'fr', 226, 'Une communication de qualité entre soi et les autres est aujourd\'hui une des compétences les plus précieuses. Par un processus en quatre points Marshall Rosenberg met ici à notre disposition un outil très simple dans son principe mais extrêmement puissant pour améliorer radicalement et rendre vraiment authentique notre relation aux autres. Grâce à des histoires des exemples et des dialogues simples ce livre nous apprend principalement à manifester une compréhension respectueuse à tout message reçu à briser les schémas de pensée qui mènent à la colère et à la déprime à dire ce que nous désirons sans susciter d\'hostilité à communiquer en utilisant le pouvoir guérisseur de l\'empathie. Bien plus qu\'un processus c\'est un chemin de liberté de cohérence et de lucidité qui nous est ici proposé.', 1999, 0, 0),
+(32, 'Je T\'aimerai Toujours', 'http://books.google.com/books/content?id=veG7xwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 32, 'Booksellers have sold more than 30 million copies of Love You Forever in paperback and hardcover. Now we have a French-language board version printed on light crisp whiteboard and slightly reduced for child-sized hands. Yet it contains every word of the original which is much-loved by grandparents and parents everywhere. A young mother holds her baby and while she sings to it she rocks it back and forth. And through her life and the stages of his life she holds her son and rocks him back and forth as she tells him that she will love him forever. Softly she sings to him: \'I\'ll love you forever I\'ll like you for always As long as I\'m living My baby you\'ll be.\' The English-language board version is EAN 9780228101048.', 2019, 11, 23),
+(33, 'Homo sapienne', 'http://books.google.com/books/content?id=HU1UDwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 201, 'Révélant une voix exceptionnelle Homo sapienne suit la vie de cinq jeunes dans la ville de Nuuk capitale du Groenland. Ils vivent des changements profonds et racontent ce qui jusqu’à maintenant a été laissé sous silence : Fia découvre qu’elle aime les femmes Ivik comprend qu’elle est un homme Arnaq et Inuk pardonnent et Sara choisit de vivre. Sur « l’île de la colère » où les tabous lentement éclatent chacune et chacun se déleste du poids de ses peurs. Niviaq Korneliussen manie une langue crue sensible et indomptée. Elle parle du désir universel d’être soi socialement intimement confiante que les cœurs et les corps sauront être vrais.', 2017, 0, 24),
+(34, 'Bonsoir lune', 'http://books.google.com/books/content?id=R4QGAAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'en', 0, 'Le rituel du coucher permet de retrouver le calme en disant bonsoir à tous les objets domestiques.', 1996, 0, 25),
+(35, 'Devine combien je t\'aime', 'http://books.google.com/books/content?id=gtxDPAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 34, 'Je t\'aime grand comme ça haut comme ça jusqu\'au bout des orteils aussi loin que... Une déclaration d\'amour pleine de charme et de jeunesse d\'un petit lièvre à un grand d\'un fils à son père.', 1998, 12, 26),
+(36, 'Maus', '', 'fr', 299, '', 2019, 0, 0),
+(37, 'La fille qui court', '', 'fr', 424, '', 2020, 0, 0),
+(38, 'Gallant', '', 'fr', 376, '', 2022, 0, 0),
+(39, 'Le livre du rien', '', 'fr', 64, '', 2020, 0, 0),
+(40, 'Les tribulations d\'Arthur Mineur', 'http://books.google.com/books/content?id=mot5DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 255, 'Prix Pulitzer 2018. Arthur Mineur est en pleine crise existentielle. 50 ans célibataire il est l’auteur d’un roman qui l’a fait connaître mais il n’a depuis publié que des livres au succès mitigé. Le jour où il reçoit un carton lui annonçant le mariage de son ex-compagnon il décide pour y échapper d’accepter les invitations d’obscurs festivals de littérature dans différents pays. C’est le début d’un périple littéraire sentimental et humain autour du monde... Un roman où les difficultés et les obstacles de la vie se changent en bulles humoristiques à l’extraordinaire et salvatrice légèreté. 200 000 exemplaires vendus aux Etats-Unis.', 2019, 13, 0),
+(41, 'Les cinq personnes que j\'ai rencontrées là-haut', 'http://books.google.com/books/content?id=SBn5AgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 169, 'Pendant des années Eddie 83 ans a veillé au bon fonctionnement de la fête foraine. Comble de l\'ironie c\'est ici qu\'il vient tout juste de mourir écrasé sous la nacelle d\'un manège alors qu\'il tentait de sauver la vie d\'une fillette... Arrivé dans l\'au-delà il se retrouve embarqué sur un vaste océan multicolore et multiforme où comme dans un rêve éveillé il va faire cinq rencontres bouleversantes et déterminantes : Marguerite son amour perdu mais aussi son ancien capitaine d\'infanterie une vieille femme aux cheveux blancs un mystérieux homme bleu et une toute jeune asiatique détenant dans ses petits doigts atrocement brûlés le secret d\'Eddie et de sa destinée...', 2014, 0, 0),
+(42, 'C\'est Bon de Faire des Bonds', 'http://books.google.com/books/content?id=ZgzJsgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 72, 'THE BELOVED ILLUSTRATIONS OF DR. SEUSS PLUS AN ALL-NEW FRENCH TRANSLATION Publi�e en anglais sous le titre original Hop on Pop cette nouvelle traduction fran�aise restitue avec bonheur l\'univers des contes du Dr.Seuss avec ses jeux jubilatoires sur les mots et les sons. C\'est Bon de faire des Bonds est un premier livre id�al pour tous ceux qui d�butent le fran�ais. Les enfants comme les parents s\'amuseront au fil des pages � d�couvrir les personnages improbables et hilarants du Dr.Seuss ses illustrations d�sormais c�l�bres et le texte qui ne cesse de jongler avec les mots : \'Tonton sur un b�ton\' des \'poissons polissons\' ou une \'souris qui sourit\'. C\'est Bon de faire des Bonds amusera tous les jeunes �coliers qui s\'initient au fran�ais � son vocabulaire et � sa prononciation. Une base ludique et originale pour d�marrer la lecture de cette nouvelle langue !', 2015, 0, 0),
+(43, 'Qu\'avons-nous fait de nos rêves ?', 'http://books.google.com/books/content?id=_u7gnQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 405, 'Dans la luxueuse berline qui l\'emmène à sa maison de disque Bennie avale les paillettes d\'or censées réveiller sa libido en berne. Qu\'est devenu le jeune punk qui ne vivait que pour la musique et la scène ? Bientôt son groupe sera de nouveau réuni. A ce tournant de leurs vies si éloignées de leurs rêves de jeunesse Bennie Lou Bosco et Marty s\'interrogent...', 2013, 0, 27),
+(44, 'Comment Capturer Un Farfadet', 'http://books.google.com/books/content?id=_oOGswEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'en', 32, '\'À petits pas silencieusement des enfants tentent de capturer un farfadet qui s\'est immiscé dans leur demeure. Mais la créature est futée et ne se laissera pas facilement attraper... Ni la trappe ni le filet ni la cage ne fonctionne. Il ne reste donc plus qu\'une solution : transformer la maison en piège géant! Un livre amusant sur les créatures imaginaires du folklore irlandais!\'--Résumé de l\'éditeur.', 2018, 14, 28),
+(45, 'Scarpetta', '', 'fr', 503, 'Oscar Bane exige son admission dans le service psychiatrique de l\'hôpital Bellevue. Il redoute pour sa vie et prétend que ses blessures lui ont été infligées au cours d\'un meurtre qu\'il nie avoir commis. Il ne se laissera examiner que par le médecin légiste expert Kay Scarpetta. Celle-ci se rend à New York et commence à enquêter mais le tueur anticipe...', 2009, 15, 29),
+(46, 'La chenille qui fait des trous', '', 'fr', 8, '', 2019, 0, 0),
+(47, 'Betty', 'http://books.google.com/books/content?id=XlnwDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 588, '“Ce livre est à la fois une danse un chant et un éclat de lune mais par-dessus tout l’histoire qu’il raconte est et restera à jamais celle de la Petite Indienne.” La Petite Indienne c’est Betty. Née en 1954 dans une baignoire Betty Carpenter est la sixième de huit enfants. Sa famille vit en marge de la bonne société car si sa mère est blanche son père est cherokee. Lorsque les Carpenter s’installent dans la petite ville de Breathed après des années d’errance le paysage luxuriant de l’Ohio semble leur apporter la paix. Avec ses frères et soeurs Betty grandit bercée par la magie immémoriale des histoires de son père. Mais les plus noirs secrets de la famille se dévoilent peu à peu. Pour affronter le monde des adultes Betty puise son courage dans l’écriture : elle confie alors sa douleur à des pages qu’elle enfouit sous terre au fil des années. Pour qu’un jour toutes ces histoires n’en forment plus qu’une qu’elle pourra enfin révéler au grand jour.', 2020, 0, 30),
+(48, 'Conversations entre amis', 'http://books.google.com/books/content?id=flDqDwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 262, 'Dublin de nos jours. Frances et Bobbi deux anciennes amantes devenues amies intimes se produisent dans la jeune scène artistique irlandaise comme poètes-performeuses. Un soir lors d\'une lecture elles rencontrent Melissa une photographe plus âgée qu\'elles mariée à Nick un acteur. Ensemble ils discutent refont le monde critiquent le capitalisme comme les personnages de Joyce pouvaient en leur temps critiquer la religion. Ils font des photographies ils écrivent ils vivent. C\'est le début d\'une histoire d\'amitié d\'une histoire de séduction menant à un \' mariage à quatre \' où la confusion des sentiments fait rage : quand Frances tombe follement amoureuse de Nick et vit avec lui une liaison torride elle menace soudainement l\'équilibre global de leur amitié. Mais Conversations entre amis n\'est pas qu\'une banale histoire d\'adultère : c\'est avant tout le portrait attachant empathique des jeunes gens contemporains ces millenials qui ne parviennent pas à trouver leur place dans le monde que leur ont laissé leurs aînés. La voix de Frances poétique désinvolte parfois naïve d\'une extraordinaire fraîcheur est par de multiples aspects celle de sa génération. Traduit de l\'anglais (Irlande) par Laetitia Devaux.', 2019, 0, 0),
+(49, 'Tika Tika Boum Boum!', 'http://books.google.com/books/content?id=g5obvgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 40, 'See below for English description. Ce classique séduit depuis plus de vingt ans les enfants partout à travers le monde. Il a été traduit à la demande générale. Les lettres de l\'alphabet se rejoignent au sommet du cocotier jusqu\'à ce que. oh non! Elles tombent toutes en bas. Une comptine rythmée et amusante avec laquelle les enfants d\'âge préscolaire pourront apprendre l\'alphabet. In this lively alphabet rhyme all the letters of the alphabet race each other up the coconut tree. Will there be enough room? Oh no - Tika Tika Boum! Boum! The well-known authors of Barn Dance and Knots on a Counting Rope have created a rhythmic alphabet chant that rolls along on waves of fun. Lois Ehlert\'s rainbow of bright bold cheerful colours makes the merry parade of letters unforgettable. Original title: Chicka Chicka Boom Boom', 2017, 16, 31),
+(50, 'Ours brun dis-moi ce que tu vois ?', '', 'fr', 21, 'Ours Brun dis-moi ce que tu vois ? Je vois un oiseau rouge un cheval bleu... Un imagier pour apprendre les couleurs.', 2013, 17, 0),
+(51, 'Votre Experience Personnelle Avec Dieu', '', 'en', 272, '', 2000, 18, 32),
+(52, 'La servante écarlate', '', 'fr', 510, 'La servante écarlate c\'est Defred une entreprise de salubrité publique à elle seule. En ces temps de dénatalité galopante elle doit mettre au service de la république de Gilead récemment fondée par des fanatiques religieux son attribut le plus précieux : sa matrice. Vêtue d\'écarlate à l\'exception des voiles blancs de sa cornette elle accomplit sa tâche comme une somnambule. Doit-elle céder à la révolte tenter de tromper le système ? Le soir Defred regagne sa chambre à l\'austérité monacale. Elle songe au temps où les femmes avaient le droit de lire d\'échanger des confidences de dépenser de l\'argent d\'avoir un travail un nom des amants... C\'était le temps où l\'amour était au centre de tout. L\'amour cette chose si douce aujourd\'hui punie de mort... Œuvre majeure La Servante écarlate n\'est pas sans rappeler 1984 d\'Orwell. Mais au-delà de cette magistrale création d\'un monde c\'est la question du rôle et de l\'avenir des femmes que pose avec force ce roman inoubliable.', 2005, 0, 33),
+(53, 'Optimisez votre équipe', '', 'fr', 239, 'Dans Optimisez votre équipe Patrick Lencioni transpose son intelligence pénétrante et son pouvoir de conteur dans le monde fascinant et complexe des groupes de travail. Kathryn Petersen la PDG de DecisionTech est confrontée à la crise suprême en matière de leadership : l\'unification d\'une équipe qui se trouve dans un tel état de détresse quelle risque de détruire l\'entreprise tout entière. Réussira-t-elle? Sera-t-elle congédiée? Une entreprise s\'effondrera-t-elle? Dans cette fable fascinante et intemporelle Patrick Lencioni nous rappelle que le leadership exige autant de courage que d\'intuition. À travers ce récit l\'auteur nous révèle les cinq dysfonctions qui font que les équipes même les meilleures se retrouvent souvent en difficulté. Il expose un modèle puissant et des étapes pratiques pour surmonter ces barrières courantes et pour constituer une équipe qui sera caractérisée par la cohésion et l\'efficacité. Patrick Lencioni a une fois de plus écrit une fable irrésistible empreinte d\'un message en apparence simple mais néanmoins puissant à l\'intention de tous ceux qui s\'efforcent d\'être des chefs d\'équipe exceptionnels.', 2005, 19, 34),
+(54, 'Greenlights', 'http://books.google.com/books/content?id=jd5FEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 320, 'Cela fait trente-cinq ans que je tiens des journaux intimes. J’y consigne mes réussites et échecs mes joies mes chagrins les choses qui m’ont émerveillé et celles qui m’ont fait rire aux éclats. Trente-cinq ans à prendre conscience à me souvenir à me rendre compte à comprendre à rassembler et à griffonner ce qui m’a ému ou excité en route. Comment être juste. Comment moins stresser. Comment m’amuser. Comment moins blesser les autres. Comment être moins blessé. Comment être un type bien. Comment obtenir ce que je veux. Comment trouver un sens à la vie. Comment être plus moi-même. Récemment j’ai trouvé le courage de m’attaquer à ces journaux et de les relire en entier. Ce que j’ai trouvé ? Un catalogue d’histoires de leçons que j’avais apprises et oubliées de poèmes de prières de recommandations de réponses à des questions que je me posais de questions que je me pose encore d’affirmations de doutes de professions de foi sur ce qui importe vraiment de théories sur la relativité et toute une ribambelle de slogans. J’ai découvert ce qui dans mon approche de la vie m’avait donné le plus de satisfaction à l’époque et m’avait guidé. J’ai appelé ça attraper les feux verts. C’est un thème solide. Donc j’ai pris mes journaux sous le bras et me suis offert un confinement en solitaire dans le désert où je me suis mis à écrire ce que vous lisez à présent : un album une trace une histoire de ma vie jusqu’à ce jour. Les choses que j’ai vues rêvées cherchées données et reçues. Les vérités explosives qui ont tellement court-circuité mon espace-temps que je n’ai pu les ignorer. Les contrats que j’ai passés avec moi-même que j’honore pour beaucoup et dont pour la plupart je cherche encore à me rendre digne. Voilà ce que j’ai vu et comment – mon ressenti et mes trouvailles mes moments de classe et de honte. Les grâces les vérités et les beautés de la brutalité. Les initiations les invitations les calibrages et transitions. Les « je m’en sors à bon compte » les « je me fais choper » et les « je me mouille en essayant de danser entre les gouttes ». Les rites de passage. Ce livre raconte aussi comment choper les feux verts réaliser que les feux orange et les rouges peuvent changer de couleur aussi. Ce livre est une lettre d’amour. À la vie', 2021, 20, 35),
+(55, 'De l’autre côté du pont', 'http://books.google.com/books/content?id=MAfoDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 185, 'Chaque jour est un combat dans les rues bondées de Chennai en Inde. Et lorsque Viji et sa sœur Rukku fuguent pour ne plus subir la violence de leur père la situation semble sans espoir. Dans un monde impitoyable et dangereux où nul n’accorde un regard aux parias elles sont des plus vulnérables. Mais leur rencontre avec deux jeunes sans-abri sur un pont en ruine va peut-être tout changer.', 2020, 21, 36),
+(56, 'Le Courage d\'Amal', 'http://books.google.com/books/content?id=GHc5EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 270, 'Amal a toujours rêvé de devenir institutrice. Mais quand sa mère qui vient de mettre au monde une seconde fille sombre dans la dépression elle doit la remplacer et s\'occuper de la maison. Elle ne peut plus aller à l\'école et voit son rêve d\'émancipation s\'éloigner. Sa situation s\'aggrave encore lorsque suite à une altercation sur le marché avec Jawad l\'homme tout puissant de son village elle est obligée de s\'installer chez lui comme servante. Malgré les brimades et les humiliations pourtant à force de courage et de détermination Amal trouvera bientôt sa place parmi les domestiques auxquelles elle apprendra à lire. Elle se battra pour sa liberté et avec le soutien de quelques personnes bienveillantes elle saura saisir sa chance. Grace à elle la tyrannie qu\'exerce Jawad sur le village pourrait même prendre fin...', 2021, 0, 37),
+(57, 'La grande numérisation', 'http://books.google.com/books/content?id=G4py05cEZXIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 210, 'Quelques mentions du projet de \'Mundaneum\' à Genève auquel était associé Le Corbusier.', 2006, 22, 38),
+(58, 'Système 1 / Système 2. Les deux vitesses de la pensée', 'http://books.google.com/books/content?id=xqWICwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 887, 'Comment prenons-nous nos décisions ? Qu’est-ce qui guide nos préférences et nos jugements ? Quand faut-il faire confiance à notre intuition ? Tels sont les fils rouges de cet ouvrage dans lequel Daniel Kahneman nous emmène à la rencontre étonnante des deux « personnages » qui se partagent notre esprit. Le « Système 1 » est rapide intuitif et émotionnel ; le « Système 2 » est lent réfléchi et logique. Via de multiples expériences auxquelles le lecteur est invité à s’essayer lui-même Daniel Kahneman expose les ravages des partis pris et autres biais cognitifs dont nous sommes les jouets : illusion de familiarité effet de halo biais optimiste effet d’ancrage... Fruit de toute une vie de recherche Système 1 / Système 2 dessine une théorie brillante qui offre des prolongements pratiques immédiats dans la vie quotidienne et professionnelle.', 2016, 23, 39),
+(59, 'L\'arbre généreux', 'http://books.google.com/books/content?id=ChQCAAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'en', 0, 'Par amour pour un petit garçon un arbre lui donne au fil des années ses fruits ses feuilles ses branches... jusqu\'à son tronc !', 1982, 24, 0),
+(60, 'Le garçon qui n\'arrêtait pas de se laver', '', 'en', 290, 'A quatorze ans Charles passe chaque jour plus de trois heures sous la douche ; il lui faut deux heures de plus pour s\'habiller. Il souffre de troubles obsessionnels compulsifs. Cette maladie étrange est aussi une affection secrète : les obsessionnels compulsifs exécutent leurs rituels à l\'abri du regard des autres ne parlent jamais de ce qu\'ils endurent et sont toujours étonnés d\'apprendre que des centaines de milliers de personnes sont atteintes de la même affection qu\'eux. En compagnie de leur médecin le docteur Rapoport ils prennent ici la parole et nous convient à un voyage dans leur monde intérieur ainsi qu\'à une réflexion sur les origines possibles d\'un mai que l\'on commence seulement à pouvoir soigner.', 2001, 0, 0),
+(61, 'Poisson Un Poisson Deux Poisson Rouge Poisson Bleu', 'http://books.google.com/books/content?id=bebyAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'en', 68, 'It\'s One Fish Two Fish Red Fish Blue Fish by Dr. Seuss in French. Of all Dr. Seuss titles this may be the strongest for helping one learn to read in French because it is 64 fun pages with a wide range of \'I Can Read It Myself\' vocabulary.The beloved illustrations of Dr. Seuss plus an all new French translation of his simple fun learn-to-read text Publiee en anglais sous le titre original One Fish Two Fish Red Fish Blue Fish cette nouvelle traduction française reste fidèle e ce qui fait le succès des livres du Dr. Seuss : rimes facetieuses et personnages loufoques comme le Bloss e sept bosses Willy et son petit lit ou le Gox qui aime la boxe... ce livre n\'est pas seulement un outil parfait pour apprendre e lire le français c\'est aussi un regal de lecture ludique où le rire n\'est jamais loin : « Notre velo est super. Il a trois places. Notre Robert s\'assoit derrière. C\'est cocasse ! »Originally published in English as One Fish Two Fish Red Fish Blue Fish this new French translation faithfully captures Dr. Seuss\' beloved tales rollicking rhyme and zany characters such as winking Yink seven-humped Wump and Ned with his little bed. This book is not only a perfect tool for learning to read French it also entertains and amuses with playful passages such as \'Did you ever fly a kite in bed? Did you ever walk with ten cats on your head?\'', 2011, 0, 40);
+INSERT INTO `test_Book` (`id`, `title`, `picture`, `language`, `nbr_pages`, `resume`, `year`, `category`, `editor`) VALUES
+(62, 'Verity -Extrait offert-', 'http://books.google.com/books/content?id=voX4DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 17, 'Toute vériTé n\'est pas bonne à dire La vie a toujours souri à Verity Crawford. ses livres font d\'elle une auteur star sa maison du Vermont est splendide et elle forme avec Jeremy son mari un couple parfait. Mais un jour sur une route son rêve tourne au cauchemar. L\'accident l\'empêche d\'écrire transforme sa trop grande maison en prison et menace de l\'éloigner de Jeremy. La vie n\'a jamais été tendre avec Lowen ashleigh. ses livres ne rencontrent qu\'un accueil poli ses finances sont au plus mal et ses histoires d\'amour sont des feux de paille. Jusqu\'à ce que Jeremy la recrute pour devenir le ghostwriter de Verity et terminer à sa place sa série à succès. pour Lowen aussi incongrue que soit la proposition l\'occasion est beaucoup trop belle pour ne pas la saisir. et Jeremy beaucoup trop séduisant pour qu\'elle lui dise non. Mais en découvrant dans les papiers de Verity ce qui semble être son autobiographie Lowen va voir se dessiner page après page le portrait d\'une femme épouvantable prête au plus atroce des crimes pour ne pas perdre ce qu\'elle a et prompte à toutes les perversités lorsqu\'elle se sent menacée. et aux yeux de Verity Lowen est désormais une menace.', 2020, 0, 0),
+(63, 'Un Jour Tu Découvriras...', 'http://books.google.com/books/content?id=tJ7pvwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 32, 'See below for English description. Plusieurs raisons expliquent pourquoi certaines personnes se sentent différentes des autres. Peut-être est-ce à cause de leur apparence physique ou de leur façon de parler de leur nourriture ou de n\'importe quel autre détail. Dans tous les cas il n\'est pas toujours facile de faire ses premiers pas dans un environnement où l\'on ne connaît personne et pourtant c\'est bien nécessaire. Le texte percutant de Jacqueline Woodson et les somptueuses illustrations de Rafael López démontrent avec brio que tout le monde se sent parfois étranger et qu\'il faut du courage pour continuer son chemin malgré ce sentiment. Cet album prouve également que de bonnes choses peuvent arriver lorsque l\'on ose enfin s\'ouvrir aux autres! There are many reasons to feel different. Maybe it\'s how you look or talk or where you\'re from; maybe it\'s what you eat or something just as random. It\'s not easy to take those first steps into a place where nobody really knows you yet but somehow you do it. Jacqueline Woodson\'s lyrical text and Rafael López\'s dazzling art reminds us that we all feel like outsiders sometimes - and how brave it is that we go forth anyway. And that sometimes when we reach out and begin to share our stories others will be happy to meet us halfway. Original title: The Day You Begin', 2019, 0, 0),
+(64, 'Parallèlement', 'http://books.google.com/books/content?id=M7nHtr6lAuMC&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'en', 193, '', 1914, 0, 0),
+(65, 'Pierre Lapin', '', 'en', 73, 'Quatre petits lapins partent en promenade à travers champs. Leur maman leur a interdit d\'entrer dans le jardin du terrible Monsieur McGregor mais Pierre Lapin a envie de désobéir... [Gallimard.fr]', 2002, 25, 0),
+(66, 'Gens indépendants', '', 'fr', 497, 'Dans le nord de l\'Islande du début du XXe siècle Bjartur est un petit paysan qui s\'efforce de préserver son indépendance d\'autant plus précieuse qu\'il l\'a acquise au prix de longues années de labeur et de sacrifices. S\'affranchir de toute tutelle tel est l\'objectif de cet éleveur de moutons héritier d\'une tradition paysanne séculaire et imprégné de poésie épique médiévale transmise de génération en génération. Le récit se déroule à la manière d\'une saga familiale décrivant l\'âpre quotidien d\'une paysannerie d\'un autre temps confrontée aux profonds bouleversements politiques et sociaux qui marquèrent cette époque : l\'émergence d\'un système économique moderne les effets de la Première Guerre mondiale les efforts pour désenclaver les régions isolées de l\'île les grands mouvements migratoires vers les Etats-Unis. Bjartur mène un combat de tous les instants pour nourrir son troupeau et seulement ensuite sa famille dont la figure centrale est sa fille Asta Sollilja que lui a laissée sa première femme Rosa morte en couches cette enfant qu\'il soupçonne pourtant d\'être illégitime est son véritable trésor sa \' petite fleur \' qui s\'épanouit dans l\'immensité glaciale de la lande. Seul face aux éléments naturels - et même surnaturels - Bjartur affronte les difficultés sans jamais baisser les bras pas plus qu\'il ne baisse les yeux devant quiconque. Ce roman marqué par un puissant souffle épique hérité des sagas médiévales mais aussi par un humour sombre et détonnant rend hommage à l\'esprit paysan islandais du début du siècle tout en fierté et en ténacité face à la mort et au chaos qui reviennent immanquablement réclamer leur dû.', 2004, 0, 0),
+(67, 'La fuite du cerveau', '', 'fr', 192, '', 2020, 0, 0),
+(68, '12 règles pour une vie', 'http://books.google.com/books/content?id=gyNyDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 406, 'Qu\'est-ce que le système nerveux des homards nous enseigne sur l\'importance de se tenir droit et sur la réussite ? Pourquoi les Égyptiens accordaient tant d\'égards à ceux qui chérissaient leurs prochains comme les plus grands des dieux ? Quels chemins terrifiants empruntons-nous lorsque nous devenons arrogants ou revanchards ? Le Dr Peterson nous entraîne dans un incroyable voyage au cœur de la discipline de la liberté et de l\'aventure humaine élaborant une nouvelle sagesse à travers 12 règles de vie simples profondes et même surprenantes. RÈGLE N° 1 Tenez-vous droit les épaules en arrière Soignez votre posture. Cessez de vous avachir et de voûter le dos. Dites le fond de votre pensée. Redressez-vous et regardez devant vous. Osez vous montrer dangereux.', 2018, 0, 41),
+(69, 'Nos étoiles contraires', 'http://books.google.com/books/content?id=nJiUvMO1gFUC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 220, 'Entre rire et larmes le destin bouleversant de deux amoureux de la vie. Hazel 16 ans est atteinte d\'un cancer. Son dernier traitement semble avoir arrêté l\'évolution de la maladie mais elle se sait condamnée. Bien qu\'elle s\'y ennuie passablement elle intègre un groupe de soutien fréquenté par d\'autres jeunes malades. C\'est là qu\'elle rencontre Augustus un garçon en rémission qui partage son humour et son goût de la littérature. Entre les deux adolescents l\'attirance est immédiate. Et malgré les réticences d\'Hazel qui a peur de s\'impliquer dans une relation dont le temps est compté leur histoire d\'amour commence... les entraînant vite dans un projet un peu fou ambitieux drôle et surtout plein de vie. . Élu \' Meilleur roman 2012 \' par le Time Magazine ! Prix de L\'Échappée Lecture 2014 de la Nièvre Prix du Jury littéraire Giennois 2014 Prix Plaisirs de lire 2014 département de l\'Yonne Prix des Embouquineurs 2014 Prix Farniente 2015 (Belgique) Prix Les goûts et les couleurs 2015 CANOPE - Académie de Rennes Prix des Incorruptibles 2015', 2013, 0, 42),
+(70, 'Sula', 'http://books.google.com/books/content?id=7LeVDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 179, 'Au cœur de l’Amérique profonde deux petites filles noires s’inventent une autre vie plus riche plus drôle plus libre surtout que la dure réalité qui les entoure. Ainsi lient-elles une amitié qu’elles veulent définitive. L’âge venant Sula la rebelle part rouler sa bosse dans les grandes villes alors que Nel la sage accomplit sa vocation de mère et d’épouse. Quarante ans après elles font leurs comptes s’opposent et incarnent chacune à leur manière la farouche énergie de la femme noire face aux hommes si vulnérables. De sa voix exceptionnelle Toni Morrison recrée l’expérience de la communauté noire avec une grâce et une authenticité inoubliables.', 2015, 0, 43),
+(71, 'Climat : comment éviter un désastre', 'http://books.google.com/books/content?id=VroaEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 461, 'Objectif zéro carbone : les solutions de Bill Gates. Dans ce livre urgent Bill Gates propose un vaste plan à la fois pragmatique et accessible pour atteindre le zéro carbone à temps et éviter ainsi une catastrophe climatique. Bill Gates a passé une décennie à enquêter sur les causes et les effets du changement climatique. Avec l’aide d’experts dans les domaines de la physique de la chimie de la biologie de l’ingénierie des sciences politiques et de la finance il s’est concentré sur ce qui doit être fait pour empêcher une catastrophe environnementale. Dans cet essai il explique non seulement pourquoi nous devons cesser d’émettre des gaz à effet de serre mais détaille également ce que nous devons faire pour atteindre cet objectif crucial. Il expose très clairement les défis auxquels nous sommes confrontés. S’appuyant sur sa compréhension de l’innovation et de ce qui est nécessaire pour introduire de nouvelles idées sur le marché il décrit les domaines dans lesquels la technologie contribue déjà à réduire les émissions expose les moyens de rendre la technologie actuelle plus efficace tout en présentant les technologies de pointe nécessaires et ceux qui travaillent sur ces innovations essentielles. Enfin il présente un plan concret pour atteindre l’objectif zéro carbone – non seulement les politiques que les gouvernements doivent adopter mais aussi ce que nous pouvons faire en tant qu’individus pour que notre gouvernement nos employeurs et nous-même participions à cette entreprise décisive. Bill Gates l’affirme sans détour : atteindre le zéro carbone ne sera ni simple ni facile mais si nous suivons le plan qu’il présente ici c’est un objectif à notre portée.', 2021, 26, 0),
+(72, 'Soleil de la conscience', 'http://books.google.com/books/content?id=_qVEAAAAYAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 88, '', 1956, 27, 0),
+(73, 'Des fleurs pour Algernon', 'http://books.google.com/books/content?id=QUo6AAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 251, 'Algernon est une souris de laboratoire dont le traitement du Pr Nemur et du Dr Strauss vient de décupler l\'intelligence. Enhardis par cette réussite les deux savants tentent alors avec l\'assistance de la psychologue Alice Kinnian d\'appliquer leur découverte à Charlie Gordon un simple d\'esprit employé dans une boulangerie. C\'est bientôt l\'extraordinaire éveil de l\'intelligence pour le jeune homme. Il découvre un monde dont il avait toujours été exclu et l\'amour qui naît entre Alice et lui achève de le métamorphoser. Mais un jour les facultés supérieures d\'Algernon déclinent. Commence alors pour Charlie le drame atroce d\'un homme qui en pleine conscience se sent retourner à l\'état de bête...', 2001, 0, 44),
+(74, 'Esclave pendant douze ans', '', 'fr', 299, '\'Je suis né libre et j\'ai vécu avec ma famille jusqu\'au jour où deux hommes m\'ont drogué séquestré et vendu comme esclave. Pendant douze ans j\'ai connu la servitude et l\'humiliation. Dormant à même le sol affamé fouetté j\'ai failli sombrer dans la folie mais je n\'ai jamais laissé la cruauté me briser. Depuis ma libération des romans se sont intéressés à l\'esclavage et ont connu une diffusion sans précédent. Je partage dans ces pages mon expérience personnelle. Mon objectif est d\'en faire un récit sincère et fidèle et laisse aux autres le soin de décider ce qui de la fiction ou de la réalité donne l\'image de l\'injustice la plus cruelle ou de l\'aliénation la plus sévère\'.', 2014, 28, 0),
+(75, 'Ugly Love', 'http://books.google.com/books/content?id=l3CJCgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 273, 'Par la plus grande auteure de romance aux États-Unis ! n°1 dans la liste des best-sellers du New York Times • n°1 dans la liste USA today • 3 000 avis positifs sur Amazon • 100 000 avis positifs sur Goodreads • En tête des ventes en Allemagne Grande-Bretagne Italie etc. Après Maybe Someday voici le deuxième titre de Colleen Hoover publié chez Hugo Roman. Quand Tate Collins rencontre Miles Archer elle sait que ce n\'est pas le coup de foudre. Et pour cause le beau pilote n\'a de temps que pour les aventures sans lendemain. Ils ne peuvent pourtant pas nier leur attraction mutuelle aussi immédiate que brûlante. Alors pourquoi ne pas se laisser séduire quand le sexe est si bon ? Pas d\'attaches simplement la passion... Leur arrangement semble parfait tant que Tate accepte de respecter les deux règles de Miles : Pas de question sur le passé Ne pas espérer de futur. Cependant ils vont vite comprendre que le coeur ne suit pas d\'autres règles que les siennes. L\'amour même quand il n\'est pas une évidence sera-t-il plus fort que leurs promesses ?', 2015, 0, 45),
+(76, 'Hamnet', 'http://books.google.com/books/content?id=z68hEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 291, 'Women\'s prize for fiction 2020 Un jour d\'été 1596 dans la campagne anglaise une petite fille tombe gravement malade. Son frère jumeau Hamnet part chercher de l\'aide car aucun de leurs parents n\'est à la maison... Agnes leur mère n\'est pourtant pas loin en train deÂ cueillir des herbes médicinales dans les champs alentour ; leur père est à Londres pour son travail ; tous deux inconscients de cette maladie de cette ombre qui plane sur leur famille et menace de tout engloutir. Porté par une écriture d\'une beauté inouïe ce nouveau roman de Maggie O\'Farrell est la bouleversante histoire d\'un frère et d\'une sœur unis par un lien indéfectible celle d\'un couple atypique marqué par un deuil impossible. C\'est aussi l\'histoire d\'une maladie \' pestilentielle \' qui se diffuse sur tout le continent. Mais c\'est avant tout une magnifique histoire d\'amour et le tendre portrait d\'un petit garçon oublié par l\'Histoire qui inspira pourtant à son père William Shakespeare sa pièce la plus célèbre. Livre de l\'année 2020 Librairies Waterstones', 2021, 0, 46),
+(77, 'Le Sang des bêtes', 'http://books.google.com/books/content?id=JLhREAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 137, '« Même si parfois la vie est difficile pour vous vous n’avez aucune idée de ce que c’est que la sensation terrifiante d’être un animal dans le monde des humains. » « Thomas Gunzig est un fauve littéraire aux gestes féroces et déroutants. On devine que face à lui les mots tremblent de trouille et ils ont bien raison. » Hervé Le Tellier – Prix Goncourt 2020 « Drôle tendre cruel et politique ce roman est un cadeau. Merci Thomas Gunzig. » Adeline Dieudonné', 2022, 0, 47),
+(78, 'Métro Place Monge (édition gros caractères)', 'http://books.google.com/books/content?id=iA7IywEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 276, 'Et si le voyage dans le temps était une histoire de famille ? Il y a près de trente ans Emma a subi un choc qui a effacé de sa mémoire les deux jours qui ont précédé l\'accident. Elle va enfin se souvenir et bien plus encore... Ce matin je me suis réveillée aux côtés de celui qui deviendra un peu plus tard mon premier époux. J\'ignore si je rêve pour combien de temps je suis là ou si je dois revivre encore toutes ces vingt-huit années... Je sais aussi que le jeune homme apparemment inoffensif qui dort encore près de moi est toxique manipulateur et violent mais qu\'il me faudra encore plusieurs années avant d\'en prendre pleinement conscience et oser enfin le quitter. Après nous avoir fait découvrir la Suède dans son premier roman Saga l\'ours de Dalécarlie l\'auteure nous emmène cette fois dans un voyage au coeur du Paris des années quatre-vingt. Au-delà de l\'intrigue Métro Place Monge est une réflexion sur différents thèmes tels que le Grand Amour la paternité et la vengeance.', 2019, 0, 0),
+(79, 'Le pouvoir de la vulnérabilité', '', 'en', 318, 'Nous avons en horreur la vulnérabilité. Nous voulons être parfaits puissants sûrs de nous. Nous croyons que la distance la froideur l\'inaccessibilité et la maîtrise contribuent à notre prestige. Que nous serions mésestimés si nous venions à être trop ouverts. Nous adoptons l\'anxiété en tant que style de vie la productivité en tant que valeur essentielle et le perfectionnisme en tant qu\'idéal. Et si la vulnérabilité n\'était pas une faiblesse mais au contraire signe de force et de courage ? Car à trop vouloir être parfaits nous avons peur de l\'échec et éprouvons un sentiment d\'insuffisance. Nous endossons notre armure avant de pénétrer dans l\'arène de la vie en sacrifiant des relations et des opportunités qui ne reviendront pas. Nous gaspillons un temps précieux en tournant le temps à nos dons merveilleux. Alors plutôt que de rester assis sur le banc de touche et d\'émettre sans cesse des jugements et des conseils mieux vaut oser se découvrir et accepter d\'être vulnérable. Vivre de manière entière en troquant le culte du contrôle contre le lâcher-prise et l\'ouverture émotionnelle. Oser être vulnérable c’est cela le courage.', 2014, 0, 0),
+(80, 'Business Model nouvelle génération', '', 'en', 282, 'Comment se positionner dans un paysage extrêmement concurrentiel ? Comment transformer ses idées en modèles économiques révolutionnaires ? Un guide pour visionnaires et challengers impatients de se lancer et de concevoir les entreprises de demain. + le poster. La matrice du modèle économique clé en main pour décrire visualiser évaluer et transformer les modèles économiques.', 2017, 0, 0),
+(81, 'Les sept maris d\'Evelyn Hugo', '', 'fr', 595, 'C\'est à vous et à vous seule que s\'adresse cette confession... A l\'aube de ses quatre-vingts ans Evelyn Hugo légende du cinéma est enfin prête à dire la vérité sur sa vie aussi glamour que scandaleuse. Mais quand cette actrice vieillissante et solitaire décrète qu\'elle fera ces révélations à Monique Grant journaliste pour un obscur magazine personne ne comprend son choix. La journaliste décide de saisir cette occasion pour lancer sa carrière. Elle écoute avec fascination l\'histoire de cette actrice mariée sept fois. Une histoire d\'ambition d\'amitié et d\'amour défendu. A mesure qu\'elle recueille les confidences d\'Evelyn la journaliste comprend que leurs destins sont étroitement liés... \' Un roman poignant captivant imprégné du glamour de la grande époque hollywoodienne. \' Buzzfeed \' Un conte envoûtant sur l\'histoire scandaleuse d\'une actrice qui ressemble à s\'y méprendre à Elizabeth Taylor. \' US Weekly \' Un livre qui fourmille d\'anecdotes savoureuses sur les années fastes d\'Hollywood. \' People \' On se laisse tenter par l\'ambiance de l\'âge d\'or d\'Hollywood et on succombe à la rencontre émouvante d\'une jeune journaliste et d\'une icône du cinéma. \' Cosmopolitan \' L\'itinéraire tumultueux de cette star solitaire s\'accompagne de rebondissements inattendus. Une lecture captivante. \' PopSugar \' Un roman envoûtant sur l\'amour le glamour et la rançon de la gloire. \' Emily Giffin (payot.ch)', 2019, 0, 0),
+(82, 'Et ils meurent tous les deux à la fin', 'http://books.google.com/books/content?id=ChZaDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 315, '\' Nous sommes au regret de vous informer que vous allez être frappé par une mort prématurée dans les prochaines vingt-quatre heures. Toute l\'équipe de Death-Cast est sincèrement désolée de vous perdre. Vivez pleinement cette journée ok ? \' Le 5 septembre un peu après minuit Mateo et Rufus reçoivent chacun le funeste appel. Ils ne se connaissent pas mais cherchent tous deux à se faire un nouvel ami en ce jour fi nal. Heureusement il existe aussi une appli pour ça Le Dernier Ami. Grâce à elle Rufus et Mateo vont se rencontrer pour une ultime grande aventure : vivre toute une vie en une seule journée. \' Sublime et envoûtant ! \' Lauren OLIVER auteure de Before I Fall', 2018, 0, 48),
+(83, 'Pourquoi la guerre ?', 'http://books.google.com/books/content?id=FJQjCwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 63, 'Texte intégral révisé suivi des biographies d\'Albert Einstein et de Sigmund Freud. Initié en 1932 par l\'Institut International de Coopération Intellectuelle de la Société des Nations (futur Unesco) — qui diffusait alors un discours humaniste afin de lutter contre la montée des nationalismes — \'Pourquoi la guerre ?\' est un échange de lettres entre Albert Einstein et Sigmund Freud. Le théoricien de la relativité pacifiste convaincu et militant des droits de l\'homme y interroge le fondateur de la psychanalyse sur les racines inconscientes de la guerre. Y-a-t-il quelque chose au coeur de l\'homme qui veut la guerre ? interroge Einstein et existe-t-il une possibilité de lutter contre les psychoses collectives de haine et de destruction peut-on éduquer l\'humanité afin de vivre dans un monde en paix ? Freud — qui s\'était déjà intéressé à cette problématique dès 1915 à travers ses \'Considérations actuelles sur la guerre et sur la mort\' et plusieurs études cliniques sur des cas de névroses de guerre — lui répond d\'abord en termes politiques sur la relation du droit et du pouvoir puis aborde lucidement le thème de la Pulsion de mort. Pour lui la guerre est le lieu où la pulsion de mort rencontre la puissance comme violence. S\'il existe un espoir de paix universelle où la psychanalyse aurait un rôle à jouer c\'est dit-il en renforçant Eros aux dépens de Thanatos avant de conclure que \'Tout ce qui travaille au développement de la culture travaille aussi contre la guerre.\' Ce bref mais brillant échange épistolaire publié simultanément en allemand anglais et français en 1933 mais censuré immédiatement par l\'Allemagne nazie reste hélas près d\'un siècle plus tard plus que jamais d\'actualité.', 2015, 0, 49),
+(84, 'Je m\'appelle Lucy Barton', 'http://books.google.com/books/content?id=TPIoDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 208, 'Hospitalisée à la suite d’une opération Lucy Barton reçoit la visite impromptue de sa mère avec laquelle elle avait perdu tout contact. Tandis que celle-ci se perd en commérages convoquant les fantômes du passé Lucy se trouve plongée dans les souvenirs de son enfance dans une petite ville de l’Illinois – la pauvreté extrême honteuse la rudesse de son père et finalement son départ pour New York qui l’a définitivement isolée des siens. Peu à peu Lucy est amenée à évoquer son propre mariage ses deux filles et ses débuts de romancière dans le New York des années 1980. Une vie entière se déploie à travers le récit lucide et pétri d’humanité de Lucy tout en éclairant la relation entre une mère et sa fille faite d’incompréhension d’incommunicabilité mais aussi d’une entente profonde. Salué comme un chef-d’oeuvre par la critique littéraire aux États-Unis Je m’appelle Lucy Barton est un grand roman contemporain sur la solitude le désir et l’amour.', 2017, 0, 50),
+(85, 'Les Aventures potagères du concombre masqué', 'http://books.google.com/books/content?id=Uk6kDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 48, 'En 1971 « Pif » publie une petite plaquette à l’italienne d’un dénommé Kalkus. Il s’agissait de la première édition des premières aventures d’un personnage né en 1965 et qui allait devenir mythique : Le Concombre masqué. Mosquito propose la réédition en fac-similé de ce monument de la bande dessinée Mandryka a ajouté une postface dans laquelle il précise -à sa manière- la genèse du légumineux.', 2016, 29, 51),
+(86, 'Me-Ti livre des retournements', '', 'en', 183, '', 1968, 0, 0),
+(87, 'Le chat chapeauté', '', 'fr', 0, 'Par un jour de pluie Sally et son frère s\'ennuient s\'ennuient... jusqu\'à l\'arrivée du Chat Chapeauté qui sème la pagaille dans toute la maisonnée. Que faire ? Laisser le Chat Chapeauté jouer les fauteurs de trouble ou bien le renvoyer ?', 2016, 0, 0),
+(88, 'Ces femmes incroyables qui ont changé le monde', '', 'fr', 32, 'De Coco Chanel à Anne Frank en passant par Marie Curie Frida Kahlo ou encore Jane Austen cet ouvrage merveilleusement illustré dresse le portrait de 13 femmes qui ont marqué l\'Histoire.', 2016, 0, 0),
+(89, 'Normal People', 'http://books.google.com/books/content?id=88QfEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 320, 'Connell et Marianne ont grandi dans la même ville d’Irlande. Il est le garçon en vue du lycée elle est la solitaire un peu maladroite. Pourtant l’étincelle se produit : le fils de la femme de ménage et l’intello hautaine connaissent ensemble leur premier amour. Un an plus tard alors que Marianne s’épanouit au Trinity College de Dublin Connell s’acclimate mal à la vie universitaire. Un jour tout est léger irrésistible ; le lendemain le drame pointe et les sentiments vacillent. Entre eux le jeu vient tout juste de commencer. Sally Rooney réussit le tour de force de donner une dimension unique et universelle à cette histoire. Porté par des dialogues saisissants de justesse Normal People est un roman magistral sur la jeunesse l’amitié le sexe sur les errances affectives et intellectuelles d’une génération qui n’a plus le droit de rêver mais qui s’entête à espérer. Traduit de l’anglais (Irlande) par Stéphane Roques.', 2021, 0, 52),
+(90, 'Une constellation de phénomènes vitaux', 'http://books.google.com/books/content?id=Xlq9AwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 450, 'Dans un village enneigé de Tchétchénie Havaa une fillette de huit ans regarde cachée dans les bois les soldats russes emmener en pleine nuit son père accusé d’aider les rebelles. De l’autre côte de la rue Akhmed son voisin et ami de sa famille observe lui aussi la scène craignant le pire pour l’enfant quand les soldats mettent le feu à la maison. Mais quand il trouve Havaa tapie dans la forêt avec une étrange valise bleue il prend une décision qui va bouleverser leur vie. Il va chercher refuge dans un hôpital abandonné où il ne reste qu’une femme pour soigner les blessés Sonja Rabina. Pour Sonja chirurgienne russe talentueuse et implacable l’arrivée d’Akhmed et de Havaa est une mauvaise surprise. Exténuée débordée de travail elle n’a aucune envie de s’ajouter ce risque et cette charge. Car elle a une bonne raison de se montrer prudente : accueillir ces réfugiés pourrait compromettre le retour de sa sœur disparue. Pourtant au cours de cinq jours extraordinaires le monde de Sonja va basculer et révéler l’entrelacs de connexions qui lie le passé de ces trois compagnons improbables et décidera de leur destin.À la fois récit d’un sacrifice et exploration du pouvoir de l’amour en temps de guerre Une constellation de phénomènes vitaux est surtout une œuvre portée par le souffle profond de la compassion vers ce qui doit être et ce qui demeure. Traduit de l’anglais par Dominique Defert', 2014, 0, 53),
+(91, 'Lean Startup', 'http://books.google.com/books/content?id=_NYTCwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 336, 'Un livre déjà culte dans le monde des entrepreneurs ! En appliquant les grands principes du lean management au développement de nouveaux produits Eric Ries a mis au point une méthode qui change radicalement la donne pour tous ceux qui souhaitent créer une entreprise ou développer un nouveau projet : le Lean Startup. Cette approche révolutionnaire permet en effet d\'adapter constamment son offre mais aussi son entreprise aux évolutions du marché en suivant le principe de l\'innovation continue. Dans cet ouvrage Eric Ries expose sa méthodologie et l\'illustre de nombreux exemples d\'entreprises qui ont su encourager la créativité et sortir des sentiers battus en s\'adaptant aux besoins de leurs clients pour faire ainsi évoluer leur business model d\'origine : Groupon Zappos Dropbox Intuit... Lean Startup est un remarquable guide pratique d\'innovation pour améliorer les chances de succès de tout nouveau projet à l\'usage des grandes entreprises comme des plus petites. C\'est également un mode d\'emploi du travail collaboratif et du management créatif. En ces temps d\'hyper-compétition mondiale c\'est donc une lecture indispensable !', 2012, 0, 0),
+(92, 'Aujourd\'hui est un autre jour', 'http://books.google.com/books/content?id=XW9HDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 368, 'Aujourd’hui est un jour comme les autres pour Rhiannon. Alors pourquoi Justin son petit ami d’ordinaire distant et lunatique semble-t-il la voir pour la première fois ? Ensemble ils vont vivre une journée parfaite - dont le garçon n’aura aucun souvenir le lendemain. Mais tout s’explique lorsque Rhiannon fait la rencontre d’A qui lui raconte se réveiller chaque matin dans un corps différent et être tombé amoureux d’elle en occupant celui de Justin. Mais peut-on s’attacher à un garçon qui est chaque jour un autre ?', 2016, 0, 54),
+(93, 'Qui a volé les tartes ?', '', 'fr', 62, 'La grand-maman de Jérémie Obadia Jackenory Jones a préparé de bonnes tartes à la confiture pour sa tante qui vit au-delà des grands bois. Pour les laisser refroidir elle les pose sur le rebord de la fenêtre. Lorsque Jérémie est prêt à partir grand-maman s\'aperçoit que les tartes ont disparu ! Qui a volé les tartes ? Est-ce le dinosaure le Chapelier fou les trois ours ou la Belle au Bois dormant ? Grâce à Allan et Janet Ahlberg les personnages de vos contes favoris deviennent tous ensemble les héros d\'une histoire pleine d\'humour et de surprises.', 1990, 30, 0),
+(94, 'Un autre visage', '', 'fr', 232, 'Martin avait tout pour lui : une belle gueule un air cool une copine \'canon\' et deux potes en admiration. Mais dans son quartier de l\'East End à Londres où règnent les gangs une mauvaise rencontre fait basculer sa vie...', 2010, 0, 0),
+(95, 'Fiction', '', 'fr', 1006, 'Dans les histoires d\'E. Welty on bascule tranquillement du quotidien ou du banal dans le drame la folie ou le féerique.', 2000, 0, 0),
+(96, 'Heartstopper - Tome 1 - Deux garçons. Une rencontre.', 'http://books.google.com/books/content?id=ZOSmDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 272, 'Ceci est l’histoire de deux lycéens. Nick le rugbyman au sourire solaire. Charlie le musicien au cœur solitaire. Parce qu’ils évoluent dans des cercles différents parce qu’ils n’ont pas le même caractère leur amitié n’était pas gagnée. Pourtant petit à petit de façon irrésistible Charlie tombe amoureux. Même s’il sait que Nick aime les filles. Même s’il sait qu’il n’a aucune chance. Alors pour ne pas mettre en péril cette amitié naissante qui compte pour lui plus que tout Charlie préfère garder le silence...', 2019, 0, 55),
+(97, 'Le Banquet', 'http://books.google.com/books/content?id=SZ5KEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 102, '« Le Banquet est quelquefois désigné sous le nom de Discours sur l’amour. C’est en effet une suite de discours qui furent censés tenus au banquet donné par le poète Agathon quand il remporta le prix au concours de tragédie avec son premier ouvrage (416 av. J.-C.). Un ami d’Apollodore disciple de Socrate le prie de raconter ce qui s’était dit à ce banquet. Justement quelques jours auparavant un certain Glaucon lui avait déjà fait la même demande : il se trouvait donc bien préparé à faire le récit de cet entretien. Ce n’est pas qu’il eût pris part lui-même au banquet lequel remontait à quelque seize années plus tôt ; mais il avait été renseigné par un disciple fidèle de Socrate Aristodème et en questionnant Socrate lui-même sur certains détails il s’était convaincu de la véracité et de l’exactitude du narrateur. Or voici ce que racontait Aristodème. Socrate se rendant à l’invitation d’Agathon rencontre Aristodème et l’engage à l’accompagner. Aristodème se laisse emmener ; mais pendant le trajet Socrate s’arrête absorbé dans une méditation profonde et le laisse entrer seul chez Agathon. C’est en vain qu’on l’appelle : il ne viendra que lorsqu’il aura trouvé ce qu’il cherche. Il arrive en effet au milieu du souper et prend place à la droite d’Agathon. Le repas fini Pausanias et Aristophane qui ont déjà fêté la veille le triomphe d’Agathon déclarent qu’ils veulent se ménager et boire avec modération. Profitant de ces dispositions le médecin Eryximaque partisan de la tempérance propose de renvoyer la joueuse de flûte et de lier quelque conversation. « Mon ami Phèdre dit-il s’indigne qu’aucun poète n’ait encore fait l’éloge de l’Amour un si grand dieu ! Si vous voulez nous paierons à ce dieu le tribut de louanges qu’il mérite et chacun de nous fera un discours en son honneur. » Socrate qui fait profession de ne savoir que l’amour accepte la proposition en son nom et au nom de toute la compagnie. C’est Phèdre qui commencera. » BnF collection ebooks a pour vocation de faire découvrir en version numérique des textes classiques essentiels dans leur édition la plus remarquable des perles méconnues de la littérature ou des auteurs souvent injustement oubliés. Tous les genres y sont représentés : morceaux choisis de la littérature y compris romans policiers romans noirs mais aussi livres d’histoire récits de voyage portraits et mémoires ou sélections pour la jeunesse.', 2021, 31, 56),
+(98, 'Fille femme autre', 'http://books.google.com/books/content?id=fW_8DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 357, 'Amma Dominique Yazz Shirley Carole Bummi LaTisha Megan devenue Morgan Hattie Penelope Winsome Grace. Il y a dans ce livre plus de femmes noires que Bernardine Evaristo n’en a vu à la télévision durant toute son enfance. La plus jeune a dix-neuf ans la plus âgée quatre-vingt-treize. Douze femmes puissantes apôtres du féminisme et de la liberté chacune à sa manière d’un bout du siècle à l’autre cherche un avenir une maison l’amour un père perdu une mère absente une identité un genre – il elle iel – une existence et au passage le bonheur. Foisonnant symphonique écrit dans un style aussi libre et entraînant que le sont ses héroïnes le roman de Bernardine Evaristo poursuit son titre : Fille femme autre... Douze récits s’entremêlent se répondent riment et raisonnent. Douze vies s’épaulent et s’opposent. Chacune des douze est en quête et en conquête de place de classe de traces d’elle-même des autres de cet autrui en elle qui a déjà traversé maintes frontières et a le front de vouloir encore exploser celles qui restent.', 2020, 0, 57),
+(99, 'Là où chantent les écrevisses', 'http://books.google.com/books/content?id=_QrqDwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 363, 'Traduit de l\'anglais (Etats-Unis) par Marc Amfreville Pendant des années les rumeurs les plus folles ont couru sur \' la Fille des marais \' de Barkley Cove une petite ville de Caroline du Nord. Pourtant Kya n\'est pas cette fille sauvage et analphabète que tous imaginent et craignent. A l\'âge de dix ans abandonnée par sa famille elle doit apprendre à survivre seule dans le marais devenu pour elle un refuge naturel et une protection. Sa rencontre avec Tate un jeune homme doux et cultivé qui lui apprend à lire et à écrire lui fait découvrir la science et la poésie transforme la jeune fille à jamais. Mais Tate appelé par ses études l\'abandonne à son tour. La solitude devient si pesante que Kya ne se méfie pas assez de celui qui va bientôt croiser son chemin et lui promettre une autre vie. Lorsque l\'irréparable se produit elle ne peut plus compter que sur elle-même... Delia Owens est née en 1949 en Géorgie aux Etats-Unis. Diplômée en zoologie et biologie elle a vécu plus de vingt ans en Afrique et a publié trois ouvrages consacrés à la nature et aux animaux tous best-sellers aux USA. Là où chantent les écrevisses est son premier roman. Phénomène d\'édition ce livre a déjà conquis des millions de lecteurs et poursuit son incroyable destinée dans le monde entier. Une adaptation au cinéma est également en cours. \' Un roman à la beauté tragique. \' The New York Times Book Review \' Une histoire déchirante un hymne sublime à la nature et à la solitude. \' Entertainment Weekly \' Un premier roman magnifique. \' People', 2020, 0, 0),
+(100, 'Loveless', 'http://books.google.com/books/content?id=dQrpzgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 0, 'Malgré son côté romantique Georgia n\'a jamais été amoureuse. Tandis qu\'elle rentre à l\'université avec Pip et Jason ses meilleurs amis elle compte bien trouver une stratégie pour y remédier. Elle rencontre alors sa nouvelle colocataire très extravertie et obtient une place à la Shakespeare Society. Mais ses plans ne se déroulent pas comme prévu.', 2022, 0, 0),
+(101, 'Le signe des Quatre', 'http://books.google.com/books/content?id=n9uatAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 160, 'Deuxième aventure du célèbre détective Sherlock Holmes en compagnie du docteur Watson qui devient amoureux. [SDM].', 1995, 0, 58),
+(102, 'Mademoiselle Pat', '', 'en', 375, 'Pat Gardiner restera-t-elle vieille fille? Peut-elle se satisfaire de l\'amour qu\'elle éprouve pour sa maison Silver Bush. Un des 22 romans de la candide romancière de l\'Ile-du-Prince-Edouard. [SDM].', 1992, 0, 59),
+(103, 'Sais-tu pourquoi je saute ?', 'http://books.google.com/books/content?id=RzwBEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 151, '\' Quand Naoki explique Pourquoi je saute ? c\'est à se demander pourquoi le reste du monde lui ne saute pas du même élan du coeur \' –; Josef Schovanec Pour la première fois un enfant atteint d\'autisme sévère nous raconte l\'autisme de l\'intérieur. Il répond aux questions que les parents se posent : Pourquoi fuis-tu le contact visuel ? Est-il vrai que tu détestes qu\'on te touche ? Pourquoi répètes-tu la même question sans arrêt ? Pourquoi sautes-tu en tapant des mains ? etc. David Mitchell l\'un des meilleurs écrivains anglais de sa génération et père d\'un enfant autiste a découvert ce texte qui fut pour lui une révélation une sorte de Scaphandre et le Papillon de l\'autisme : \' J\'ai eu l\'impression pour la première fois que notre fils nous racontait ce qui se passait dans sa tête. \' Il a décidé de le traduire du japonais avec sa femme KA Yoshida : \' Ce livre est bien plus qu\'une somme d\'informations il apporte la preuve qu\'il y a emprisonné à l\'intérieur du corps autistique apparemment impuissant un esprit aussi curieux subtil et complexe que le vôtre le mien celui de n\'importe qui. \' Naoki a appris à communiquer grâce à une grille alphabétique. Il a écrit ce livre à 13 ans et l\'a d\'abord publié via Internet. Il a aujourd\'hui 22 ans et communique toujours grâce à son clavier. Il vit à Kimitsu et tient un blog. Traduit de l\'anglais par Daniel Roche', 2014, 32, 0),
+(104, 'Hypersensible Et alors ?', 'http://books.google.com/books/content?id=yCMpDQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 142, 'Ce livre sur la haute sensibilité (High Sensitivity) explique un tempérament que vous partagez avec 15 milliards de personnes dans le monde. Il clarifie ce que toutes les personnes hypersensibles ont en commun comment cela se manifeste et comment l\'hypersensibilité influence tous les aspects de votre vie. Il vous offre aussi des suggestions pour vous aider à trouver votre équilibre en tant qu\'hypersensible dans un monde qui ne vous comprend pas toujours. Ce livre vous rassure enfin que l\'hypersensibilité n\'est pas un défaut mais qu\'elle vous enrichit avec des qualités inestimables qu\'il est temps pour vous d\'accueillir pour en profiter et la faire rayonner autour de vous.', 2016, 33, 60),
+(105, 'Hellados periēgēsis', 'http://books.google.com/books/content?id=0DJOAAAAcAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'en', 599, '', 1814, 0, 0),
+(106, 'Rester en vie', 'http://books.google.com/books/content?id=HanlDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 183, 'À 24 ans souffrant d\'anxiété et de dépression au cours d\'un séjour en Espagne Matt Haig s\'est retrouvé au bord d\'une falaise les pieds à moitié dans le vide sur le point de se précipiter... Rester en vie... cela paraît si difficile à celles et ceux qui sont au fond de l\'abîme qui ne voient poindre aucune lueur.', 2016, 34, 61),
+(107, 'Ne tirez pas sur l\'oiseau moqueur', 'http://books.google.com/books/content?id=YKk-GQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 0, 'Dans une petite ville d\'Alabama à l\'époque de la Grande Dépression Atticus Finch élève seul ses deux enfants Jem et Scout. Avocat intègre et rigoureux il est commis d\'office pour défendre un Noir accusé d\'avoir violé une Blanche. Racontée par Scout avec beaucoup de drôlerie cette histoire tient du conte de la court story américaine et du roman initiatique.', 2006, 0, 62),
+(108, 'Journal d\'un dégonflé - tome 13 Totalement givré', 'http://books.google.com/books/content?id=aPd0DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 224, 'Toute la ville est coincée par la neige. Le collège est fermé ! Une gigantesque bataille de boules de neige se prépare. Les bandes s\'organisent. Et tous les coups sont permis ! Greg et son copain Robert parviendront-ils à rester au chaud en attendant la fin des hostilités ? Ou deviendront-ils malgré eux les héros de l\'hiver ?', 2018, 0, 0),
+(109, 'Le cinéma expressionniste', 'http://books.google.com/books/content?id=PzsRCwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 229, 'Décors tourmentés perspectives dépravées expressivité des corps d’acteurs jeux d’ombre et de lumière sensations de fi n du monde... Pourquoi cet expressionnisme-là celui du Cabinet du docteur Caligari est-il resté si célèbre ? Mais pourquoi ce même expressionnisme ne peut-il établir aussi une liste immuable des films qui le composent pourquoi doit-il toujours prouver sa validité suspecté dès l’origine de n’exister que par abus de langage ? Cet ouvrage suppose l’inverse : non qu’une définition du phénomène soit aisée ou même possible (il existe toute une histoire racontée ici de cette aventure intellectuelle) mais que ce « mouvement » ou ce moment si contesté a joui d’une forme de postérité qui le prouve presque en retour. D’Orson Welles à Tim Burton de Maya Deren à Kenneth Anger de Blade Runner à David Lynch pour ne citer que quelques noms d’un seul continent le cinéma expressionniste s’avère paradoxalement une des grandes virtualités accomplies du cinématographe. Depuis son origine jusqu’à aujourd’hui il pose des questions d’esthétique d’histoire des questions qui dévoilent tout un pan du 7e art.', 2013, 35, 63),
+(110, 'Matilda', 'http://books.google.com/books/content?id=234wEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 272, 'Titre recommandé par le ministère de l\'Éducation nationale en classe de 6e.', 2021, 0, 0),
+(111, 'Cinquante nuances de grey', '', 'fr', 551, 'Roman érotique', 2012, 0, 64),
+(112, 'De l\'eau pour les éléphants', 'http://books.google.com/books/content?id=yusXPwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 471, 'Ce roman pas comme les autres a une histoire exceptionnelle : en quelques mois il a fait d’un auteur inconnu un véritable phénomène d’édition le coup de coeur de l’Amérique. Durant la Grande Dépression dans les années 1930 les trains des petits cirques ambulants sillonnent les États-Unis. Jacob Jankowski orphelin sans le sou saute à bord de celui des frères Benzini et de leur « plus grand spectacle du monde ». Embauché comme soigneur il va découvrir l’envers sordide du décor. Tous hommes et bêtes sont pareillement exploités maltraités.Sara Gruen fait revivre avec un incroyable talent cet univers de paillettes et de misère qui unit Jacob Marlène la belle écuyère et Rosie l’éléphante que nul jusqu’alors n’a pu dresser dans un improbable trio.Plus qu’un simple roman sur le cirque De l’eau pour les éléphants est l’histoire bouleversante de deux êtres perdus dans un monde dur et violent où l’amour est un luxe.', 2009, 0, 65),
+(113, 'La Mauvaise Graine', 'http://books.google.com/books/content?id=H_77zQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'en', 40, 'See below for English description. Ce livre raconte l\'histoire d\'une mauvaise graine. Une très mauvaise graine. Mais à quel point est-ce qu\'une graine peut être mauvaise? Eh bien celle-ci a un mauvais caractère de mauvaises manières et une mauvaise attitude. Elle a toujours été mauvaise. Elle coupe dans les files d\'attente fixe les gens du regard et n\'écoute jamais. Mais qu\'arrive-t-il lorsque la petite graine malicieuse décide de prendre sa vie en main et d\'être... heureuse? La mauvaise graine est un récit à la fois drôle et touchant qui nous rappelle à tous la force de la volonté et de l\'acceptation de soi. Les lecteurs jeunes et moins jeunes adoreront cette histoire. Elle est la preuve que chacun d\'entre nous peut changer pour le mieux. This is a book about a bad seed. Really truly bad. But how bad could a seed really be? Well he has a bad temper bad manners and a bad attitude. This seed cuts in line every time stares at everybody and never listens. But what happens when one mischievous little seed changes his mind about himself and decides that he wants to be...happy? La mauvaise graine is a funny yet touching tale that reminds us of the remarkably transformative power of will acceptance and just being you. Perfect for readers young and old La mauvaise graine proves that positive change is possible for each and every one of us. Original title: The Bad Seed', 2021, 0, 0),
+(114, 'La grâce de l\'imperfection', '', 'fr', 200, 'Dans cet ouvrage Brené Brown une spécialiste réputée sur le sentiment de honte l\'authenticité et le sentiment d\'appartenance propose dix conseils sur le pouvoir d\'une vie sans réserve ancrée dans la pleine affirmation de soi. Ce livre essentiel porte sur la quête de toute une vie depuis le \'Que va-t-on penser de moi ?\' jusqu\'au sentiment d\'être bien tel qu\'on est. Grâce à sa capacité unique à intégrer la recherche érudite à une narration sincère la lecture de \'La grâce de l\'imperfection\' ressemble à un édifiant et long dialogue avec un ami avisé qui offre compassion sagesse et judicieux conseils.', 2013, 0, 0),
+(115, 'Tout commence ici', '', 'fr', 128, 'Chaque reponse est en toi. Dans ce magnifique ouvrage Meera Lee Patel nous invite a un voyage interieur a la decouverte de soi. Elle a choisi des citations inspirantes d ecrivains de penseurs et les a sublimees a l aquarelle en de veritables tableaux. S appuyant sur ces messages positifs et sages elle nous aide a les mettre en pratique avec des exercices tests listes souvenirs. On apprend ainsi a distinguer l essentiel du superflu a identifier nos forces et nos gouts mais aussi ce qui est bon pour nous et ce qui est nocif afin de vivre heureux et d accomplir nos reves ! Deja traduit dans plus de 10 langues il a rencontre un grand succes aux etats-Unis.\'', 2016, 0, 0),
+(116, 'Pat de Silver Bush', '', 'en', 396, '', 1993, 0, 0),
+(117, 'Tome 1 Le Dernier Voeu ; Tome 2 L\'Epée de la providence ; La Saison des orages', '', 'fr', 854, 'En ces temps obscurs ogres goules et vampires pullulent et les magiciens sont des manipulateurs experts. Contre ces menaces un tueur à gages exceptionnel un mutant devenu le parfait assassin grâce à la magie et à un long entraînement : Geralt de Riv. Fidèle aux règles de la corporation maudite des sorceleurs il assume sa mission sans faillir dans un monde hostile et corrompu qui ne laisse aucune place à l\'espoir. Héros solitaire il n\'en fera pas moins d\'étonnantes rencontres au cours de ses aventures : une magicienne capricieuse aux charmes vénéneux un troubadour paillard au grand coeur... et enfin la petite Ciri l\'enfant élue. Geralt cessera-t-il un jour de fuir devant la mort pour affronter son véritable destin ?', 2016, 0, 0),
+(118, 'Facile', '', 'en', 21, 'Consists of 6 bifolia; 3rd and 4th form a 4-leaf gathering; last leaf is blank. A blank bifolium at beginning is not counted in collation above.', 1935, 36, 0),
+(119, 'Emmanuel Guibert', '', 'en', 155, 'Publié à l\'occasion de l\'exposition rétrospective présentée au 48e Festival international de la bande dessinée d\'Angoulême cette monographie richement illustrée est consacrée à l\'oeuvre d\'E. Guibert.', 2021, 0, 0),
+(121, 'Le Livre de la joie. Le bonheur durable dans un monde en mouvement', 'http://books.google.com/books/content?id=C1nlDAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 355, '\'Nous nous sommes retrouvés à Dharamsala pour partager ce que deux amis venus de deux mondes très différents ont appris au cours de leur longue existence. Nous aimerions que ce livre soit une invitation à la joie.\' La célébration des 80 ans de Sa Sainteté le Dalaï-Lama fut l’occasion de recevoir l’archevêque Desmond Tutu pour une série de rencontres historiques. Grands maîtres spirituels contemporains ce sont aussi deux personnes dont la joie est contagieuse et ce malgré de nombreuses épreuves personnelles. Loin d’être dépendante des circonstances extérieures la joie est un état d’esprit et un art de vie face aux tourments du quotidien. À travers des dialogues baignés de tendresse et de rire ces deux prix Nobel nous offrent quantité d’anecdotes personnelles et nous font partager leurs pratiques spirituelles.', 2016, 0, 0),
+(122, 'La voix du couteau', '', 'en', 544, '', 2021, 0, 67);
+INSERT INTO `test_Book` (`id`, `title`, `picture`, `language`, `nbr_pages`, `resume`, `year`, `category`, `editor`) VALUES
+(123, 'La guerre du bruit', '', 'en', 630, 'Todd et Viola pensaient bien avoir mis un terme au conflit entre le Cercle et la Flèche et en avoir fini avec Maire Prentiss et Mrs Coyle. Mais c\'était compter sans les Spackle... Voici que leur armée déterminée innombrable déferle sur New Prentissville avec un seul objectif : anéantir tous les humains. Todd et Viola arriveront-ils envers et contre tous à empêcher le massacre qui s\'annonce à arrêter l\'ultime guerre du Bruit ? La guerre du Bruit est le dernier tome de la trilogie Le Chaos en marche une ode à la différence à la liberté et à l\'amour puissante et bouleversante.', 2014, 0, 0),
+(124, 'Entraîner votre esprit Transformer votre cerveau', '', 'fr', 317, 'Dans ce livre fascinant et d\'une grande portée la journaliste scientifique du magazine Newsweek retrace l\'heureux mariage de la science de pointe et de la sagesse séculaire du bouddhisme qui a donné naissance à une science selon laquelle contrairement à l\'opinion populaire nous avons le pouvoir de littéralement transformer notre cerveau et ce en transformant notre esprit. Les récentes études d\'avant-garde en neuroplasticité - la faculté du cerveau à se modifier en réponse au vécu - révèlent que le cerveau est capable d\'altérer sa structure et sa fonction voire de générer de nouveaux neurones. Et ce pouvoir perdure jusqu\'à un âge avancé. Le cerveau peut s\'adapter guérir se renouveler après un traumatisme neutraliser des invalidités se recâbler pour vaincre la dyslexie et s\'affranchir des cycles de la dépression et du trouble obsessionnel compulsif. Et comme le constatent les scientifiques grâce à des études sur des moines bouddhistes il n\'y a pas que le monde extérieur qui puisse modifier le cerveau; ce dernier est également assujetti à l\'esprit et notamment à l\'attention concentrée par la pratique bouddhiste de \' la pleine conscience\'. Grâce à ce talent qu\'elle a de rendre la science accessible riche de sens et attrayante Sharon Begley jette la lumière sur une compréhension novatrice des interactions entre le cerveau et l\'esprit et nous conduit à la pointe d\'une révolution dans la signification de ce qu\'est l\'être humain.', 2008, 0, 68),
+(125, 'Lon Po Po', '', 'fr', 30, 'Une version chinoise des contes de loup dans laquelle trois soeurs viennent à bout de la ruse du loup qui se fait passer pour leur grand-mère.', 1995, 37, 0),
+(126, 'Daisy Jones & the Six', '', 'fr', 399, 'Best-seller du New York Times en cours d\'adaptation pour une web série à être diffusée sur Amazon Video voici un roman saisissant sur la montée en flèche d\'un méga groupe rock des années 1970 - et en particulier de sa chanteuse. Tellement réaliste qu\'on oublie qu\'il s\'agit d\'une fiction... Bref les années Woodstock comme si vous y étiez!', 2020, 0, 0),
+(127, 'Rimbaud Warriors', 'http://books.google.com/books/content?id=t_adDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 183, 'Juillet 2018. Richard Gaitet auteur et animateur sur Radio Nova s\'embarque dans une aventure menée tambour battant : 111 kilomètres à pied dans les bottines d\'Arthur Rimbaud de Charleville-Mézières à Charleroi sur l\'itinéraire supposé de sa célèbre fugue d\'octobre 1870. Une drôle d\'échappée aux rebondissements incessants. Des poèmes plein les poings : à 15 ans Arthur Rimbaud songe à devenir journaliste et plus encore à quitter l\'inqualifiable contrée ardennaise notamment Charleville supérieurement idiote. Punk avant l\'heure l\'élève prodige conspue l\'école l\'Église les bourgeois ou les politiciens tout en cherchant à fuir l\'emprise de sa Mother qui l\'étouffe. C\'est au cours de sa deuxième fugue une course énorme à travers les faubourgs et la campagne qu\'il aurait rompu avec la vie ordinaire et écrit ses vers les plus célèbres – dont Le Dormeur du val. Dans les bottines de l\'incandescent poète adolescent Richard Gaitet a voulu refaire ce parcours à pied lors d\'une traversée des Ardennes jusqu\'en Belgique d\'abord en été au sein d\'une escouade de onze vaillants \' warriors \' puis seul en hiver avec la tempête Gabriel sur les talons. Une épopée débraillée menée tambour battant – avec sur la route des rencontres inoubliables : Patti Smith Julie la cartomancienne gitane un coiffeur de myrtilles ou encore l\'écrivain Franz Bartelt.', 2019, 0, 69),
+(128, 'L\'Iguifou. Nouvelles rwandaises', 'http://books.google.com/books/content?id=Wb1wCgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 160, 'L’Iguifou c’est le ventre insatiable la faim qui tenaille les déplacés tutsi de Nyamata en proie à la famine et conduit Colomba aux portes lumineuses de la mort. À Nyamata il y a aussi la peur qui accompagne les enfants jusque sur les bancs de l’école et qui bien loin du Rwanda s’attache encore aux pas de l’exilée comme une ombre maléfique. Quant à Héléna elle vit la tragique malédiction de sa beauté... Après le génocide ne reste que la quête du deuil impossible deuil désiré et refusé car c’est auprès des morts qu’il faut puiser la force de survivre. L’écriture sereine de Scholastique Mukasonga empreinte de poésie et d’humour gravite inlassablement autour de l’indicible l’astre noir du génocide.', 2015, 0, 0),
+(129, 'Hooked : comment créer un produit ou un service qui ancre des habitudes', 'http://books.google.com/books/content?id=Rk1nDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 229, '\'Selon une étude universitaire les gens consultent leur téléphone 34 fois par jour. Mais d\'après les spécialistes du secteur on approcherait plutôt le chiffre sidérant de 150 consultations quotidienne. RECONNAISSONS-LE : NOUS SOMMES ACCROS !\' C\'est en ces termes que Nir Eyal touche du doigt la plus grande réussite marketing de ces dernières décennies. Au fil des pages il décrypte le mécanisme de l\'addiction à un produit ou à un service. Les neurosciences ont largement permis de comprendre le fonctionnement de notre cerveau et de jouer sur notre besoin de satisfaction. Cela se déroule en quatre étapes : 1. Déclencheurs 2. Récompense 3. Action 4. Investissement Vous êtes marketeur créateur entrepreneur ? Il vous dévoile le processus infaillible qui permettra de rendre votre client accro. Vous être client utilisateur ? Vous comprendrez pourquoi vous ne pouvez plus vous passer de telle application de tel service ou de tel produit.', 2018, 0, 70),
+(130, 'L\'art subtil de s\'en foutre', 'http://books.google.com/books/content?id=Vg4oDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 197, 'Un livre de développement personnel pour ceux qui détestent le développement personnel Le discours ambiant nous pousse sans cesse à nous améliorer. Sois plus heureux. Sois en meilleure santé. Sois plus intelligent plus rapide plus riche plu', 2017, 0, 0),
+(131, 'Harry Potter et le Prisonnier d\'Azkaban', 'http://books.google.com/books/content?id=vWxokFDTpy4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 493, 'Sirius Black le dangereux criminel qui s’est échappé de la forteresse d’Azkaban recherche Harry Potter. C’est donc sous bonne garde que l’apprenti sorcier fait sa troisième rentrée. Au programme : des cours de divination la fabrication d’une potion de Ratatinage le dressage des hippogriffes... Mais Harry est-il vraiment à l’abri du danger qui le menace? Le troisième tome des aventures de Harry Potter vous emportera dans un tourbillon de surprises et d’émotions. Frissons et humour garantis!', 2015, 0, 71),
+(132, 'La Lumière difficile', 'http://books.google.com/books/content?id=6tvpDwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 97, 'Retiré dans un petit village de Colombie David un peintre devenu presque aveugle se remémore ses années passées à New York et à Miami lorsqu\'il s\'efforçait de capter sur la toile l\'infinie beauté de la lumière son amour pour sa femme et le jour où son fils Jacob a décidé de renoncer à la vie pour mettre fin aux souffrances d\'une paraplégie irréversible. Avec son frère Pablo Jacob s\'était rendu dans l\'Oregon seul état où l\'euthanasie est légale tandis que la famille respectant sa décision était restée à New York dans l\'attente du coup de téléphone qui lui annoncerait que Jacob n\'est plus.Ce livre bouleversant magnifique tout en délicatesse et en concision d\'une écriture claire et juste est paradoxalement un hymne à la vie à la solidarité et au respect de l\'autre. des valeurs qui permettent à la famille de Jacob de s\'élever au dessus de la toute puissance de la mort.Traduit de l\'espagnol ( Colombie) par Delphine Valentin', 2013, 0, 0),
+(133, 'Power les 48 lois du pouvoir', 'http://books.google.com/books/content?id=tt6rEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 833, 'Le pouvoir... on le désire on le craint on s’en protège... « Le sentiment de n’avoir aucun pouvoir sur les gens et les événements est difficilement supportable : l’impuissance rend malheureux. Personne ne réclame moins de pouvoir tout le monde en veut davantage. » Amoral intelligent impitoyable et captivant cet ouvrage colossal condense 3 000 ans d’histoire du pouvoir en 48 lois. Véritable manuel de la manipulation il analyse la quintessence de cette sagesse millénaire tirée de la vie des plus illustres stratèges (Sun Zi Clausewitz) hommes d’État (Louis XIV Bismarck Talleyrand) courtisans (Castiglione Gracián) séducteurs (Ninon de Lenclos Casanova) et escrocs de l’histoire. Certaines lois reposent sur la prudence (loi no 1 : Ne surpassez jamais le maître) d’autres demandent de la dissimulation (loi no 7 : Laissez le travail aux autres mais recueillez-en les lauriers) d’autres encore une absence totale de compassion (loi no 15 : Écrasez complètement l’ennemi). Toutes ces lois trouveront des applications dans votre vie de tous les jours... Car soyez en certain : le monde est une immense cour où se trament toutes sortes d’intrigues. Au lieu de nier l’évidence tâchez d’exceller dans la course au pouvoir. Des extraits des vidéos des interviews de Robert Greene sur son site www.robertgreene.fr', 2014, 0, 72),
+(134, 'Grain de grenade', '', 'fr', 203, 'Ce recueil rassemble six histoires de fantômes : une morte amoureuse qui vampirise son fiancé remarié une vivante qui joue à la morte... \' Miss Wharton au fil des nouvelles et de sa manière si lisse fait rejaillir en nous cet effroi des ténèbres que nous masquons habituellement derrière un rationalisme narquois. La diabolique romancière doit aujourd\'hui se réjouir lorsque délaissant sa tombe au crépuscule elle vient observer sur nos visages le trouble produit par ses écrits. Celui-là même qui la traversait il y a plus d\'un siècle. La vengeance est décidément un plat qui se déguste glacé... \' Florence Sarrola Le Monde', 1994, 0, 73),
+(135, 'La guerre et la paix', 'http://books.google.com/books/content?id=eK4OAAAAQAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 474, '', 1885, 38, 0),
+(136, 'Projet Dernière Chance', 'http://books.google.com/books/content?id=9JQ2EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 476, 'La nouvelle passionnante aventure spatiale de l\'auteur du best-seller Seul sur Mars bientôt portée à l\'écran avec Ryan Gosling. Ryland Grace est le seul survivant d\'une expédition spatiale de la dernière chance. S\'il échoue c\'est le sort de l\'humanité et la Terre tout entière qui sera en péril. Mais pour l\'instant il ignore tout de cela. Il ne se souvient même pas de son propre nom et encore moins des objectifs de sa mission. Il sait seulement qu\'il est resté en sommeil très très longtemps. Et il vient de se réveiller pour découvrir qu\'il se trouve à des millions de kilomètres de chez lui avec deux cadavres pour toute compagnie. Ryland se rend compte peu à peu qu\'il doit faire face à une tâche impossible. Filant à travers l\'espace il lui faut trouver la clé d\'un mystère scientifique insondable... et combattre un fléau qui laisse présager l\'extinction de notre espèce. Alors que chaque minute compte et que des années-lumière le séparent de l\'être humain le plus proche il est seul pour relever cet incroyable défi... Mais l\'est-il vraiment ? « Un livre qui aurait ravi Robert A. Heinlein et Isaac Asimov. » - George R.R. Martin « Le meilleur roman d\'Andy Weir à ce jour... et le seul de tout ce que j\'ai lu récemment que je suis certain de pouvoir recommander à tout lecteur en sachant qu\'ils vont se régaler. » - Brandon Sanderson', 2022, 0, 74),
+(137, 'L\'Abbaye de Northanger', 'http://books.google.com/books/content?id=Zh0YDgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 222, 'Madame dit Catherine le lendemain à Mistriss Allen y aurait-il quelque inconvénient que j’allasse aujourd’hui chez Miss Tilney ? Je n’aurai point de tranquillité que je ne lui aie expliqué comment les choses se sont passées. — Eh bien ma chère répondit Mistriss Allen allez-y seulement mettez une robe blanche ; Miss Tilney eu porte toujours une. Catherine fut bientôt prête ; et avec plus d’empressement que jamais elle alla à la Pump-Room pour s’informer du logement du général Tilney. Fruit d’une sélection réalisée au sein des fonds de la Bibliothèque nationale de France Collection XIX a pour ambition de faire découvrir des textes classiques et moins classiques dans les meilleures éditions du XIXe siècle.', 2016, 0, 75),
+(138, 'Le Chant d\'Achille', 'http://books.google.com/books/content?id=RAW0AwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 479, 'Patrocle jeune prince maladroit part en exil à la cour du roi Pélé. Il y rencontre Achille son exact contraire doué pour tout ce qu\'il entreprend. Malgré leurs différences les deux jeunes hommes deviennent inséparables. Le destin les mènent à la guerre de Troie. La violence des Dieux et des hommes fera de leur histoire un drame. Madeline Miller professeur de grec ancien et spécialiste de Shakespeare revisite L\'Iliade pour en tirer un grand roman d\'apprentissage et une poignante tragédie amoureuse.', 2014, 0, 76),
+(139, 'Emma', 'http://books.google.com/books/content?id=BeY8DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 423, 'Emma Woodhouse orpheline de mère vit avec son père dans le domaine d\'Hartfield. Ayant réussi à arranger le mariage de son ancienne gouvernante elle se donne pour objectif de marier Harriet Smith sa jeune protégée. À tout juste 21 ans elle s’attribue ce rôle d’entremetteuse sans tenir compte de son inexpérience des choses de l\'amour...', 2017, 0, 77),
+(140, 'Entre toutes les mères', 'http://books.google.com/books/content?id=JbEVEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 400, 'Blythe Connor n’a qu’une seule idée en tête : ne pas reproduire ce qu’elle a vécu. Lorsque sa fille Violet naît elle sait qu’elle lui donnera tout l’amour qu’elle mérite. Tout l’amour dont sa propre mère l’a privée. Mais les nouveau-nés ne se révèlent pas forcément être le fantasme qu’on s’est imaginé. Violet est un bébé agité qui ne sourit jamais. Très vite Blythe se demande ce qui ne va pas. Ce qu’elle fait mal. Si le problème c’est sa fille. Ou elle. Puisque Violet se comporte différemment avec son père ce dernier met les doutes de sa femme sur le compte de l’épuisement. Sûrement parce qu’il ne peut imaginer ce qu’elle a vécu enfant. Peut-être parce que personne ne peut l’imaginer. Dans ce premier roman aussi addictif que troublant Ashley Audrain sonde les affres de la maternité et les hérédités blessées. Traduit de l’anglais (Canada) par Julia Kerninon. « Parfaitement construit. Un page turner magistral. » The Guardian « Ashley Audrain perce le mystère de l’inné et de l’acquis d’une main de maître. » The New York Times « Percutant glaçant vertigineux digne de Lionel Shriver. » Livres Hebdo « Ce thriller est le roman d\'une lutte contre l\'hérédité ainsi que la critique féroce de ce qu’on attend d’une mère parfaite forcément parfaite. » Olivia de Lamberterie ELLE « Dérangeante cette histoire aux troublants accents de vérité ? Assurément. Mais le roman aus si déroutant que passionnant est de ceux que l’on n’oublie pas ... » Le Dauphiné Libéré « Pour son premier roman Ashley Audrain signe un thriller haletant parfois dérangeant parce qu’il joue avec les peurs élémentaires de toutes les mamans et interroge sur la maternité et le poids de l’hérédité. » Gala « Autant qu’un thriller redoutablement efficace - qui laisse les lecteurs en suspension happés par la voix bouleversante d\'une femme aux abois - le récit interroge l\'évidence supposée du lien maternel. Sur les traces d’Il faut qu’on parle de Kevin de Lionel Shriver (Belfond 2006) il parvient à faire glisser l’héroïne et les lecteurs de la normalité conjugale à un enfer insidieux où faire bonne figure devient illusoire. » Le Monde', 2021, 0, 0),
+(141, 'Instructions for dancing', 'http://books.google.com/books/content?id=KC1VEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 400, 'La nouvelle romance magique de l\'autrice de Everything Everything et The Sun is Also a Star ! Depuis que son père a trompé sa mère Evie est sûre d\'une chose : les histoires d\'amour ne durent jamais. Et elle a de bonnes raisons de le croire : dès qu\'elle voit un couple s\'embrasser Evie a une étrange vision et devient le témoin invisible de son histoire de la rencontre vibrante... à la rupture fracassante. Lorsqu\'elle se rend au studio de danse La Brea elle fait la connaissance de X un jeune homme aussi agaçant qu\'il est beau et fascinant. Mais lorsqu\'ils se retrouvent partenaires pour un concours de danse de salon Evie en vient à se demander si l\'amour ne mériterait finalement pas qu\'on prenne tous les risques...', 2022, 0, 78),
+(142, 'S.A.R.R.A.', 'http://books.google.com/books/content?id=FGXXDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 354, 'Mars 2026 : La fin d\'un Monde ? L\'épidémie d\'Ebola s\'étend. Après Paris la Belgique et l\'Allemagne sont lourdement touchées. L\'accueil des millions de réfugiés européens est devenu un enjeu majeur de l\'élection présidentielle française. Dans ce contexte d\'agitation médiatique et de pressions politiques Mélusine traquée par les services de renseignement noue d\'étranges lien avec le Mouvement de Résistance contre les Robots (M2R). S.A.R.R.A. quant à elle mobilise tous les moyens à sa disposition pour répondre à cette pandémie émergente. Une quête qui l\'amènera à s\'interroger sur le principe même de notre survie et sur notre Humanité face à la technologie. Entre le Virus et l\'intelligence artificielle notre Temps est compté.', 2020, 0, 0),
+(143, 'Gruffalo', 'http://books.google.com/books/content?id=duOHPwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 24, 'Une petite souris se promène dans la grande forêt. Sur son chemin elle croise le renard le hibou et le serpent qui la trouvent bien appétissante et l\'invitent à déjeuner chez eux. Mais la petite souris refuse car elle a déjà rendez-vous avec un mystérieux et terrifiant gruffalo... Une histoire malicieuse où le plus petit a raison du plus gros. Un récit à l\'humour délicat accompagné d\'illustrations espiègles.', 2002, 0, 0),
+(144, 'Harry Potter à L\'école des Sorciers', 'http://books.google.com/books/content?id=nvijsUyJYR4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 357, 'Le jour de ses onze ans Harry Potter un orphelin élevé par un oncle et une tante qui le détestent voit son existence bouleversée. Un géant vient le chercher pour l’emmener à Poudlard une école de sorcellerie! Voler en balai jeter des sorts combattre les trolls : Harry Potter se révèle un sorcier doué. Mais un mystère entoure sa naissance et l’effroyable V... le mage dont personne n’ose prononcer le nom. Amitié surprises dangers scènes comiques Harry découvre ses pouvoirs et la vie à Poudlard. Le premier tome des aventures du jeune héros vous ensorcelle aussitôt!', 2015, 0, 0),
+(145, 'Magnolia Table', 'http://books.google.com/books/content?id=y4btDwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 336, 'NY Times Best Seller ! Le livre de cuisine Magnolia Table est imprégné de la passion de Joanna Gaines pour la cuisine qu\'elle prépare pour son mari et ses 5 enfants. Son livre de recettes comprend 125 recettes : du petit déjeuner au déjeuner et au dîner en passant par de petites assiettes des collations et des desserts. Johanna Gaines présente une sélection de plats traditionnels américains et de plats préférés de sa famille. Joanna éprouve également une grande passion pour son jardin ses plats intègrent également des produits de saison. Exemple de recettes : quiche aux asperges macaronis au fromage tarte au citron ...', 2019, 39, 79),
+(146, 'La discipline sans drame', 'http://books.google.com/books/content?id=bd0oEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 386, 'Par les auteurs du best-seller international Le cerveau de votre enfant Que faire quand le bol de céréales se fracasse contre le mur de la cuisine quand votre enfant hurle dans un restaurant et vous fait passer pour la mère d’Aurore ou que pour la troisième fois l’école vous appelle parce que fiston a encore poussé Thomas-qui-n’est-plus-son-ami? Ah vous en avez assez de jouer à la police ça c’est clair. Mais la solution n’est pas de mettre la chair de votre chair dans un coin à tout jamais! Oubliez tout ce que vous savez de la discipline. Adoptez cette nouvelle approche fondée sur ce que la science nous révèle de l’enfant de son cerveau de ses besoins. Vous aurez en main tout le nécessaire pour aider votre fille ou votre garçon à devenir un être heureux et bienveillant capable d’autodiscipline. Une panoplie d’outils pour devenir un meilleur parent! - Le «pourquoi-quoi-comment» ou les trois questions à se poser pour passer du mode réaction au mode réponse - Plus de 100 dessins et BD qui mettent en scène des situations courantes et vous aident à adopter la meilleure attitude - Des trucs et astuces pour vous connecter à votre enfant afin de désamorcer les crises', 2017, 0, 80),
+(147, 'Surmonter la faible estime de soi', '', 'en', 280, '', 2021, 0, 0),
+(148, 'La Meute', 'http://books.google.com/books/content?id=7hMBEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 321, 'Un vieux président défait qui n\'arrive pas à raccrocher et prépare son retour à l\'occasion des prochaines élections : François Gabory. Face à lui Claire Bontems une jeune ambitieuse qui tente de faire main basse sur la gauche radicale en passant par-dessus les appareils politiques aidée par Catherine Lengrand la sœur de François Gabory. Le choc de deux ambitions. Le choc de deux générations. Le choc de deux visions de la gauche. Et dans cette guerre sans merci les rumeurs sexuelles hypertrophiées par les réseaux sociaux. Dans cette ère où les fake news entrent par effraction dans le débat public la frontière entre la vérité et le mensonge s\'estompe aussi rapidement que les souvenirs. Et si dans la France post-\' balance ton porc \' le clivage politique n\'opposait plus la droite et la gauche ni les patriotes et les mondialistes mais les hommes et les femmes ?', 2019, 0, 0),
+(149, 'Insaisissable', 'http://books.google.com/books/content?id=mMkLIZPuMosC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 277, '\' Ne me touche pas \' je lui murmure. Je mens mais ne lui dis pas. J\'aimerais qu\'il me touche mais ne lui dirai jamais. Des choses arrivent quand on me touche. Des choses étranges. De mauvaises choses. Des choses mortelles. Juliette est enfermée depuis 264 jours dans une forteresse à cause d\'un accident. Un crime. 264 jours sans parler ni toucher personne. Jusqu\'au moment où un gardien vient partager sa cellule. Derrière sa nouvelle apparence elle le reconnaît : c\'est Adam celui qu\'elle aime en secret depuis l\'enfance. Pourquoi est-il enfermé avec elle ? Pourquoi lui pose-t-il tant de questions ? Et pourquoi semble-t-il ignorer qui elle est ? Le monde de Juliette est régi par un organisme tout-puissant le Rétablissement. Il contrôle l\'accès à la nourriture à l\'eau et n\'hésite pas à tuer pour asservir le peuple. Avide de pouvoir absolu le fils du leader Warner contrôle sa propre armée et son propre territoire. Mais ce qu\'il désire par-dessus tout c\'est Juliette. Avant d\'en faire sa captive il l\'a observée en cachette pendant des années. La malédiction de Juliette est pour lui une force une arme inestimable. Mais cette dernière n\'a pas l\'intention de se laisser faire. Après une vie de paria elle trouve pour la première fois la force de se battre et de rêver à un avenir avec celui qu\'elle croyait avoir perdu pour toujours...', 2012, 0, 0),
+(150, 'Le soleil est pour toi', 'http://books.google.com/books/content?id=IV3JDgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 496, 'Un livre lumineux bouleversant qui déborde de romantisme et de passion. Printz Medal 2015.', 2017, 0, 0),
+(151, 'La puissance des mères', 'http://books.google.com/books/content?id=2ejuDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 141, 'Depuis la naissance de la Ve République l\'État français mène une guerre larvée contre une partie de sa population. Les jeunes des quartiers populaires descendants de l\'immigration postcoloniale subissent une opération quotidiennement répétée de \' désenfantisation \' : ils ne sont pas traités comme des enfants mais comme des menaces pour la survie du système. Combien d\'entre eux sont morts à cause de cette désenfantisation ? Combien ont été tués par la police en toute impunité ? Combien de mères ont pleuré leurs enfants victimes de crimes racistes devant les tribunaux ? En s\'appuyant sur les luttes menées par les Folles de la place Vendôme dans les années 1980 comme sur les combats du Front de mères aujourd\'hui Fatima Ouassak montre dans ce livre combatif et plein d\'espoir le potentiel politique stratégique des mères. En se solidarisant systématiquement avec leurs enfants en refusant de jouer un rôle de tampon entre eux et la violence des institutions bref en cessant d\'être une force d\'apaisement social et des relais du système inégalitaire elles se feront à leur tour menaces pour l\'ordre établi. Ce livre a l\'ambition de proposer une alternative politique portée par les mères autour d\'une parentalité en rupture alliant réussite scolaire et dignité et d\'un projet écologiste de reconquête territoriale. Son message est proprement révolutionnaire : en brisant le pacte social de tempérance qui les lie malgré elles au système oppressif les mères se mueront en dragons.', 2020, 0, 81),
+(152, 'Love me tender', 'http://books.google.com/books/content?id=JZ28DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 123, '« Je ne vois pas pourquoi l’amour entre une mère et un fils ne serait pas exactement comme les autres amours. Pourquoi on ne pourrait pas cesser de s’aimer. Pourquoi on ne pourrait pas rompre. Je ne vois pas pourquoi on ne pourrait pas s’en foutre une fois pour toutes de l’amour. » Constance Debré poursuit sa quête entamée avec Play Boy celle du sens de la vie juste de la vie bonne. Après la question de l’identité se pose la question de l’autre et de l’amour sous toutes ses formes de l’amour maternel aux variations amoureuses. Faut-il pour être libre accueillir tout ce qui nous arrive ? Faut-il tout embrasser jusqu’à nos propres défaites ? Peut-on renverser le chagrin ?', 2020, 0, 0),
+(153, 'Un peu malgré eux', 'http://books.google.com/books/content?id=vbb1DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 432, 'D’un côté : Jamie Goldberg dix-sept ans une maladresse maladive. Il s’est retrouvé embarqué dans la campagne d’un candidat aux élections locales. De l’autre : Maya Rehman dix-sept ans un caractère bien affirrmé. Ses vacances en famille ont été annulées mais sa meilleure amie est trop occupée pour traîner avec elle. Ensemble et surtout malgré eux ils sont recrutés pour faire du porte-à-porte. Ça n’a rien de très sexy mais ce n’est pas la pire activité au monde non plus surtout que peu à peu les rebondissements de la campagne électorale les rapprochent...', 2020, 0, 0),
+(154, 'Humanité. Une histoire optimiste', 'http://books.google.com/books/content?id=B2D5DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 480, '« L’ouvrage de Rutger Bregman m’a fait voir l’humanité sous un nouveau jour » Yuval Noah Harari auteur de Sapiens. Ce livre expose une idée radicale. C’est une idée qui angoisse les puissants depuis des siècles. Une idée que les religions et les idéologies ont combattue. Une idée dont les médias parlent rarement et que l’histoire semble sans cesse réfuter. En même temps c’est une idée qui trouve ses fondements dans quasiment tous les domaines de la science. Une idée démontrée par l’évolution et confirmée par la vie quotidienne. Une idée si intimement liée à la nature humaine qu’on n’y fait souvent même plus attention. Si nous avions le courage de la prendre au sérieux cela nous sauterait aux yeux : cette idée peut déclencher une révolution. Elle peut mettre la société sens dessus dessous. Si elle s’inscrit véritablement dans notre cerveau elle peut même devenir un remède qui change la vie qui fait qu’on ne regardera plus jamais le monde de la même façon. L’idée en question ? La plupart des gens sont bons. Captivant et inspirant formidable succès partout dans le monde Humanité ouvre avec humour sérieux et pédagogie de nouveaux horizons. Et si nous étions plutôt bons ? Et si un livre pouvait changer le monde ? Historien journaliste pour le magazine en ligne De Correspondent Rutger Bregman est l’auteur du génial Utopies réalistes best-seller traduit dans plus de trente pays. Traduit du néerlandais par Caroline Sordia et Pieter Boyekens', 2020, 0, 82),
+(155, 'Salem', 'http://books.google.com/books/content?id=IWX9AwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 620, 'Le Maine 1970. Ben Mears revient à Salem s\'installer à Marsten House inhabitée depuis la mort tragique de ses propriétaires vingt-ans auparavant. Mais très vite il devra se rendre à l\'évidence : il se passe des choses étranges dans cette petite bourgade. Un chien est immolé un enfant disparaît et l\'horreur s\'infiltre s\'étend se répand aussi inéluctable que la nuit qui descend sur Salem. Les éditions Lattès ont été le premier éditeur de Stephen King et ont aussi à leur catalogue : Shining L\'accident et Danse Macabre. Traduit de l\'anglais par Dominique Defert', 2006, 0, 0),
+(156, 'Le Feu et la Fureur', 'http://books.google.com/books/content?id=iqFGDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 403, '\' C\'est pire que ce que vous pouvez imaginer. Un idiot entouré de clowns. \' La chronique stupéfiante et pourtant vraie d\'une année de chaos au sommet du monde. Dans ce livre qui a mis le feu à l\'Amérique et que Donald Trump a cherché à interdire Michael Wolff nous entraîne dans les coulisses de la Maison Blanche et multiplie les révélations. Luttes de pouvoir favoritisme amateurisme trahisons scènes de famille... L\'enquête démontre comment l\'entourage intime et professionnel de Trump déploie une énergie considérable à camoufler l\'ignorance le manque de sang-froid et de scrupules du 45e président des États-Unis. Difficile de ne pas être saisi d\'effroi pour la marche du monde quand les principaux conseillers de la Maison Blanche se vouent une haine froide quand les efforts des diplomates sont anéantis en quelques tweets présidentiels quand les collaborateurs jettent l\'éponge ou sont renvoyés sur un coup de tête quand la First Lady et sa belle-fille sont à couteaux tirés... Difficile d\'être président des États-Unis quand on est le premier surpris par son élection. Michael Wolff a bénéficié d\'un accès exceptionnel à la Maison Blanche il a recueilli plus de deux cents témoignages de proches et de conseillers. Son livre relance le débat : Donald Trump est-il en capacité de gouverner ? Vendu à plus d\'un million d\'exemplaires et traduit dans trente et une langues Le Feu et la Fureur est déjà entré dans l\'Histoire.', 2018, 0, 0),
+(157, 'Le Sanatorium', 'http://books.google.com/books/content?id=25VFEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 422, 'Un huis clos terrifiant qui rappelle le célèbre Shining de Stephen King. Un ancien sanatorium transformé en hôtel de luxe. Une femme qui disparaît lors de ses fiançailles. Une tempête de neige qui coupe l\'hôtel du monde. Un corps mutilé.', 2021, 0, 0),
+(158, 'Harry Potter et l’Ordre du Phénix', 'http://books.google.com/books/content?id=d1Fm_U1LzY4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 1141, 'À quinze ans Harry entre en cinquième année à Poudlard mais il n’a jamais été si anxieux. L’adolescence la perspective des examens et ces étranges cauchemars... Car Celui-Dont-On-Ne-Doit-Pas-Prononcer- Le-Nom est de retour. Le ministère de la Magie semble ne pas prendre cette menace au sérieux contrairement à Dumbledore. La résistance s’organise alors autour de Harry qui va devoir compter sur le courage et la fidélité de ses amis de toujours... D’une inventivité et d’une virtuosité rares découvrez le cinquième tome de cette saga que son auteur a su hisser au rang de véritable phénomène littéraire.', 2015, 0, 0),
+(159, 'Je Lis Avec Pat le Chat : Pat en Camping', 'http://books.google.com/books/content?id=WcwLwAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 32, 'See below for English description. Pat le chat est impatient d\'aller faire de la randonnée de la pêche et de manger des guimauves au bord d\'un feu de camp. Mais quand il entend parler d\'une mystérieuse créature appelée un Sasquatch Pat ne peut s\'empêcher de se demander : le Sasquatch existe-t-il vraiment? Il devra faire preuve de courage afin de découvrir la vérité! Pat can\'t wait to go hiking and fishing and eat s\'mores by the campfire. But when he hears about the mysterious creature named Bigfoot Pat can\'t help but wonder: Is Bigfoot real? Original title: Pete Goes Camping', 2019, 0, 0),
+(160, 'A la poursuite du bisou perdu', '', 'fr', 28, 'Le jeune prince n\'a pas eu son bisou du soir car celui-ci s\'est enfui par la fenêtre du château. Un preux chevalier est sommé de le rattraper. Mais sera-t-il assez courageux pour affronter les redoutables bêtes féroces de la forêt et le terrible dragon ? Un très bel album plein d\'humour et de tendresse à lire juste avant de s\'endormir.', 2007, 0, 0),
+(161, 'Un amour impossible', 'http://books.google.com/books/content?id=hCn0CQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 177, '\'– Les gens veulent l’amour conjugal Rachel parce qu’il leur apporte un bien-être une certaine paix. C’est un amour prévisible puisqu’ils l’attendent qu’ils l’attendent pour des raisons précises. Un peu ennuyeux comme tout ce qui est prévisible. La passion amoureuse elle est liée au surgissement. Elle brouille l’ordre elle surprend. Il y a une troisième catégorie. Moins connue que j’appellerai... la rencontre inévitable. – Pour toi notre rencontre elle appartient à quelle catégorie ?\' Pierre et Rachel vivent une liaison courte mais intense à Châteauroux à la fin des années 1950. Pierre érudit issu d’une famille bourgeoise fascine Rachel employée à la Sécurité sociale. Il refuse de l’épouser mais ils font un enfant. L’amour maternel devient pour Rachel et Christine le socle d’une vie heureuse. Pierre voit sa fille épisodiquement. Des années plus tard Rachel apprend qu’il la viole. Le choc est immense. Un sentiment de culpabilité s’immisce progressivement entre la mère et la fille. Christine Angot entreprend ici de mettre à nu une relation des plus complexes entre amour inconditionnel pour la mère et ressentiment dépeignant sans concession une guerre sociale amoureuse et le parcours d’une femme détruite par son péché originel : la passion vouée à l’homme qui aura finalement anéanti tous les repères qu’elle s’était construits.', 2015, 0, 0),
+(162, 'La tournée d\'automne', '', 'fr', 190, 'Analyse : Roman d\'amour.', 1996, 0, 83),
+(163, 'La barque le soir', '', 'fr', 194, 'Dans l\'œuvre de Tarjei Vesaas La barque le soir publiée en 1968 et curieusement restée inédite en français est une œuvre fondamentale crépusculaire. Appelée \' roman \' par son auteur il s\'agit plutôt d\'amples réminiscences poétiques semi-autobiographiques. Il révise les thèmes qui ont accompagné sa vie de créateur : l\'effroi face à l\'invisible la condition spirituelle de l\'homme tandis qu\'il brosse son propre portrait psychologique de sa prise de conscience que l\'homme est seul jusqu\'à l\'acceptation finale de la mort. Mais Vesaas n\'est pas un auteur abstrait fidèle à ses origines il sait rendre présentes les choses les plus essentielles les plus élémentaires : du pas d\'un cheval dans la neige jusqu\'aux variations infinies de la lumière. Plus subjectif que ses autres livres La Barque le soir illustre avec une rare densité les talents de Vesaas sa capacité d\'évoluer \' du rêve au réel en passant par le symbole et l\'allégorie sans qu\'il soit jamais possible de séparer l\'un de l\'autre \' (C.G. Bjurström).', 2003, 0, 84),
+(164, 'Père Riche Père Pauvre (résumé)', '', 'fr', 37, 'Père riche père pauvre : l\'un des livres qui m\'a le plus fait réfléchir sur ma condition... tout ce que j\'acceptais dans ma vie et considérais comme « normal » ! Ce livre m\'a incité à reprendre ma situation financière en main. À cette époque j\'avais des économies mais je n\'en faisais rien de particulier... Je laissais bêtement les banques s\'en occuper et me donner des miettes en retour. Finalement tout ce qui me manquait c\'était l\'intelligence financière... quelque chose qui malheureusement n\'est pas enseigné à l\'école. C\'est absurde et ce n\'est que le début d\'une longue série de révélations toutes plus dérangeantes les unes que les autres. Ce livre est inspirant mais long (plus de 300 pages) j\'ai donc décidé d\'en faire un résumé pour en présenter les idées fondatrices et vous éviter des semaines de lecture.', 2021, 0, 0),
+(165, 'Le livre', '', 'fr', 224, 'Depuis deux mille cinq cents ans les livres servent à gouverner consigner vénérer éduquer et distraire. Cet ouvrage aux illustrations luxueuses explore l\'une des technologies les plus extraordinaires essentielles et durables jamais inventées. Le livre : une histoire vivante retrace l\'évolution et l\'influence du livre partout sur notre planète des tablettes cunéiformes de la civilisation sumérienne jusqu\'à l\'essor du livre mobile et la révolution des moyens d\'information modernes. Parmi les illustrations sélectionnées avec soin figurent des manuscrits mayas des rouleaux de papyrus égyptiens des enluminures médiévales des chefs- d\'oeuvre de l\'imprimerie de Gutenberg et Aldo Manuce les atlas des Grandes Découvertes des alphabets et des livres pour enfants des romans à trois sous et des mangas japonais ainsi que des oeuvres de fiction allant de Don Quichotte à Level 26 le premier \'roman numérique\' au monde. Un régal pour les amoureux du livre traditionnel ainsi qu\'une source d\'inspiration pour les passionnés des nouvelles technologies électroniques : cet ouvrage magnifique célèbre le pouvoir et la magie éternels du livre.', 2011, 40, 0),
+(166, 'Découvrez vos points forts dans la vie et au travail', '', 'fr', 287, 'Peu de personnes savent réellement quels sont leurs points forts. Au contraire nous sommes plutôt conscients de nos faiblesses auxquelles nous ne cessons de vouloir remédier toute notre vie durant alors qu\'il faudrait axer notre développement sur nos forces et bâtir notre existence autour d\'elles. Pour parvenir à ce changement radical d\'optique la Gallup Organization a mis au point un détecteur de talents disponible sur Internet sous la forme d\'un questionnaire en ligne. Ce livre unique en son genre donne les clés pour utiliser ce détecteur et pour interpréter les résultats qu\'il révélera. La méthode des deux auteurs fondée sur une analyse statistique des comportements humains est radicalement innovante et ouvrira des horizons inattendus à tous ceux qui l\'utiliseront pour eux-mêmes et pour les personnes avec lesquelles ils travaillent.', 2003, 0, 0),
+(167, 'Le visage de Sara', '', 'fr', 300, 'Sara veut devenir célèbre. La célébrité est son obsession. La chirurgie esthétique son fantasme. Aussi quand la légendaire star de rock Jonathan Heat propose de la prendre en main c\'est comme si son rêve devenait réalité. Mais s\'il y avait un prix insoupçonné... Et Sara serait-elle prête à aller jusque là ? Melvin Burgess se glisse avec un talent étonnant dans la peau d\'une jeune névrosée obsédée par son image. Un thriller psychologique décapant et provocateur qui se dévore d\'une traite.', 2008, 0, 85),
+(168, 'Surmonter la timidité et la peur des autres avec les TCC', '', 'fr', 240, 'La timidité et le mal être en société sont de puissants freins à l\'épanouissement personnel. Ce livre propose au lecteur un parcours d\'autothérapie fondé sur les outils des thérapies comportementales et cognitivistes (les TCC) particulièrement appropriés dans ce cas car ils agissent sur les émotions les comportements et les pensées. Il analyse les sources possibles du problème dont souffre le lecteur lui montre comment se prendre en main et explicite chaque point de résolution étape par étape de façon pragmatique et applicable au quotidien. Il propose des exercices pour aider la personne à appliquer les conseils donnés et est illustré de cas encourageants et réconfortants montrant comment d\'autres ont pu réussir avant eux.', 2014, 41, 0),
+(169, 'Les Hauts de Hurlevent', 'http://books.google.com/books/content?id=cwboDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 200, 'Un chef-d\'œuvre d\'Emily Brontë jeune romancière qui mourut à vingt-neuf ans. Les Hauts de Hurlevent terres balayées par les vents du nord dans la campagne anglaise. Heathcliff enfant trouvé et adopté par Mr Earnshaw a grandi en tant que valet de ferme dans cette famille où les enfants l\'ont méprisé durant des années. Bien qu\'il soit tombé amoureux de Catherine et qu\'elle ne soit pas insensible à ses charmes elle choisira pour mari un homme de son rang riche de surcroît. Blessé et violent il préparera sa vengeance pour toutes ces années d\'humiliation et espérera trouver justice.', 2021, 0, 86),
+(170, 'Harry Potter et le Prince de Sang-Mêlé', 'http://books.google.com/books/content?id=YoVZxxIVvnQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api', 'fr', 753, 'Dans un monde de plus en plus inquiétant Harry se prépare à retrouver Ron et Hermione. Bientôt ce sera la rentrée à Poudlard avec les autres étudiants de sixième année. Mais pourquoi Dumbledore vient il en personne chercher Harry chez les Dursley? Dans quels extraordinaires voyages au coeur de la mémoire va-t-il l\'entraîner? Émotion humour art du suspense... J.K. Rowling révèle dans ce sixième tome la fascinante complexité de l\'univers qu\'elle a créé et met en place tous les ressorts du dénouement.', 2015, 0, 0),
+(171, 'L\'Eternéant', 'http://books.google.com/books/content?id=CXRlBgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 181, 'Après un accident de voiture auquel ils n’ont pas survécu les âmes de Nick et d’Allie se retrouvent bloquées à mi-chemin entre la vie et la mort dans un univers qu’on appelle l’Éternénant. Il s’agit d’un lieu à la fois magique et dangereux où l’on croise toutes sortes d’âmes et d’objets errants. La reine autoproclamée de l\'Éternénant Mary Tourcélèste a réuni ses ouailles dans un des rares buildings passé dans les limbes : les Twin Towers. Or Nick et Allie n’ont aucune envie de rester coincés dans ce monde bizarre ! Ce qu’ils veulent à tout prix c’est retrouver leur vie d’avant. Leur quête les mènera dans les territoires inexplorés sombres et parfois terrifiants de l’Éternénant... Mais plus le temps passe et plus l’espoir de retrouver un jour leur existence passée s’estompe. Et si tous leurs souvenirs s’évaporaient ? Il se pourrait bien alors qu’ils ne parviennent jamais à fuir ce monde étrange et inquiétant... Traduit de l’anglais (États-Unis) par Alexandre Boldrini et Anne-Judith Descombey', 2012, 0, 87),
+(172, 'Les lois de la médecine', '', 'fr', 96, 'Changer notre regard sur la médecine. Jeune interne en médecine comme beaucoup d\'autres Siddhartha Mukherjee croyait que la médecine était une science dotée de lois qu\'il suffirait de suivre pour ramener chaque patient à une règle générale et à la santé. Mais tel n\'est pas le cas. C\'est quand médecins et patients auront compris que la médecine est une science du cas particulier de l\'expérience de l\'intuition de l\'irrégulier bref de l\'humain qu\'ils sauront trouver ensemble la voie de la guérison.', 2016, 0, 0),
+(173, 'CHRONIQUES D AVONLEA T 1 ANNE', '', 'en', 0, '', 2006, 0, 0),
+(174, 'Longue vie aux dodos', '', 'fr', 119, 'Maladroits et Patauds les dodos vivent béatement sur leur île au milieu de l\'océan indien dans un climat idéal sans le moindre ennemi. Rien ne vient troubler leur bonheur jusqu\'au jour où débarquent sur l\'île des singes de mer ces créatures que nous connaissons mieux sous le nom de pirates... Une aventure riche en humour et en tendresse.', 1998, 0, 0),
+(175, 'Le Souci de Calie', 'http://books.google.com/books/content?id=0VoEvgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 32, 'See below for English description. Calie adore être Calie. jusqu\'au jour où elle découvre un souci. Au début ce n\'est pas un gros souci alors tout va bien. mais il commence peu à peu à grandir. Il grandit et grandit et maintenant Calie se sent triste. Comment la petite fille pourra-t-elle se débarrasser de son souci et commencer à se sentir de nouveau elle-même? Cette histoire touchante qui a l\'avantage de mettre les choses en perspective est un incontournable pour garnir la bibliothèque des petits et les aider à gérer leurs émotions! Calie loves being Calie. Until one day she finds a worry. At first it\'s not such a big worry and that\'s all right but then it starts to grow. It gets bigger and bigger every day and it makes Calie sad. How can Calie get rid of it and feel like herself again? A perceptive and poignant story that is a must-have for all children\'s bookshelves. Original title: Ruby\'s Worry', 2019, 0, 0),
+(176, 'La Terre Chinoise', 'http://books.google.com/books/content?id=SVMYBAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 383, 'Premier roman d\'une trilogie qui retrace de façon magistrale la vie et les mœurs de la Chine au XIXè siècle La Terre chinoise est dominée par le personnage d\'O-len laide taciturne et courageuse tout entière dévouée à son devoir. Admirable personnage de femme au silence héroïque à l\'abnégation totale. Un grand roman une figure inoubliable.', 2000, 0, 0),
+(177, 'Star Wars', '', 'fr', 739, 'Star Wars n\'est pas seulement la plus grande saga de science-fiction c\'est aussi un formidable défi cinématographique. Pour créer l\'illusion qui transportera le spectateur aux confins d\'une galaxie futuriste George Lucas et son équipe ont redoublé d\'ingéniosité. Des premières applications de l\'infographie à l\'utilisation des caméras les plus performantes ils ont habilement marié les trucages aux effets numériques et optiques. John Knoll superviseur des effets visuels des trois derniers épisodes révèle l\'envers du décor et les anecdotes de plateau de La Guerre des étoiles à La Revanche des Sith. Entre astuces et prouesses techniques les photographies du tournage associées aux séquences des films dévoilent les secrets de fabrication des décors maquettes et peintures. Une véritable plongée dans les coulisses de Star Wars guidée par un des maîtres du trucage visuel.', 2005, 0, 0),
+(178, 'Bus de nuit', '', 'fr', 222, '', 2020, 0, 0),
+(179, 'Le rêve du renard', '', 'fr', 40, 'Littérature jeunesse: album', 1988, 42, 0),
+(180, 'Les impatientes', 'http://books.google.com/books/content?id=NCPDzQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 240, 'La 4e de couverture indique : \'Trois femmes trois histoires trois destins liés. Ce roman polyphonique retrace le destin de la jeune Ramla arrachée à son amour pour être mariée à l\'époux de Safira tandis que Hindou sa soeur est contrainte d\'épouser son cousin. Patience ! C\'est le seul et unique conseil qui leur est donné par leur entourage puisqu\'il est impensable d\'aller contre la volonté d\'Allah. Comme le dit le proverbe peul : « Au bout de la patience il y a le ciel. » Mais le ciel peut devenir un enfer. Comment ces trois femmes impatientes parviendront-elles à se libérer ? Mariage forcé viol conjugal consensus et polygamie : ce roman de Djaïli Amadou Amal brise les tabous en dénonçant la condition féminine au Sahel et nous livre un roman bouleversant sur la question universelle des violences faites aux femmes.\'', 2020, 0, 88),
+(181, 'Les Horizons perdus', '', 'fr', 221, '', 1988, 0, 0),
+(182, 'Les leçons de magie de Strega Nonna', '', 'fr', 30, 'Big Anthony disguises himself as a girl in order to take magic lessons from Strega Nona.', 1987, 43, 0),
+(183, 'L\'empereur et le cerf-volant', '', 'fr', 27, 'Quatrième fille de l’empereur la princesse Djeow Seow est si petite que nul à la cour ne fait attention à elle. Elle vit seule elle mange seule elle joue seule avec un cerf-volant. Mais un jour l’empereur est arrêté et fait prisonnier. Comment la toute petite Djeow Seow pourrait-elle seule libérer son père ?', 2011, 44, 0);
+INSERT INTO `test_Book` (`id`, `title`, `picture`, `language`, `nbr_pages`, `resume`, `year`, `category`, `editor`) VALUES
+(184, 'Adieu Jérusalem', 'http://books.google.com/books/content?id=sNOQBQAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 408, '2017. Mounir est un modeste employé de l’Institut scientifique de Kazan en Russie. La veille de son départ pour La Mecque où il doit accomplir le Hadj le grand pélerinage le site explose sous ses yeux dans une fumée de fin du monde. Dans l’avion il est pris de convulsions et meurt peu après son arrivée. À son insu il a introduit dans la ville sainte le plus terrible des fléaux qu’on croyait disparu depuis le Moyen-Âge. Persina Yersis. La peste noire. La bactérie se répand à une vitesse incontrôlable parmi les pélerins. Les morts se chiffrent par milliers. Dans la panique la rumeur enfle : les juifs ont empoisonné l’eau de la Mecque. Et cette rumeur franchit les frontières jusqu’à Jérusalem où les Palestiniens puis les Arabes d’Israël lancent des actions de représailles contre les Juifs. Israël s’embrase Jérusalem tombe. Cette catastrophe bouleverse l’échiquier politique international et fera basculer dans son sillage des destins individuels : de l’Égyptien Youssef Chahid médecin volontaire à l’hôpital de La Mecque à l’Estonien Rein Laristel tout juste élu secretaire général de l’ONU ; de l’Américaine Susan Rice secrétaire d’État des États-Unis confrontée au plus périlleux défi de sa carrière au commissaire arabe israélien Eli Bishara en lutte contre le chaos ; jusqu’à la belle juive turque Ana Güler déchirée entre Istanbul et Jérusalem. À travers eux l’histoire s’incarne : de Kazan à La Mecque de New-York à Tel Aviv de Washington à Istanbul de Catane à Dubaï. Leur monde notre monde ne sera plus jamais le même. Et si c’était vrai ?', 2010, 0, 89),
+(185, 'Le cinquième accord toltèque', 'http://books.google.com/books/content?id=KGHCBgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 116, 'Dans son best-seller mondial Les Quatre Accords Toltèques Don Miguel Ruiz révélait comment le processus éducatif notre \'domestication\' nous fait oublier la sagesse inhérente avec laquelle nous venons au monde. Tout au long de notre vie nous concluons en effet des accords qui vont à l\'encontre de ce que nous sommes et nous nous créons ainsi des souffrances inutiles. Les Quatre Accords Toltèques servent à briser ces accords qui nous limitent pour les remplacer par d\'autres qui nous procurent la liberté le bonheur et l\'amour. Aujourd\'hui aidé de son fils Don José Ruiz Don Miguel jette une nouvelle lumière sur Les Quatre Accords Toltèques auxquels ils en ajoutent ensemble un cinquième très puissant afin que nous puissions faire un véritable paradis personnel de notre vie. Le Cinquième Accord Toltèque nous donne accès à un niveau de conscience de la puissance du Soi encore plus puissant qu\'avant nous restituant du même coup l\'authenticité avec laquelle nous sommes venus au monde. Dans cette suite très attendue au livre qui a déjà changé la vie de millions de personnes de par le monde les Ruiz nous remettent en mémoire le plus grand cadeau que nous puissions nous faire : la liberté d\'être qui nous sommes vraiment. En nous donnant les outils pour y parvenir.', 2014, 45, 90),
+(186, 'Ma peur et moi', '', 'en', 33, '', 2021, 0, 0),
+(187, 'Celestia', '', 'fr', 272, '', 2020, 0, 0),
+(188, 'Fatale', 'http://books.google.com/books/content?id=lLkWKAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'en', 150, 'Ceci est un roman noir. C\'est l\'histoire d\'une tueuse professionnelle solitaire et aliénée qui fait son œuvre sanglante. C\'est l\'histoire d\'un contrat inhabituel dans une ville pourrie par le fric.', 1998, 0, 91),
+(189, 'L\'enfant la taupe le renard et le cheval', '', 'fr', 126, '', 2020, 0, 0),
+(190, 'La princesse Azara et l\'affreux génie', '', 'fr', 94, 'Cléa a un SECRET. Elle habite un château où de petites princesses se cachent un peu partout : sur le décor d\'un vase sur le motif d\'une statue ou d\'un tapis ! Une fois la princesse trouvée Cléa lui fait la révérence et la voilà projetée dans un autre univers... Cléa est en Perse. Elle rencontre une princesse très triste Azara. Celle-ci ne peut plus faire voler son tapis car le génie Abdoul lui a ôté la faculté de chanter. Cléa va l\'aider à se débarrasser de l\'affreux génie !', 2007, 46, 0),
+(191, 'Nana Tome 4', '', 'fr', 188, 'Analyse: Manga (genre)', 2003, 0, 0),
+(192, 'Aux endroits brisés', 'http://books.google.com/books/content?id=kKBEEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 396, 'Anaïs est une jeune femme à la dérive. Certains la disent éteinte. D’autres sans ambition. Les plus cléments la décrivent comme quelqu’un de triste. Quand elle perd successivement son emploi et l’homme qu’elle aimait elle décide d’en finir et de partir à Limoges dont on lui a vanté la grisaille. Au fil de ses errances d’hôtel de luxe en petit appartement loué par une vieille Italienne qui a certes perdu la vue mais pas le goût de la vie Anaïs va découvrir non pas l’art de panser ses blessures mais de vivre avec ces fêlures qui font de nous des êtres imparfaits et pourtant si uniques.', 2021, 0, 0),
+(193, 'Les raisons de l\'amour', '', 'fr', 117, '\' Aimer quelqu\'un ou quelque chose signifie ou consiste dans le fait entre autres choses de prendre ses intérêts comme des raisons d\'agir pour servir ces intérêts. L\'amour est lui-même pour celui qui aime une source de raisons. Il crée les raisons par lesquelles ses actes d\'intérêt et d\'attachement amoureux sont inspirés... \'', 2006, 0, 92),
+(194, 'Arc-en-ciel', 'http://books.google.com/books/content?id=DqjRRwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 26, 'Arc-en-ciel est le plus beau poisson de tous les océans. Ses écailles brillent et scintillent de toutes les couleurs de l\'arc-en-ciel. Mais il est fier et si vaniteux qu\'il en est aussi très seul. Un jour il offre à un petit poisson l\'une de ses belles écailles. Puis une autre puis beaucoup d\'autres et il découvre enfin qu\'il n\'y a de vrai bonheur que dans le partage.', 1995, 0, 93),
+(195, 'La haine qu\'on donne', 'http://books.google.com/books/content?id=LV4XvwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 494, 'La jeune noire Starr Carter 16 ans vit entre deux mondes : le quartier pauvre où elle habite et le lycée blanc situé dans une banlieue chic qu\'elle fréquente. Cet équilibre difficile est brisé quand Starr voit son meilleur ami d\'enfance Khalil tué par un policier trop nerveux. Son quartier s\'embrase Khalil devient un symbole national. Starr doit apprendre à surmonter son deuil et sa colère.', 2018, 0, 0),
+(196, 'La peste', 'http://books.google.com/books/content?id=q4QTnQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'en', 249, '', 1979, 0, 0),
+(197, 'Meurtre mode d\'emploi', '', 'en', 522, '', 2019, 0, 0),
+(198, 'La boutique aux poisons', 'http://books.google.com/books/content?id=VOFBEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 384, 'Règle no 1: le poison ne doit jamais être utilisé contre une femme. Règle no 2: le nom des clientes et celui des victimes doivent être consignés dans un registre. Dans une ruelle sombre de Londres par une froide soirée de février 1791 Nella attend sa cliente. Autrefois guérisseuse officielle l’apothicaire utilise désormais ses connaissances pour des desseins plus obscurs en vendant des remèdes à des femmes prêtes à tuer pour s’affranchir des hommes qui leur empoisonnent la vie. Un jour une jeune fille de 12 ans Eliza se présente à la petite boutique située au 3 Back Alley; aussitôt une amitié improbable naît entre elles et déclenche des événements hors du commun. En 2017 Caroline Parcewell célèbre son dixième anniversaire de mariage à Londres seule après avoir appris l’infidélité de son mari. En trouvant une vieille fiole dans la boue des rives de la Tamise l’historienne en herbe ne peut résister au mystère qu’elle représente d’autant plus qu’elle pourrait être liée à des assassinats irrésolus depuis plusieurs siècles. Au fil de ses découvertes Caroline voit son destin s’entremêler à ceux de Nella et d’Eliza dans une série de hasards qui n’en sont peut-être pas... Un roman captivant qui illustre la solidarité féminine à travers les siècles.', 2021, 0, 0),
+(199, 'La première impression', '', 'fr', 130, 'Comment font les designer et les publicitaires pour influencer nos choix ? Que nous le voulions ou non dès que nous voyons un objet une affiche ou tout support de communication visuelle la façon dont nous allons le juger se détermine en un quart de seconde. On aime on n\'aime pas on comprend on ne comprend pas on fait attention (ou on se détourne) on désire (ou pas) on achète (ou pas)...Et ce qui détermine cette première impression ce n\'est pas un choix rationnel mais des critères immédiats donc visuels. Ce livre nous dévoile les secrets du designer le plus influent du moment qui nous explique par l\'exemple comment une image soit par sa clarté soit par son mystère réussit à faire passer un message et à nous convaincre avant même que nous ayons eu te temps de nous en rendre compte !', 2016, 0, 0),
+(200, 'Stellaluna', '', 'fr', 44, 'Album - solitude - amitié - relations interpersonnelles.', 1996, 47, 0),
+(201, 'Jour de neige', '', 'fr', 31, 'La 4e de couverture indique : \'Lorsque Peter se réveille ce matin là il n\'en croit pas ses yeux : tout est blanc dehors il a neigé ! Se précipitant dans le jardin le petit garçon découvre alors émerveillement la magie de cette drôle de matière moelleuse et froide la neige.\' Trente-six ans après sa publication aux Etats-Unis où il a remporté la Caldecott Medal cet album continue à émouvoir tant il aborde avec simplicité ce plaisir commun à tous les enfants celui de la découverte.', 1999, 0, 0),
+(202, 'Rébellion chez les crayons', '', 'fr', 36, '', 2016, 0, 0),
+(203, 'Le renard et l\'étoile', '', 'fr', 64, 'Aussi loin que Renard s\'en souvienne il n\'a jamais eu qu\'une amie l\'Etoile qui guide ses pas chaque nuit dans la grande forêt. Un soir la douce lumière de l\'Etoile n\'apparaît pas. Et Renard doit affronter seul l\'obscurité. Perdu attristé il se met en quête de son étoile. Ce faisant il explore les bois et découvre un superbe ciel étoilé. Heureux et rassuré il trouve son propre chemin à travers la forêt. Une magnifique histoire sur l\'amour l\'amitié la perte d\'un ami et la route sinueuse vers un nouveau bonheur et la connaissance de soi.', 2017, 0, 0),
+(204, 'La mythologie', '', 'fr', 450, 'Edith Hamilton est sans doute le seul auteur à avoir saisi toute l\'importance que gardent à notre époque les mythes et les légendes qui sont le fondement même de notre culture et où nous puisons encore une si large inspiration. Remontant aux sources c\'est chez les poètes - Homère Hésiode Pindare Ovide - qu\'elle retrouve la substance des grands thèmes mythologiques et nous les restitue dans leur spontanéité leur efficacité sous forme de merveilleuses histoires : Orphée et Eurydice Philémon et Baucis Tantale et Niobé les travaux d\'Hercule le défi d\'Icare la descente de Thésée aux Enfers... De l\'avis unanime voici sur la mythologie l\'ouvrage le plus clair et le plus complet. Avec trente illustrations et un index très détaillé.', 2006, 0, 0),
+(205, 'Guinness world records 2020', '', 'fr', 255, 'L\'édition 2020 du livre millésimé le plus populaire de la planète présente des milliers de records nouveaux ou mis à jour validés par des experts dans chaque domaine. Des centaines de photos inédites et une toute nouvelle approche graphique font de chaque édition un livre unique à collectionner. 11 chapitres : Planète Terre Animaux Humains Recordologie Sports viraux Aventures Société technologies et ingénierie Arts et médias Sports. Plus : un chapitre spécial Robots avec les 10 plus grands phénomènes réels ou de fiction. (payot.ch)', 2019, 0, 0),
+(206, 'Deconstructing Harry', 'http://books.google.com/books/content?id=96VZAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api', 'fr', 196, 'Ecrivain new-yorkais d\'aujourd\'hui Harry (Woody Allen) se penche sur les péripéties tumultueuses et multiples de son existence de créateur et de sa vie amoureuse. Une comédie écrite réalisée et interprétée par le cinéaste amércain où le héros se trouve confrontée à une succession d\'aventures débridées jusqu\'à l\'hystérie. Le film du même titre sort en salle en janvier 1998.', 1998, 48, 0),
+(209, 'Chainsaw Man Tome 8', '', 'en', 192, '', 2021, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Borrow`
+--
+
+CREATE TABLE `test_Borrow` (
+  `id` int(11) NOT NULL,
+  `date_borrow` date NOT NULL,
+  `date_return` date DEFAULT NULL CHECK (`date_borrow` < `date_return`),
+  `id_book` int(11) NOT NULL,
+  `id_reader` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Borrow`
+--
+
+INSERT INTO `test_Borrow` (`id`, `date_borrow`, `date_return`, `id_book`, `id_reader`) VALUES
+(1, '1970-11-28', '1982-11-12', 116, 12),
+(2, '1999-08-14', '2018-07-13', 91, 24),
+(3, '1975-12-17', '2020-10-23', 50, 10),
+(4, '1970-08-03', '1978-11-18', 119, 10),
+(5, '1975-03-09', '2012-02-29', 38, 26),
+(6, '1984-02-25', NULL, 124, 46),
+(7, '1976-01-13', NULL, 46, 36),
+(8, '1972-06-17', '2017-01-11', 28, 9),
+(9, '1972-01-21', NULL, 82, 50),
+(10, '1997-01-19', NULL, 93, 40),
+(11, '2010-04-23', NULL, 21, 30),
+(12, '1996-01-16', NULL, 140, 46),
+(13, '1998-07-25', NULL, 135, 40),
+(14, '1982-08-09', '2005-11-22', 71, 4),
+(15, '1973-08-14', '1993-01-21', 105, 3),
+(16, '2004-07-28', NULL, 10, 34),
+(17, '2020-11-05', '2022-10-01', 57, 3),
+(18, '1970-03-15', NULL, 110, 41),
+(19, '1989-02-20', '2012-09-23', 24, 10),
+(20, '2009-02-02', '2013-04-24', 104, 21),
+(21, '2014-07-24', '2020-11-07', 136, 28),
+(22, '1972-04-22', NULL, 142, 37),
+(23, '2016-01-02', NULL, 99, 30),
+(24, '1979-08-08', '1999-08-04', 13, 7),
+(25, '1991-02-01', NULL, 29, 45),
+(26, '1980-03-31', NULL, 67, 40),
+(27, '1999-01-21', NULL, 89, 36),
+(28, '1987-06-25', '1991-02-09', 143, 19),
+(29, '2016-04-17', NULL, 113, 31),
+(30, '1976-10-15', NULL, 125, 32),
+(31, '1984-07-30', '2019-11-30', 1, 3),
+(32, '1991-07-27', NULL, 56, 34),
+(33, '1993-01-22', '2004-05-27', 120, 15),
+(34, '1979-01-13', '2003-08-12', 90, 22),
+(35, '1973-01-22', '1982-04-15', 75, 1),
+(36, '1981-12-23', '2013-05-04', 27, 2),
+(37, '2010-01-14', NULL, 135, 38),
+(38, '2020-01-13', NULL, 125, 34),
+(39, '1981-02-08', '2010-11-22', 35, 14),
+(40, '2019-10-18', NULL, 85, 40),
+(41, '2001-06-05', NULL, 34, 37),
+(42, '1974-07-08', '1990-08-09', 97, 22),
+(43, '2002-01-16', '2020-03-05', 44, 26),
+(44, '1972-02-19', '1979-02-28', 52, 3),
+(45, '1973-10-01', NULL, 97, 37),
+(46, '2010-07-09', NULL, 98, 39),
+(47, '1970-09-27', '1983-02-02', 97, 4),
+(48, '1979-02-17', '2023-03-16', 120, 7),
+(49, '1974-01-20', '1989-07-01', 68, 22),
+(50, '1976-12-09', NULL, 75, 31),
+(51, '2000-11-06', NULL, 21, 38),
+(52, '2014-01-21', NULL, 147, 30),
+(53, '1999-09-30', NULL, 87, 43),
+(54, '1980-08-25', '2001-04-11', 38, 22),
+(55, '1999-04-24', NULL, 146, 31),
+(56, '2011-10-20', NULL, 101, 39),
+(57, '2017-04-25', NULL, 87, 37),
+(58, '2004-04-28', NULL, 127, 31),
+(59, '2012-07-08', '2016-04-07', 77, 14),
+(60, '1980-11-22', '2010-11-21', 68, 12),
+(61, '1994-01-23', '1995-10-15', 86, 27),
+(62, '2013-05-02', NULL, 49, 30),
+(63, '1981-02-23', '1991-01-23', 133, 0),
+(64, '1994-01-14', '2012-05-17', 80, 19),
+(65, '2004-03-25', NULL, 146, 39),
+(66, '2016-01-19', NULL, 19, 36),
+(67, '1996-06-08', NULL, 14, 44),
+(68, '1997-10-04', NULL, 41, 46),
+(69, '1980-12-02', NULL, 101, 43),
+(70, '2003-11-17', NULL, 59, 45),
+(71, '1977-04-20', '1982-06-10', 114, 19),
+(72, '1970-08-05', NULL, 112, 45),
+(73, '2012-12-19', NULL, 146, 47),
+(74, '1980-08-26', NULL, 44, 36),
+(75, '1987-04-02', '1987-11-27', 60, 19),
+(76, '1989-05-09', '1995-10-14', 150, 15),
+(77, '1994-05-19', NULL, 57, 49),
+(78, '1978-06-26', '2003-07-21', 24, 27),
+(79, '1999-11-16', NULL, 149, 47),
+(80, '1994-07-02', NULL, 43, 44),
+(81, '2011-02-03', NULL, 103, 44),
+(82, '1976-07-15', '2006-01-23', 10, 0),
+(83, '1983-02-24', NULL, 35, 48),
+(84, '2014-07-05', NULL, 38, 43),
+(85, '1972-07-05', NULL, 112, 32),
+(86, '2016-10-05', NULL, 66, 44),
+(87, '1983-06-21', NULL, 92, 31),
+(88, '1972-11-21', NULL, 20, 38),
+(89, '2002-03-18', NULL, 88, 33),
+(90, '2014-01-20', NULL, 148, 36),
+(91, '2010-05-14', NULL, 36, 39),
+(92, '2010-06-15', NULL, 66, 42),
+(93, '2002-03-27', NULL, 4, 50),
+(94, '1972-02-02', NULL, 34, 41),
+(95, '2013-11-23', '2020-02-20', 150, 20),
+(96, '1997-01-29', '2012-01-18', 32, 17),
+(97, '2021-10-27', NULL, 145, 42),
+(98, '1973-09-25', '2007-06-17', 25, 10),
+(99, '1973-04-14', '1993-10-02', 23, 18),
+(100, '2008-05-26', NULL, 26, 41),
+(101, '1983-11-05', NULL, 46, 39),
+(102, '2022-11-28', NULL, 73, 36),
+(103, '1978-06-16', NULL, 148, 36),
+(104, '2013-03-09', NULL, 89, 46),
+(105, '2010-05-06', NULL, 55, 41),
+(106, '1973-11-22', '2007-10-20', 110, 15),
+(107, '2006-12-11', NULL, 58, 35),
+(108, '2014-01-22', NULL, 4, 40),
+(109, '2012-03-02', NULL, 45, 47),
+(110, '1991-08-16', '1993-07-14', 21, 21),
+(111, '2010-02-25', '2018-08-11', 123, 13),
+(112, '2006-03-06', '2008-12-19', 25, 9),
+(113, '1982-06-24', NULL, 10, 47),
+(114, '1991-10-26', NULL, 65, 33),
+(115, '2023-02-05', NULL, 55, 41),
+(116, '1975-04-11', '1981-12-18', 60, 3),
+(117, '1971-12-11', NULL, 0, 49),
+(118, '1975-10-07', NULL, 24, 31),
+(119, '2012-04-19', NULL, 141, 41),
+(120, '2021-07-16', NULL, 138, 36),
+(121, '1992-09-16', NULL, 61, 49),
+(122, '1978-11-09', '1981-08-02', 46, 24),
+(123, '1995-05-26', '2017-06-14', 121, 12),
+(124, '1998-06-15', '2017-03-04', 13, 24),
+(125, '2009-04-04', NULL, 18, 40),
+(126, '2002-07-03', '2022-06-07', 148, 19),
+(127, '1983-07-20', '1988-02-15', 69, 28),
+(128, '2015-04-18', NULL, 54, 42);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Category`
+--
+
+CREATE TABLE `test_Category` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Category`
+--
+
+INSERT INTO `test_Category` (`id`, `name`) VALUES
+(46, '\"Body Mind & Spirit\"'),
+(20, '\"Children\'s stories French\"'),
+(7, '\"Comic books strips etc\"'),
+(39, '\"Napoleonic Wars 1800-1815\"'),
+(19, 'Abuse of plants'),
+(27, 'African Americans'),
+(17, 'Alphabet'),
+(15, 'Animals'),
+(41, 'Anxiety'),
+(48, 'Bats'),
+(24, 'Bibliothèques - Prévision'),
+(33, 'Biography & Autobiography'),
+(42, 'Books'),
+(6, 'Business & Economics'),
+(47, 'Castles'),
+(8, 'Children\'s stories'),
+(21, 'Christian life'),
+(9, 'Comics & Graphic Novels'),
+(38, 'Cooking'),
+(4, 'Family & Relationships'),
+(45, 'Fathers and daughters'),
+(36, 'Female nude in art'),
+(5, 'Fiction'),
+(37, 'Folklore'),
+(14, 'Forensic pathologists'),
+(43, 'Foxes'),
+(44, 'French language materials'),
+(34, 'Health & Fitness'),
+(29, 'Humor'),
+(11, 'Juvenile Fiction'),
+(12, 'Juvenile Nonfiction'),
+(1, 'Language Arts & Disciplines'),
+(40, 'Large type books'),
+(26, 'Leadership'),
+(16, 'Leprechauns'),
+(13, 'Literary Collections'),
+(10, 'Literary Criticism'),
+(28, 'Literature'),
+(0, 'no category'),
+(30, 'Pastry'),
+(35, 'Performing Arts'),
+(31, 'Philosophy'),
+(22, 'Political Science'),
+(25, 'Psychology'),
+(32, 'Religion'),
+(18, 'Science'),
+(3, 'Self-Help'),
+(2, 'Social Science'),
+(23, 'Young Adult Fiction');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Editor`
+--
+
+CREATE TABLE `test_Editor` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Editor`
+--
+
+INSERT INTO `test_Editor` (`id`, `name`) VALUES
+(59, '[Montréal] : Éditions Flammarion'),
+(76, '10/18'),
+(6, '12-21'),
+(18, 'Actes Sud Junior'),
+(5, 'Albin Michel'),
+(74, 'Alisio'),
+(84, 'Ariane Editions'),
+(43, 'Au Diable Vauvert'),
+(81, 'Bayard Jeunesse'),
+(48, 'Belfond'),
+(57, 'BnF collection ebooks'),
+(61, 'BoD - Books on Demand'),
+(35, 'Casa Bautista de Publicaciones'),
+(44, 'Christian Bourgois éditeur'),
+(92, 'CIRCE'),
+(88, 'Collas Emmanuelle'),
+(72, 'Collection XIX'),
+(27, 'Contemporary French Fiction'),
+(68, 'Dunod'),
+(12, 'Dupuis'),
+(38, 'Ecole des Loisirs'),
+(10, 'Éditions Actes Sud'),
+(26, 'Editions De L\'Ecole'),
+(14, 'Éditions de la Maison des sciences de l’homme'),
+(28, 'Editions des Deux Terres'),
+(17, 'Éditions des Falaises'),
+(83, 'Editions du Seuil'),
+(39, 'Editions du Seuil Jeunesse'),
+(71, 'Editions Eyrolles'),
+(19, 'Editions Gallimard'),
+(33, 'Éditions Gallmeister'),
+(58, 'Éditions Globe'),
+(4, 'Éditions Jouvence'),
+(52, 'Editions Mosquito'),
+(69, 'Éditions Payot'),
+(51, 'Fayard'),
+(3, 'Fayard/Mazarine'),
+(13, 'Fayard/Mille et une nuits'),
+(23, 'Firefly Books'),
+(32, 'Flammarion'),
+(2, 'Fv Editions'),
+(91, 'Gallimard Education'),
+(55, 'Gallimard Jeunesse'),
+(87, 'Gallimard-Jeunesse'),
+(73, 'Grasset'),
+(82, 'Guy Saint-Jean Éditeur'),
+(90, 'Guy Trédaniel'),
+(75, 'Hachette Pratique'),
+(56, 'Hachette Romans'),
+(11, 'Helium'),
+(47, 'Hugo Roman'),
+(45, 'J\'Ai Lu'),
+(54, 'JC Lattès'),
+(36, 'Jean-Claude Lattès'),
+(79, 'José Corti Editions'),
+(25, 'L\'Ecole des Loisirs'),
+(80, 'La Découverte'),
+(24, 'La peuplade'),
+(16, 'Larousse'),
+(67, 'Ldp Policiers'),
+(22, 'Le Livre de Poche'),
+(85, 'Le Masque'),
+(7, 'Les Arènes'),
+(77, 'Les éditions du 38'),
+(30, 'Les editions Scholastic'),
+(65, 'LGF/Le Livre de Poche'),
+(78, 'Libris éditions'),
+(63, 'Livre de Poche'),
+(40, 'Lucien X. POLASTRON'),
+(9, 'Média Diffusion'),
+(15, 'Mémoire d\'encrier'),
+(42, 'Michel Lafon'),
+(0, 'name'),
+(29, 'Nathan'),
+(93, 'NordSud'),
+(53, 'Olivier'),
+(1, 'OpenEdition Press'),
+(70, 'Paulsen'),
+(8, 'Pearson'),
+(60, 'Philippe Rey'),
+(21, 'Pocket'),
+(64, 'Pottermore Publishing'),
+(62, 'Presses universitaires de Rennes'),
+(49, 'R-jeunes adultes'),
+(50, 'République des Lettres'),
+(34, 'Robert Laffont'),
+(86, 'Rue Fromentin'),
+(41, 'Saint-Hubert Québec : Un Monde différent'),
+(31, 'Scholastic'),
+(37, 'Seuil'),
+(89, 'Stock'),
+(20, 'Tempus Perrin'),
+(46, 'Ulysses Press');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Follow`
+--
+
+CREATE TABLE `test_Follow` (
+  `id` int(11) NOT NULL,
+  `id_follow` int(11) NOT NULL,
+  `id_is_followed` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Follow`
+--
+
+INSERT INTO `test_Follow` (`id`, `id_follow`, `id_is_followed`) VALUES
+(50, 0, 1),
+(35, 0, 20),
+(1, 0, 50),
+(26, 2, 12),
+(13, 2, 16),
+(10, 2, 32),
+(27, 3, 16),
+(20, 5, 12),
+(21, 5, 30),
+(38, 10, 39),
+(12, 11, 10),
+(6, 11, 26),
+(28, 13, 38),
+(17, 14, 10),
+(5, 15, 5),
+(22, 16, 23),
+(0, 16, 26),
+(44, 18, 35),
+(11, 20, 33),
+(42, 21, 4),
+(47, 22, 15),
+(34, 24, 22),
+(15, 25, 4),
+(48, 25, 15),
+(32, 26, 6),
+(18, 26, 16),
+(36, 30, 29),
+(19, 31, 28),
+(37, 32, 20),
+(31, 32, 49),
+(46, 33, 16),
+(43, 33, 25),
+(9, 33, 30),
+(4, 33, 37),
+(49, 33, 46),
+(3, 34, 32),
+(16, 34, 45),
+(8, 35, 5),
+(24, 35, 10),
+(45, 35, 22),
+(14, 39, 14),
+(39, 40, 49),
+(40, 41, 18),
+(25, 41, 46),
+(41, 42, 1),
+(2, 42, 33),
+(30, 44, 5),
+(29, 45, 24),
+(7, 45, 47),
+(33, 47, 26),
+(23, 50, 28);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Reader`
+--
+
+CREATE TABLE `test_Reader` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `picture` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Reader`
+--
+
+INSERT INTO `test_Reader` (`id`, `first_name`, `last_name`, `email`, `picture`, `password`, `token`) VALUES
+(0, 'admin', 'admin', 'admin@admin', NULL, 'admin', NULL),
+(1, 'Capucine', 'Gautier-Hebert', 'Capucine@Gautier-Hebert', 'https://boredhumans.b-cdn.net/faces2/385.jpg', 'Capucine', 'UFlKSLvigtKyHLaAesLD'),
+(2, 'Martin', 'Delmas', 'Martin@Delmas', 'https://boredhumans.b-cdn.net/faces2/386.jpg', 'Martin', 'NpMNQMZmzMKDWgRTnJWM'),
+(3, 'Maurice', 'Dubois', 'Maurice@Dubois', 'https://boredhumans.b-cdn.net/faces2/387.jpg', 'Maurice', 'utSerNokLHsxEPdBSAqF'),
+(4, 'Noël', 'Rossi', 'Noël@Rossi', 'https://boredhumans.b-cdn.net/faces2/388.jpg', 'Noël', NULL),
+(5, 'Aimée-Célina', 'Le', 'Aimée-Célina@Le', 'https://boredhumans.b-cdn.net/faces2/389.jpg', 'Aimée-Célina', NULL),
+(6, 'Alfred', 'Wagner', 'Alfred@Wagner', 'https://boredhumans.b-cdn.net/faces2/390.jpg', 'Alfred', NULL),
+(7, 'Maryse', 'Bonneau', 'Maryse@Bonneau', 'https://boredhumans.b-cdn.net/faces2/391.jpg', 'Maryse', NULL),
+(8, 'Christelle', 'du', 'Christelle@du', 'https://boredhumans.b-cdn.net/faces2/392.jpg', 'Christelle', NULL),
+(9, 'Alix', 'François', 'Alix@François', 'https://boredhumans.b-cdn.net/faces2/393.jpg', 'Alix', NULL),
+(10, 'Arthur', 'Navarro', 'Arthur@Navarro', 'https://boredhumans.b-cdn.net/faces2/394.jpg', 'Arthur', NULL),
+(11, 'Maryse-Claude', 'Klein', 'Maryse-Claude@Klein', 'https://boredhumans.b-cdn.net/faces2/395.jpg', 'Maryse-Claude', NULL),
+(12, 'Auguste', 'Moreau', 'Auguste@Moreau', 'https://boredhumans.b-cdn.net/faces2/396.jpg', 'Auguste', NULL),
+(13, 'Valérie', 'Carre', 'Valérie@Carre', 'https://boredhumans.b-cdn.net/faces2/397.jpg', 'Valérie', NULL),
+(14, 'Michel', 'Guillon', 'Michel@Guillon', 'https://boredhumans.b-cdn.net/faces2/398.jpg', 'Michel', NULL),
+(15, 'Catherine', 'Berthelot', 'Catherine@Berthelot', 'https://boredhumans.b-cdn.net/faces2/399.jpg', 'Catherine', NULL),
+(16, 'Aimé', 'Delorme', 'Aimé@Delorme', 'https://boredhumans.b-cdn.net/faces2/400.jpg', 'Aimé', NULL),
+(17, 'Christophe', 'Joseph', 'Christophe@Joseph', 'https://boredhumans.b-cdn.net/faces2/401.jpg', 'Christophe', NULL),
+(18, 'Timothée', 'Rousseau-Gillet', 'Timothée@Rousseau-Gillet', 'https://boredhumans.b-cdn.net/faces2/402.jpg', 'Timothée', NULL),
+(19, 'Constance', 'Pages', 'Constance@Pages', 'https://boredhumans.b-cdn.net/faces2/403.jpg', 'Constance', NULL),
+(20, 'Stéphanie', 'Duhamel', 'Stéphanie@Duhamel', 'https://boredhumans.b-cdn.net/faces2/404.jpg', 'Stéphanie', NULL),
+(21, 'Augustin', 'Pons', 'Augustin@Pons', 'https://boredhumans.b-cdn.net/faces2/405.jpg', 'Augustin', NULL),
+(22, 'Joseph', 'Lombard-Benoit', 'Joseph@Lombard-Benoit', 'https://boredhumans.b-cdn.net/faces2/406.jpg', 'Joseph', NULL),
+(23, 'Zoé', 'Cohen', 'Zoé@Cohen', 'https://boredhumans.b-cdn.net/faces2/407.jpg', 'Zoé', NULL),
+(24, 'Victoire', 'Lebrun-Millet', 'Victoire@Lebrun-Millet', 'https://boredhumans.b-cdn.net/faces2/408.jpg', 'Victoire', NULL),
+(25, 'Benjamin', 'Diaz', 'Benjamin@Diaz', 'https://boredhumans.b-cdn.net/faces2/409.jpg', 'Benjamin', NULL),
+(26, 'Claire-Nathalie', 'Launay', 'Claire-Nathalie@Launay', 'https://boredhumans.b-cdn.net/faces2/410.jpg', 'Claire-Nathalie', NULL),
+(27, 'Charles', 'Ramos', 'Charles@Ramos', 'https://boredhumans.b-cdn.net/faces2/411.jpg', 'Charles', NULL),
+(28, 'Margaux', 'de', 'Margaux@de', 'https://boredhumans.b-cdn.net/faces2/412.jpg', 'Margaux', NULL),
+(29, 'Joseph', 'Joly', 'Joseph@Joly', 'https://boredhumans.b-cdn.net/faces2/413.jpg', 'Joseph', NULL),
+(30, 'Simone', 'Roche', 'Simone@Roche', 'https://boredhumans.b-cdn.net/faces2/414.jpg', 'Simone', NULL),
+(31, 'Timothée', 'Imbert-Leduc', 'Timothée@Imbert-Leduc', 'https://boredhumans.b-cdn.net/faces2/415.jpg', 'Timothée', NULL),
+(32, 'Andrée', 'de', 'Andrée@de', 'https://boredhumans.b-cdn.net/faces2/416.jpg', 'Andrée', NULL),
+(33, 'Simone', 'Delannoy', 'Simone@Delannoy', 'https://boredhumans.b-cdn.net/faces2/417.jpg', 'Simone', NULL),
+(34, 'Lucy', 'Gillet', 'Lucy@Gillet', 'https://boredhumans.b-cdn.net/faces2/418.jpg', 'Lucy', NULL),
+(35, 'Julien', 'du', 'Julien@du', 'https://boredhumans.b-cdn.net/faces2/419.jpg', 'Julien', NULL),
+(36, 'Christelle-Lucie', 'Guillot', 'Christelle-Lucie@Guillot', 'https://boredhumans.b-cdn.net/faces2/420.jpg', 'Christelle-Lucie', NULL),
+(37, 'Anastasie', 'de', 'Anastasie@de', 'https://boredhumans.b-cdn.net/faces2/421.jpg', 'Anastasie', NULL),
+(38, 'Aimé', 'Guillet', 'Aimé@Guillet', 'https://boredhumans.b-cdn.net/faces2/422.jpg', 'Aimé', 'frbJHGxRsEUaikxoCHWp'),
+(39, 'Gilles', 'Guibert', 'Gilles@Guibert', 'https://boredhumans.b-cdn.net/faces2/423.jpg', 'Gilles', 'ZlssfZWWoJGGxuHhlNGn'),
+(40, 'Jeannine', 'Godard', 'Jeannine@Godard', 'https://boredhumans.b-cdn.net/faces2/424.jpg', 'Jeannine', 'NIJOfbmNjrEssKmmAyDn'),
+(41, 'Isaac', 'Wagner', 'Isaac@Wagner', 'https://boredhumans.b-cdn.net/faces2/425.jpg', 'Isaac', 'jvXIGsayYrLlTKXODGrE'),
+(42, 'Emmanuel', 'Clément', 'Emmanuel@Clément', 'https://boredhumans.b-cdn.net/faces2/426.jpg', 'Emmanuel', 'xhwHlUeHkJpUCiPFEAMv'),
+(43, 'Michelle', 'Roux', 'Michelle@Roux', 'https://boredhumans.b-cdn.net/faces2/427.jpg', 'Michelle', 'JFBwprPwvPlVYUEdNRwj'),
+(44, 'Hortense', 'Legendre', 'Hortense@Legendre', 'https://boredhumans.b-cdn.net/faces2/428.jpg', 'Hortense', 'OFiXmBHnjOQRMmscmUEV'),
+(45, 'Pauline', 'du', 'Pauline@du', 'https://boredhumans.b-cdn.net/faces2/429.jpg', 'Pauline', 'cDUqutJNeTFwtzwhfTuA'),
+(46, 'Étienne', 'Evrard', 'Étienne@Evrard', 'https://boredhumans.b-cdn.net/faces2/430.jpg', 'Étienne', 'DwVuMTYxuciOEIFUktcN'),
+(47, 'Dominique', 'Camus', 'Dominique@Camus', 'https://boredhumans.b-cdn.net/faces2/431.jpg', 'Dominique', 'ThJzOOmzqUVillasjezy'),
+(48, 'Alexandre', 'Bernard', 'Alexandre@Bernard', 'https://boredhumans.b-cdn.net/faces2/432.jpg', 'Alexandre', 'umIwBKuacIGNHzZEudfU'),
+(49, 'Danielle', 'Reynaud-Mace', 'Danielle@Reynaud-Mace', 'https://boredhumans.b-cdn.net/faces2/433.jpg', 'Danielle', 'UcRiOtmjdOVnWRXCjowX'),
+(50, 'Geneviève', 'Arnaud', 'Geneviève@Arnaud', 'https://boredhumans.b-cdn.net/faces2/434.jpg', 'Geneviève', 'egVuGwiVKyTQaANFCCbU'),
+(51, 'Nicolas', 'Bernier', 'Nicolas@Bernier', 'https://boredhumans.b-cdn.net/faces2/435.jpg', 'Nicolas', 'gmSDGFERnCZpjmsYaKEi'),
+(52, 'Olivie', 'Lejeune', 'Olivie@Lejeune', 'https://boredhumans.b-cdn.net/faces2/436.jpg', 'Olivie', 'RefhcHvDYJgeGQWKITSa'),
+(53, 'Maurice', 'Couturier', 'Maurice@Couturier', 'https://boredhumans.b-cdn.net/faces2/437.jpg', 'Maurice', 'xuJfNVpxookGNIWAKOCj'),
+(54, 'Bertrand', 'Guichard-Weber', 'Bertrand@Guichard-Weber', 'https://boredhumans.b-cdn.net/faces2/438.jpg', 'Bertrand', 'tQOQYJLBvDNskHhCRdlD'),
+(55, 'Christophe', 'Martel-Gaillard', 'Christophe@Martel-Gaillard', 'https://boredhumans.b-cdn.net/faces2/439.jpg', 'Christophe', 'FcXjNitKLkdbTUdUWiaZ'),
+(56, 'Audrey', 'Guérin', 'Audrey@Guérin', 'https://boredhumans.b-cdn.net/faces2/440.jpg', 'Audrey', 'CWQvYgYBtIdaLYEtjLtt'),
+(57, 'Valentine', 'Lefebvre', 'Valentine@Lefebvre', 'https://boredhumans.b-cdn.net/faces2/441.jpg', 'Valentine', 'VdaumApmTaOPdaPfYmra'),
+(58, 'Laure', 'Germain', 'Laure@Germain', 'https://boredhumans.b-cdn.net/faces2/442.jpg', 'Laure', 'dnXtcqWLrsMqKwvwMUZd'),
+(59, 'Aimée', 'Guillon', 'Aimée@Guillon', 'https://boredhumans.b-cdn.net/faces2/443.jpg', 'Aimée', 'SQILiXiGWntTcizdLfcR'),
+(60, 'Julien', 'Jacques', 'Julien@Jacques', 'https://boredhumans.b-cdn.net/faces2/444.jpg', 'Julien', 'jfRBySyjJwpzdZrHYOGh'),
+(61, 'Bertrand', 'Bertrand', 'Bertrand@Bertrand', 'https://boredhumans.b-cdn.net/faces2/445.jpg', 'Bertrand', 'hrrzfpBmBOgAupVIKFRQ'),
+(62, 'Jacques', 'Barbier', 'Jacques@Barbier', 'https://boredhumans.b-cdn.net/faces2/446.jpg', 'Jacques', 'WKQQZgTUDCUdMoFgrqbH'),
+(63, 'David', 'Auger', 'David@Auger', 'https://boredhumans.b-cdn.net/faces2/447.jpg', 'David', 'XqPjOnTcVpsrFfXxqZKS'),
+(64, 'Émile', 'Richard', 'Émile@Richard', 'https://boredhumans.b-cdn.net/faces2/448.jpg', 'Émile', 'tbbWUQQfmMPaQbZCglia'),
+(65, 'Thibault', 'Guyot', 'Thibault@Guyot', 'https://boredhumans.b-cdn.net/faces2/449.jpg', 'Thibault', 'mHWbrvWYlyQHxjwYuMkx'),
+(66, 'Emmanuelle', 'Lucas', 'Emmanuelle@Lucas', 'https://boredhumans.b-cdn.net/faces2/450.jpg', 'Emmanuelle', 'BSuFaRQzNRHzxhLqSWZg'),
+(67, 'Pierre', 'du', 'Pierre@du', 'https://boredhumans.b-cdn.net/faces2/451.jpg', 'Pierre', 'OBbAlrWFlJCvXKlAWUAE'),
+(68, 'Michèle', 'Bouvet', 'Michèle@Bouvet', 'https://boredhumans.b-cdn.net/faces2/452.jpg', 'Michèle', 'QuhcunwUoHkUnJqFYLTp'),
+(69, 'Éric', 'Muller', 'Éric@Muller', 'https://boredhumans.b-cdn.net/faces2/453.jpg', 'Éric', 'SbJVGbicAJYFdSBjTmkL'),
+(70, 'Anouk', 'Blondel', 'Anouk@Blondel', 'https://boredhumans.b-cdn.net/faces2/454.jpg', 'Anouk', 'bdToanfRCivyPfoxeEfK'),
+(71, 'Vincent', 'Rivière-Moulin', 'Vincent@Rivière-Moulin', 'https://boredhumans.b-cdn.net/faces2/455.jpg', 'Vincent', 'QevIpAHRPfGfdKdrTNpI'),
+(72, 'Michèle', 'Noël', 'Michèle@Noël', 'https://boredhumans.b-cdn.net/faces2/456.jpg', 'Michèle', 'yUYYKGbWoamuKAQXsqwF'),
+(73, 'Gérard', 'Bourdon', 'Gérard@Bourdon', 'https://boredhumans.b-cdn.net/faces2/457.jpg', 'Gérard', 'LiboNtRTWmHUnuazpshJ'),
+(74, 'François', 'Boucher', 'François@Boucher', 'https://boredhumans.b-cdn.net/faces2/458.jpg', 'François', 'RAswvcsiHcyaHDXhzmTn'),
+(75, 'Denis', 'Schneider-Berger', 'Denis@Schneider-Berger', 'https://boredhumans.b-cdn.net/faces2/459.jpg', 'Denis', 'nOkTHaBxsjGVNpodUdJu'),
+(76, 'Olivie', 'Evrard', 'Olivie@Evrard', 'https://boredhumans.b-cdn.net/faces2/460.jpg', 'Olivie', 'kTmuGtSOSBAmxIEFATvu'),
+(77, 'Bertrand', 'Leroux', 'Bertrand@Leroux', 'https://boredhumans.b-cdn.net/faces2/461.jpg', 'Bertrand', 'uiJCUwMpTmTWZtwZSZgg'),
+(78, 'Robert', 'de', 'Robert@de', 'https://boredhumans.b-cdn.net/faces2/462.jpg', 'Robert', 'CkoXQjSaPBiIQISDVske'),
+(79, 'Anouk', 'Lenoir', 'Anouk@Lenoir', 'https://boredhumans.b-cdn.net/faces2/463.jpg', 'Anouk', 'oUCUKBrPcTNUEphkwxqA'),
+(80, 'Tristan', 'Martel', 'Tristan@Martel', 'https://boredhumans.b-cdn.net/faces2/464.jpg', 'Tristan', 'eQQqhlxCJGjEplhcuEIi'),
+(81, 'Bernard', 'Chevalier', 'Bernard@Chevalier', 'https://boredhumans.b-cdn.net/faces2/465.jpg', 'Bernard', 'zGuZSaLOZIhlNniNIudT'),
+(82, 'Michelle', 'Lemoine', 'Michelle@Lemoine', 'https://boredhumans.b-cdn.net/faces2/466.jpg', 'Michelle', 'PoQLJGgDSzbkAaFVNANO'),
+(83, 'Margot', 'Baron', 'Margot@Baron', 'https://boredhumans.b-cdn.net/faces2/467.jpg', 'Margot', 'JroYVIOpDkBefvYpZTCa'),
+(84, 'Célina', 'Martinez', 'Célina@Martinez', 'https://boredhumans.b-cdn.net/faces2/468.jpg', 'Célina', 'DOrwgzmAruUqLWWEnJCP'),
+(85, 'Alphonse', 'Ledoux', 'Alphonse@Ledoux', 'https://boredhumans.b-cdn.net/faces2/469.jpg', 'Alphonse', 'qPmXwgcWAJzqVkdehSLz'),
+(86, 'Emmanuel', 'Cohen-Dijoux', 'Emmanuel@Cohen-Dijoux', 'https://boredhumans.b-cdn.net/faces2/470.jpg', 'Emmanuel', 'VdMRhPeQwjgpnVNnusMP'),
+(87, 'Emmanuelle', 'Fischer', 'Emmanuelle@Fischer', 'https://boredhumans.b-cdn.net/faces2/471.jpg', 'Emmanuelle', 'nyRGyOKztqKYDrfluvlB'),
+(88, 'Jacqueline', 'du', 'Jacqueline@du', 'https://boredhumans.b-cdn.net/faces2/472.jpg', 'Jacqueline', 'AlnFJIPpcqwXawrUROWF'),
+(89, 'Josette', 'Collin', 'Josette@Collin', 'https://boredhumans.b-cdn.net/faces2/473.jpg', 'Josette', 'ZhBIclbVyoLrFjMVFJDf'),
+(90, 'Timothée', 'Colas', 'Timothée@Colas', 'https://boredhumans.b-cdn.net/faces2/474.jpg', 'Timothée', 'MOqVtIbqRFHBdyouLbbc'),
+(91, 'Gérard', 'Bègue', 'Gérard@Bègue', 'https://boredhumans.b-cdn.net/faces2/475.jpg', 'Gérard', 'iLCKczcOjDPIHkdVMxUM'),
+(92, 'Lucas-Marc', 'Dias', 'Lucas-Marc@Dias', 'https://boredhumans.b-cdn.net/faces2/476.jpg', 'Lucas-Marc', 'MaSWJFzymMJkVpZbBrSQ'),
+(93, 'Paulette', 'Peron', 'Paulette@Peron', 'https://boredhumans.b-cdn.net/faces2/477.jpg', 'Paulette', 'OuFOZOfISWqURLXhWvgK'),
+(94, 'Xavier', 'Legendre', 'Xavier@Legendre', 'https://boredhumans.b-cdn.net/faces2/478.jpg', 'Xavier', 'ytOVzjNNjyPKMHBYpZln'),
+(95, 'Patrick', 'Briand', 'Patrick@Briand', 'https://boredhumans.b-cdn.net/faces2/479.jpg', 'Patrick', 'IQlGMeSMrzBCrBuyjwdj'),
+(96, 'Margaud-Camille', 'Potier', 'Margaud-Camille@Potier', 'https://boredhumans.b-cdn.net/faces2/480.jpg', 'Margaud-Camille', 'UgbJvtuCrggRIowdDQUV'),
+(97, 'Yves', 'Dos', 'Yves@Dos', 'https://boredhumans.b-cdn.net/faces2/481.jpg', 'Yves', 'ZBXpSYWuaWqOjnkcdsJi'),
+(98, 'Brigitte', 'Bertin', 'Brigitte@Bertin', 'https://boredhumans.b-cdn.net/faces2/482.jpg', 'Brigitte', 'uSgisFhFgwUYTBJWdFSG'),
+(99, 'Thérèse-Patricia', 'Marchal', 'Thérèse-Patricia@Marchal', 'https://boredhumans.b-cdn.net/faces2/483.jpg', 'Thérèse-Patricia', 'oYKCDnSdaSvWeSkjDazS'),
+(100, 'Yves', 'Schmitt', 'Yves@Schmitt', 'https://boredhumans.b-cdn.net/faces2/484.jpg', 'Yves', 'HzVLDGFnPPrNXTybiODB');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `test_Write_`
+--
+
+CREATE TABLE `test_Write_` (
+  `id` int(11) NOT NULL,
+  `id_author` int(11) NOT NULL,
+  `id_book` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `test_Write_`
+--
+
+INSERT INTO `test_Write_` (`id`, `id_author`, `id_book`) VALUES
+(1, 2, 1),
+(2, 3, 2),
+(3, 4, 2),
+(4, 5, 2),
+(5, 6, 3),
+(6, 7, 4),
+(7, 8, 5),
+(8, 9, 6),
+(9, 10, 6),
+(10, 11, 7),
+(11, 12, 8),
+(12, 13, 9),
+(13, 14, 9),
+(14, 15, 9),
+(15, 16, 9),
+(16, 17, 10),
+(17, 18, 11),
+(18, 19, 12),
+(19, 20, 13),
+(20, 21, 13),
+(21, 22, 14),
+(22, 23, 14),
+(23, 24, 15),
+(24, 25, 16),
+(25, 26, 17),
+(26, 27, 18),
+(27, 28, 19),
+(28, 29, 20),
+(29, 30, 20),
+(30, 31, 20),
+(31, 32, 21),
+(32, 33, 22),
+(33, 34, 23),
+(34, 35, 24),
+(35, 36, 24),
+(36, 37, 25),
+(37, 38, 25),
+(38, 39, 26),
+(39, 40, 26),
+(40, 41, 26),
+(41, 42, 27),
+(42, 43, 29),
+(43, 44, 30),
+(44, 45, 31),
+(45, 46, 32),
+(46, 47, 33),
+(47, 48, 34),
+(48, 49, 34),
+(49, 50, 35),
+(50, 51, 35),
+(51, 52, 36),
+(52, 53, 37),
+(53, 54, 38),
+(54, 55, 39),
+(55, 56, 40),
+(56, 57, 41),
+(57, 58, 42),
+(58, 59, 43),
+(59, 60, 44),
+(60, 61, 45),
+(61, 62, 46),
+(62, 63, 47),
+(63, 64, 48),
+(64, 65, 49),
+(65, 66, 49),
+(66, 67, 51),
+(67, 68, 52),
+(68, 69, 53),
+(69, 70, 54),
+(70, 71, 55),
+(72, 73, 57),
+(73, 74, 58),
+(74, 75, 59),
+(75, 76, 60),
+(76, 77, 62),
+(77, 78, 63),
+(78, 79, 64),
+(79, 80, 65),
+(80, 81, 66),
+(81, 82, 67),
+(82, 83, 68),
+(83, 84, 69),
+(84, 85, 70),
+(85, 86, 71),
+(86, 87, 72),
+(87, 88, 73),
+(88, 89, 74),
+(89, 90, 76),
+(90, 91, 77),
+(91, 92, 78),
+(92, 93, 79),
+(93, 94, 81),
+(94, 95, 82),
+(95, 96, 83),
+(96, 97, 83),
+(97, 98, 84),
+(98, 99, 85),
+(99, 100, 86),
+(100, 101, 87),
+(101, 102, 88),
+(102, 103, 90),
+(103, 104, 91),
+(104, 105, 92),
+(105, 106, 93),
+(106, 107, 93),
+(107, 108, 94),
+(108, 109, 95),
+(109, 110, 96),
+(110, 111, 96),
+(111, 112, 97),
+(112, 113, 98),
+(113, 114, 99),
+(114, 115, 100),
+(115, 116, 101),
+(116, 117, 102),
+(117, 118, 103),
+(118, 119, 104),
+(119, 120, 105),
+(120, 121, 106),
+(121, 122, 107),
+(122, 123, 108),
+(123, 124, 109),
+(124, 125, 110),
+(125, 126, 111),
+(126, 127, 111),
+(127, 128, 112),
+(128, 129, 113),
+(129, 130, 114),
+(130, 131, 115),
+(131, 132, 116),
+(132, 133, 117),
+(133, 134, 119),
+(134, 135, 119),
+(136, 137, 121),
+(137, 138, 121),
+(138, 139, 122),
+(139, 140, 124),
+(140, 141, 125),
+(141, 142, 127),
+(142, 143, 128),
+(143, 144, 129),
+(144, 145, 130),
+(145, 146, 131),
+(146, 147, 132),
+(147, 148, 133),
+(148, 149, 134),
+(149, 150, 135),
+(150, 151, 136),
+(151, 152, 137),
+(152, 153, 138),
+(153, 154, 138),
+(154, 155, 140),
+(155, 156, 141),
+(156, 157, 141),
+(157, 158, 142),
+(158, 159, 143),
+(159, 160, 143),
+(160, 161, 145),
+(161, 162, 146),
+(162, 163, 146),
+(163, 164, 147),
+(164, 165, 148),
+(165, 166, 149),
+(166, 167, 150),
+(167, 168, 151),
+(168, 169, 152),
+(169, 170, 153),
+(170, 171, 153),
+(171, 172, 154),
+(172, 173, 155),
+(173, 174, 156),
+(174, 175, 157),
+(175, 176, 159),
+(176, 177, 160),
+(177, 178, 161),
+(178, 179, 162),
+(179, 180, 163),
+(180, 181, 163),
+(181, 182, 164),
+(182, 183, 164),
+(183, 184, 165),
+(184, 185, 166),
+(185, 186, 166),
+(186, 187, 167),
+(187, 188, 168),
+(188, 189, 169),
+(189, 190, 171),
+(190, 191, 172),
+(191, 192, 173),
+(192, 193, 174),
+(193, 194, 174),
+(194, 195, 175),
+(195, 196, 176),
+(196, 197, 177),
+(197, 198, 177),
+(198, 199, 178),
+(199, 200, 179),
+(200, 201, 180),
+(201, 202, 181),
+(202, 203, 182),
+(203, 204, 182),
+(204, 205, 183),
+(205, 206, 184),
+(206, 207, 186),
+(207, 208, 187),
+(208, 209, 187),
+(209, 210, 188),
+(210, 211, 189),
+(211, 212, 190),
+(212, 213, 191),
+(213, 214, 192),
+(214, 215, 193),
+(215, 216, 194),
+(216, 217, 195),
+(217, 218, 196),
+(218, 219, 197),
+(219, 220, 198),
+(220, 221, 199),
+(221, 222, 200),
+(222, 223, 201);
 
 -- --------------------------------------------------------
 
@@ -1247,11 +2541,81 @@ ALTER TABLE `Follow`
   ADD KEY `id_is_followed` (`id_is_followed`);
 
 --
+-- Index pour la table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_75EA56E0FB7336F0` (`queue_name`),
+  ADD KEY `IDX_75EA56E0E3BD61CE` (`available_at`),
+  ADD KEY `IDX_75EA56E016BA31DB` (`delivered_at`);
+
+--
 -- Index pour la table `Reader`
 --
 ALTER TABLE `Reader`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `UQ_Reader_email` (`email`);
+
+--
+-- Index pour la table `test_Author`
+--
+ALTER TABLE `test_Author`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `test_Book`
+--
+ALTER TABLE `test_Book`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `category` (`category`),
+  ADD KEY `editor` (`editor`);
+
+--
+-- Index pour la table `test_Borrow`
+--
+ALTER TABLE `test_Borrow`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_book` (`id_book`),
+  ADD KEY `id_reader` (`id_reader`);
+
+--
+-- Index pour la table `test_Category`
+--
+ALTER TABLE `test_Category`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UQ_Category_category_name` (`name`);
+
+--
+-- Index pour la table `test_Editor`
+--
+ALTER TABLE `test_Editor`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UQ_Editor_name` (`name`);
+
+--
+-- Index pour la table `test_Follow`
+--
+ALTER TABLE `test_Follow`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UQ_Follow_id_follow_id_is_followed` (`id_follow`,`id_is_followed`),
+  ADD KEY `id_follow` (`id_follow`),
+  ADD KEY `id_is_followed` (`id_is_followed`);
+
+--
+-- Index pour la table `test_Reader`
+--
+ALTER TABLE `test_Reader`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UQ_Reader_email` (`email`);
+
+--
+-- Index pour la table `test_Write_`
+--
+ALTER TABLE `test_Write_`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UQ_Write_id_author_id_book` (`id_author`,`id_book`),
+  ADD KEY `id_book` (`id_book`),
+  ADD KEY `id_reader` (`id_author`);
 
 --
 -- Index pour la table `Write_`
@@ -1263,6 +2627,16 @@ ALTER TABLE `Write_`
   ADD KEY `id_reader` (`id_author`);
 
 --
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- Contraintes pour les tables déchargées
 --
 
@@ -1272,27 +2646,6 @@ ALTER TABLE `Write_`
 ALTER TABLE `Book`
   ADD CONSTRAINT `Book_ibfk_1` FOREIGN KEY (`category`) REFERENCES `Category` (`id`),
   ADD CONSTRAINT `Book_ibfk_2` FOREIGN KEY (`editor`) REFERENCES `Editor` (`id`);
-
---
--- Contraintes pour la table `Borrow`
---
-ALTER TABLE `Borrow`
-  ADD CONSTRAINT `Borrow_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `Book` (`id`),
-  ADD CONSTRAINT `Borrow_ibfk_2` FOREIGN KEY (`id_reader`) REFERENCES `Reader` (`id`);
-
---
--- Contraintes pour la table `Follow`
---
-ALTER TABLE `Follow`
-  ADD CONSTRAINT `Follow_ibfk_1` FOREIGN KEY (`id_follow`) REFERENCES `Reader` (`id`),
-  ADD CONSTRAINT `Follow_ibfk_2` FOREIGN KEY (`id_is_followed`) REFERENCES `Reader` (`id`);
-
---
--- Contraintes pour la table `Write_`
---
-ALTER TABLE `Write_`
-  ADD CONSTRAINT `Write__ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `Book` (`id`),
-  ADD CONSTRAINT `Write__ibfk_2` FOREIGN KEY (`id_author`) REFERENCES `Author` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

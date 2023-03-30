@@ -103,7 +103,7 @@ function AuthorBooks() {
         <h2 className="text-2xl py-8 text-gray-400">Tous les livres de <b className="font-bold text-color"> {author} </b> disponible à la bibliothèque</h2>
         {pagination()}
         <ul className="flex flex-col md:flex-row items-center md:flex-wrap">
-          {books.map((book) => (
+          {currentBooks.map((book) => (
             <li key={book[0].id} className="m-4 flex flex-col w-[60%]  md:max-w-[15%] ease-out duration-150 hover:scale-105 items-center p-2 bg-white drop-shadow-lg">
 
               {book[0].picture ? (

@@ -11,6 +11,7 @@ import BookPage from "./BookPage";
 import MyLogoutPage from "./MyLogoutPage";
 import ProfilPage from "./ProfilPage";
 import MentionLegal from "./MentionLegal";
+import AuthorPage from "./AuthorPage";
 
 export default function Index() {
   return (
@@ -24,6 +25,7 @@ export default function Index() {
         <Route path="/books/:id" element={<BookPage />} />
         <Route path="/deconnexion" element={<MyLogoutPage />} />
         <Route path="/mention_legales" element={<MentionLegal />} />
+        <Route path="/auteur/:id" element={<AuthorPage />} />
       </Routes>
     </BrowserRouter>
   );

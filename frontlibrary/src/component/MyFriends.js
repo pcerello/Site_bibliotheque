@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Book from "./Book";
 import defaultImage from "./livre.png";
 import { Link } from "react-router-dom";
+import userImage from "./userImage.png";
 
 function MyFriends(props) {
     const follower = props.follow;
@@ -28,7 +29,7 @@ function MyFriends(props) {
         {follower.picture ? (
           <img src={`${follower.picture}`} alt={follower.firstName} className="object-cover h-[24vh] w-[100%] md:object-contain drop-shadow-md"/>
         ) : (
-          <img src={defaultImage} alt="default" style={{ width: "10vw" }} />
+          <img src={userImage} alt="default" style={{ width: "10vw" }} />
         )}
         <div className="">
           <h3 className="font-medium">

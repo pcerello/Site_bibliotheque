@@ -49,13 +49,13 @@ function BookInfo() {
                   <li>{author.name}</li>
                 ))}
               </ul>
-              <p className="text-gray-400">Langue:<p className="text-color">{book.book.language}</p></p>
+              <p className="text-gray-400 mt-4">Langue:<p className="text-color">{book.book.language}</p></p>
               <p className="text-gray-400">Nombre de pages:<p className="text-color">{book.book.nbrPages}</p></p>
             </div>
             <div className="ml-4">
               <p className="text-gray-400">Editeur:<p className="text-color">{book.book.editor}</p></p>
-              <p className="text-gray-400">Catégorie:<p className="text-color">{book.book.category}</p></p>
-              <p className="text-gray-400">Année:<p className="text-color">{book.book.year}</p></p>
+              <p className="text-gray-400 mt-4">Catégorie:<p className="text-color">{book.book.category}</p></p>
+              <p className="text-gray-400 mt-4">Année:<p className="text-color">{book.book.year}</p></p>
             </div>
           </div>
         </div>

@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import App from "../App";
 import { useNavigate } from "react-router-dom";
 
 function SearchEngine() {
@@ -29,10 +28,9 @@ function SearchEngine() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("authorName", authorName);
     
-    const authors = suggestedAuthors.map(author => author.id).join(',');
-    console.log("AAAA",authors);
-    navigate(`/auteurs`, { state: { authors } });
+    navigate(`/auteurs`, { state: { authorName } });
   };
 
   const handleAuthorClick = (author) => {

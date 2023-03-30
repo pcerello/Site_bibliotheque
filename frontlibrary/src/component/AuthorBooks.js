@@ -107,7 +107,7 @@ function AuthorBooks() {
             {book[0].picture ? (
             <img src={`${book[0].picture}`} alt={book[0].title} title={book[0].title} />
           ) : (
-            <img src={defaultImage} alt="default" style={{ width: "128px" }} />
+            <img src={defaultImage} alt="default" style={{ width: "128px" }} title={book[0].title}/>
           )}
           </li>
         ))}

@@ -225,8 +225,14 @@ class BookApiController extends AbstractController
      *
      * @return mixed
      */
-    public function bookAuthors(AuthorRepository $authorRepository, int $id)
+    public function bookAuthors(AuthorRepository $authorRepository, int $id, BookRepository $bookRepository)
     {
+        // if the book doesn't exist
+        if (!$bookRepository->findOneBy(["id" => $id])) {
+            // we return an error 404
+            return $this->json(["message" => "The book with id $id doesn't exist"], 404);
+        }
+
         // we get the request
         $query = $authorRepository->findAuthorsOfBook($id);
 

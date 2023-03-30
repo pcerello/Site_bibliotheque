@@ -121,7 +121,7 @@ function AuthorsPage() {
                 </h2>
                 {pagination()}
                 <ul className="flex flex-col md:flex-row items-center md:flex-wrap">
-                  {currentBooks.map((book) => (
+                  {currentBooks ? (currentBooks.map((book) => (
                     <li key={book[0].id} className="m-3 flex flex-col w-[60%]  md:w-[10%] ease-out duration-150 hover:scale-105 items-center p-2 bg-white drop-shadow-lg">
                       {book[0].picture ? (
                         <Link to={`/books/${book[0].id}`} className="flex flex-col items-center">
@@ -144,7 +144,7 @@ function AuthorsPage() {
                         </Link>
                       )}
                     </li>
-                  ))}
+                  ))): (<div><p>Aucun auteur correspondant</p></div>)}
                 </ul>
                 {pagination()}
               </div>

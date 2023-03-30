@@ -29,12 +29,17 @@ function AuthorsPage() {
       .then((data) => {
         setBooks(data);
         console.log("data", data);
+      })
+      .catch((error) => {
+        console.error("Erreur fetching book:", error);
+        setBooks(null);
       });
   }, [authors]);
 
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
+  const currentBooks = Array.isArray(books) ? (books.slice(indexOfFirstBook, indexOfLastBook)): null;
+
 
   const totalPages = Math.ceil(books.length / booksPerPage);
   const prevPages = currentPage > 2 ? [currentPage - 2, currentPage - 1] : [1];
@@ -102,6 +107,7 @@ function AuthorsPage() {
   return (
     <div className="App">
       <Layout>
+        <SearchEngine />
         {books.length === 0 ? (
           <div>
             <h2>Aucun livre disponible pour la recherche : {authors}</h2>
@@ -114,7 +120,7 @@ function AuthorsPage() {
             </h2>
             <ul>
               {pagination()}
-              {currentBooks.map((book) => (
+              {currentBooks ? (currentBooks.map((book) => (
                 <li key={book[0].id}>
                   {book[0].picture ? (
                     <Link to={`/books/${book[0].id}`}>
@@ -137,7 +143,7 @@ function AuthorsPage() {
                     </Link>
                   )}
                 </li>
-              ))}
+              ))): (<div><p>aucun auteur correspondant</p></div>)}
               {pagination()}
             </ul>
           </div>

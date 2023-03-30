@@ -14,6 +14,7 @@ function AuthorPage({ authorId}) {
   return (
     <div className="App">
       <Layout>
+        <SearchEngine />
           <AuthorBooks author={authorId} />
       </Layout>
     </div>

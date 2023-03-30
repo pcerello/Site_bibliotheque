@@ -16,7 +16,7 @@ function MyConnection() {
       .then((response) => {
         localStorage.setItem("token", response.data.user.token);
         localStorage.setItem("userId", response.data.user.id);
-        navigate('/?userId=' + response.data.user.id);
+        navigate('/');
       })
       .catch((error) => {
         console.log("Error while logging in: ", error);

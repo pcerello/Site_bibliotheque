@@ -14,7 +14,7 @@ function SearchEngine() {
     const value = event.target.value;
     setAuthorName(value);
     if (value.length >= 4) {
-      fetch(`http://185.212.225.127:8000/api/authors?name=${value}&max=5`, {
+      fetch(`http://localhost:8000/api/authors?name=${value}&max=10`, {
         mode: "cors",
       })
         .then((response) => response.json())
@@ -29,7 +29,10 @@ function SearchEngine() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setSelectedAuthor(authorName);
+    
+    const authors = suggestedAuthors.map(author => author.id).join(',');
+    console.log("AAAA",authors);
+    navigate(`/auteurs`, { state: { authors } });
   };
 
   const handleAuthorClick = (author) => {
@@ -64,7 +67,7 @@ function SearchEngine() {
       className="flex flex-col items-center text-left"
     >
       {selectedAuthor ? (
-        navigate('/auteur/?author=' + selectedAuthor)
+        navigate(`/auteur/${selectedAuthor}`)
       ) : (
         <form
           className="relative w-fit pt-16 pb-16"
@@ -87,7 +90,7 @@ function SearchEngine() {
             id="search-button"
             type="submit"
             className="p-1 px-6 bg-color hover:bg-color-hover text-white"
-            onClick={() => setSelectedAuthor(authorName)}
+            onClick={handleSubmit}
             arial-label="Rechercher"
           >
             <FontAwesomeIcon icon="fa-solid fa-magnifying-glass"

@@ -12,6 +12,7 @@ import MyLogoutPage from "./MyLogoutPage";
 import ProfilPage from "./ProfilPage";
 import MentionLegal from "./MentionLegal";
 import AuthorPage from "./AuthorPage";
+import AuthorsPage from "./AuthorsPage";
 
 export default function Index() {
   return (
@@ -26,6 +27,7 @@ export default function Index() {
         <Route path="/deconnexion" element={<MyLogoutPage />} />
         <Route path="/mention_legales" element={<MentionLegal />} />
         <Route path="/auteur/:id" element={<AuthorPage />} />
+        <Route path="/auteurs" element={<AuthorsPage />} />
       </Routes>
     </BrowserRouter>
   );

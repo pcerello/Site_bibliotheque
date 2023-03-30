@@ -9,15 +9,16 @@ import AuthorBooks from "./component/AuthorBooks";
 
 library.add(fas, far, fab);
 
-function AuthorPage({ authorId}) {
+function AuthorsPage() {
+  
   
   return (
     <div className="App">
       <Layout>
-          <AuthorBooks author={authorId} />
+          
       </Layout>
     </div>
   );
 }
 
-export default AuthorPage;
+export default AuthorsPage;

@@ -8,7 +8,7 @@ function BookInfo() {
   const [book, setBook] = useState(null);
 
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/books/${id}`, {
+    fetch(`http://localhost:8000/api/books/${id}`, {
       mode: "cors",
     })
       .then((response) => {

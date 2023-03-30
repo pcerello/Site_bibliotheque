@@ -12,7 +12,7 @@ function SearchEngine() {
     const value = event.target.value;
     setAuthorName(value);
     if (value.length >= 4) {
-      fetch(`http://185.212.225.127:8000/api/authors?name=${value}&max=5`, {
+      fetch(`http://localhost/api/authors?name=${value}&max=5`, {
         mode: "cors",
       })
         .then((response) => response.json())

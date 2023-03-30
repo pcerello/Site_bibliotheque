@@ -19,7 +19,7 @@ class AuthorBooks extends React.Component {
    * Cherche les livres de l'auteur
    */
   bookAuthor() {
-    let request = "http://185.212.225.127:8000/api/books?idAuthor=" + this.props.author;
+    let request = "http://localhost:8000/api/books?idAuthor=" + this.props.author;
     axios 
       .get(request)
       .then((response) => {

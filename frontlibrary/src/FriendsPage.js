@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "./component/Layout";
 import MyFriends from "./component/MyFriends";
+import MyFriendsRecom from "./component/MyFriendsRecom";
 
 import { useEffect, useState } from "react";
 
@@ -12,7 +13,7 @@ function FriendsPage() {
   const [friendsPerPage] = useState(8);
   console.log("readerId", userId);
   useEffect(() => {
-    fetch(`http://185.212.225.127:8000/api/readers/${userId}/follow`, {
+    fetch(`http://localhost:8000/api/readers/${userId}/follow`, {
       mode: "cors",
     })
       .then((response) => {
@@ -146,7 +147,7 @@ console.log("folow" ,followerRecommendation)
                 <ul className="flex flex-row flex-wrap ">
                     {followerRecommendation ? (followerRecommendation.map((follower) => (
                     <div>
-                        <MyFriends follow={follower}/>
+                        <MyFriendsRecom follow={follower}/>
                     </div>
                     ))) : (<div className="bg-white py-16">Aucune suggestion</div>
                     )}

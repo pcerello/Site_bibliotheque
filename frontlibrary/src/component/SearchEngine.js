@@ -14,7 +14,6 @@ function SearchEngine() {
     setAuthorName(value);
     if (value.length >= 4) {
       fetch(`http://localhost:8000/api/authors?name=${value}&max=10`, {
-
         mode: "cors",
       })
         .then((response) => response.json())

@@ -23,10 +23,10 @@ function Book(props) {
             src={`${book[0].picture}`}
             alt={book[0].title}
             title={`Couverture du livre ${book[0].title}`}
-            className="object-cover h-[24vh] w-[100%] md:object-contain drop-shadow-md"
+            className="object-cover  w-[100%] md:object-contain drop-shadow-md"
           />
         ) : (
-          <img src={defaultImage} alt="default" style={{ width: "128px" }} />
+          <img src={defaultImage} alt="default" style={{ width: "128px"}} />
         )}
         <div className="ml-4 flex flex-col justify-between">
           <h3 className="text-lg font-medium">

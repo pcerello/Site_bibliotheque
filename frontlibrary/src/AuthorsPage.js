@@ -5,7 +5,6 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import Layout from "./component/Layout";
-import AuthorBooks from "./component/AuthorBooks";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import defaultImage from "../src/component/livre.png";

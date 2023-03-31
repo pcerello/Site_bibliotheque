@@ -14,6 +14,12 @@ import MentionLegal from "./MentionLegal";
 import AuthorPage from "./AuthorPage";
 import AuthorsPage from "./AuthorsPage";
 
+/**
+ * The main entry point of the React application.
+ * Configures the router and sets up the routes for the different pages of the app.
+ * The root component of the app is rendered using `ReactDOM.createRoot`.
+ * @returns {JS.Element} The root element of the React application.
+ */
 export default function Index() {
   return (
     <BrowserRouter>

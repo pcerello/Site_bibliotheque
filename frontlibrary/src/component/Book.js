@@ -2,11 +2,15 @@ import React, { useMemo } from "react";
 import defaultImage from "./livre.png";
 import { Link } from "react-router-dom";
 
+/**
+ * This function represents the component that displays a book.
+ * @param {*} props  the book to display
+ * @returns JS Element
+ */
 function Book(props) {
-  const book = useMemo(() => props.book[0], [props.book]); // Mettre en cache book[0]
-
-  const titleLimit = 20;
-  const resumeLimit = 50;
+  const book = useMemo(() => props.book[0], [props.book]); // book to display
+  const titleLimit = 20; // limit of characters for the title
+  const resumeLimit = 50; // limit of characters for the resume
 
   return (
     <Link
@@ -19,7 +23,7 @@ function Book(props) {
         role="listitem"
         className=" flex flex-col md:flex-row text-left "
       >
-        {book.picture ? (
+        {book.picture ? ( // if the book has a picture
           <img
             src={`${book.picture}`}
             alt={book.title}
@@ -27,21 +31,28 @@ function Book(props) {
             className="object-cover  w-[100%] md:object-contain drop-shadow-md"
           />
         ) : (
-          <img src={defaultImage} alt="default" style={{ width: "128px"}} title={`${book.title}`} />
+          // if the book has no picture
+          <img
+            src={defaultImage}
+            alt="default"
+            style={{ width: "128px" }}
+            title={`${book.title}`}
+          />
         )}
         <div className="ml-4 flex flex-col justify-between">
           <h3 className="text-lg font-medium">
             {book.title.length > titleLimit
-              ? book.title.substring(0, titleLimit) + "..."
+              ? book.title.substring(0, titleLimit) + "..." // if the title is too long
               : book.title}
           </h3>
           <p className="text-gray-300 text-sm">
-            {book.nameAuthor ? book.nameAuthor : "auteur inconnu"} -{" "}
+            {book.nameAuthor ? book.nameAuthor : "auteur inconnu"} - // if the
+            author is unknown
             {book.year}
           </p>
           <p className="text-gray-600 mt-2">
             {book.resume.length > resumeLimit
-              ? book.resume.substring(0, resumeLimit) + "..."
+              ? book.resume.substring(0, resumeLimit) + "..." // if the resume is too long
               : book.resume}
           </p>
         </div>

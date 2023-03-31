@@ -3,9 +3,14 @@ import defaultImage from "./livre.png";
 import { Link } from "react-router-dom";
 import userImage from "./userImage.png";
 
+/**
+ *  This function represents the component that displays the friends of the reader.
+ * @param {*} props  the follower id
+ * @returns  JS Element
+ */
 function MyFriends(props) {
-  const follower = props.follow;
-  const [books, setBook] = useState(null);
+  const follower = props.follow; // follower id
+  const [books, setBook] = useState(null); // books of the follower
   useEffect(() => {
     fetch(`http://localhost:8000/api/readers/${follower.id}/books?max=3`, {
       mode: "cors",
@@ -14,12 +19,12 @@ function MyFriends(props) {
         if (!response.ok) {
           throw new Error("404 Not Found");
         }
-        return response.json();
+        return response.json(); // Transform the data into json
       })
-      .then((data) => setBook(data))
+      .then((data) => setBook(data)) // Set the books to the data returned by the API
       .catch((error) => {
-        console.error("Error fetching follower:", error);
-        setBook(null);
+        console.error("Error fetching follower:", error); // Set the books to null if there is an error
+        setBook(null); // Set the books to null if there is an error
       });
   }, [follower.id]);
 
@@ -28,14 +33,15 @@ function MyFriends(props) {
       <button className="bg-red-600 hover:bg-red-800 ease-in-out duration-200 text-white p-1">
         Se désabonner
       </button>
-      {follower.picture ? (
+      {follower.picture ? ( // if the follower has a picture
         <img
           src={`${follower.picture}`}
           alt={follower.firstName}
           className="object-cover h-[24vh] w-[100%] md:object-contain drop-shadow-md"
         />
       ) : (
-        <img src={defaultImage} alt="default" style={{ width: "10vw" }} />
+        // if the follower has no picture
+        <img src={userImage} alt="default" style={{ width: "10vw" }} />
       )}
       <div className="">
         <h3 className="font-medium">
@@ -46,9 +52,9 @@ function MyFriends(props) {
       </div>
 
       <ul className="flex flex-row w-full justify-between">
-        {books ? (
+        {books ? ( // if the follower has books
           books.map((book) =>
-            book[0].picture ? (
+            book[0].picture ? ( // if the book has a picture
               <Link to={`/books/${book[0].id}`}>
                 <img
                   className="w-[15vw] md:w-[3vw]"
@@ -58,6 +64,7 @@ function MyFriends(props) {
                 />
               </Link>
             ) : (
+              // if the book has no picture
               <Link to={`/books/${book[0].id}`}>
                 <img
                   className="w-[15vw] md:w-[3vw]"
@@ -69,6 +76,7 @@ function MyFriends(props) {
             )
           )
         ) : (
+          // if the follower has no books
           <div className="text-red-500">Pas de dernière lecture</div>
         )}
       </ul>
